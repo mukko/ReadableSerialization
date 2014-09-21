@@ -35,5 +35,6 @@ class Main {
 		
         var str = haxe.Serializer.run(object);
 		trace(str);
+		SerializationReader.getJsonData(str);
     }
 }
