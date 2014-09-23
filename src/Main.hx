@@ -1,40 +1,27 @@
 package ;
-
 import haxe.Serializer;
-import haxe.Unserializer;
-import haxe.ds.HashMap;
-import flash.geom.Point;
-
-//enumの例を定義
-enum Color{
-    Red;
-    Green;
-    Blue;
-}
 
 class Main {
-    static function main() {
-		//シリアライズ検証用変数の定義
-		var array = new Array<Int>();
-		array[0] = 50;
-		array[5] = 100;
-		var enum_color = Color.Green;
-		var point = new Point(10, 20);
-		var float = 10.55;
-		var hash = new Map();
-		hash.set("abc", 1);
+	
+	public static function main() {
+		//デシリアライズした結果を変数に格納
+		var exampleUnserializedData1 = ExtendedUnserializer.run('cy17:flash.geom.Matrixy1:ai1y2:txi100y1:bzy2:tyi200y1:czy1:di1g');
+		var exampleUnserializedData2 = ExtendedUnserializer.run('wy17:com.example.Colory3:Rgb:1i128');
+		var exampleUnserializedData3 = ExtendedUnserializer.run('awy5:Colory3:Rgb:1i128wR0y3:Red:0h');
+		var exampleUnserializedData4 = ExtendedUnserializer.run('oy1:bcy16:flash.geom.Pointy1:xzy1:yi100gy1:ewy5:Colory3:Rgb:1i10y1:ccy17:flash.geom.Matrixy2:txzy1:ai1y2:tyzR0zR7zy1:di1gR10ai1i2i3hR12wR5y3:Red:0g');
 		
-        var object = {
-			color : enum_color,
-			p : point,
-            x: 120,
-            y: 230,
-            z: 990,
-			array: array,
-        }
+		//デシリアライズした整形前のデータを出力
+		trace(exampleUnserializedData1);
+		trace(exampleUnserializedData2);
+		trace(exampleUnserializedData3);
+		trace(exampleUnserializedData4);
 		
-        var str = haxe.Serializer.run(object);
-		trace(str);
-		SerializationReader.getJsonData(str);
-    }
+		//デシリアライズデータの整形と表示
+		var result1 = SerializationReader.getObjectJsonData(exampleUnserializedData1);
+		var result2 = SerializationReader.getObjectJsonData(exampleUnserializedData2);
+		var result3 = SerializationReader.getObjectJsonData(exampleUnserializedData3);
+		trace(result1);
+		trace(result2);
+		trace(result3);
+	}
 }
