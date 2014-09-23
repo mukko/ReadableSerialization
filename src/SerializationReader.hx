@@ -27,27 +27,42 @@ class SerializationReader {
 			case('i') : trace('\n{\n  "" : $unserializedData - Int\n}'); 	//Int型変数の場合
 			case('d') : trace('\n{\n  "" : $unserializedData - Float\n}');	//Float型変数の場合
 			case('b') : trace('\n{\n   : $unserializedData - Hash\n}');		//Hash型変数の場合
-			case('o') : traceObjectJsonData(unserializedData);				//Object型変数の場合
+			//case('o') : traceObjectJsonData(unserializedData);				//Object型変数の場合
 			case _ : 	//それ以外の場合
 		}
 
 		var x = Unserializer.run(serializedData);
-		traceObjectJsonData(x);
+		//traceObjectJsonData(x);
 	}
 	
 	/**
 	 * デシリアライズされたオブジェクト型の変数をJson形式にして出力
 	 * 返り値をStringにするように修正予定。
 	 * @param	unserializedObjectData デシリアライズされたオブジェクト型の変数
+	 * @return  Json形式に整形した文字列データ
 	 */
-	public static function traceObjectJsonData(unserializedObjectData : Dynamic) : Void {
-		var fields = Reflect.fields(unserializedObjectData);
+	public static function getObjectJsonData(unserializedObjectData : Dynamic) : StringBuf {
+		var buf  = new StringBuf();
 		
-		trace("\n{");
+		//デシリアライズデータ整形部分
+		buf.add("{\n");	//最初の「{」後は改行
+		var fields = Reflect.fields(unserializedObjectData);
+		var numberOfData = 0;
 		for (field in fields) {
 			var reflectField = Reflect.field(unserializedObjectData, field);
-			trace('"$field" : $reflectField - type,');
+			var type = Type.getClassName(Type.getClass(field));
+			
+			//最後のデータには「,」が付かないようにする
+			if (numberOfData == fields.length-1) {
+				buf.add('	"$field" : $reflectField - $type\n');
+			}
+			else {
+				buf.add('	"$field" : $reflectField - $type,\n');
+			}
+			numberOfData++;
 		}
-		trace("\n}");
+		buf.add("}\n");
+
+		return buf;
 	}
 }
