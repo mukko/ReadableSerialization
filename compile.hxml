@@ -1,6 +1,5 @@
 -cp src
--main Main
--swf bin/Main.swf
+--macro TypeHacker.run()
 
--D fdb
--debug
+-main Main
+--interp
