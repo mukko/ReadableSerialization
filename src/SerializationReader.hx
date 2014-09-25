@@ -1,6 +1,7 @@
 package ;
 
 import haxe.Unserializer;
+import sys.io.File;
 
 /**
  * シリアライズされた文字列をJSON形式に整形し、
@@ -66,5 +67,16 @@ class SerializationReader {
 		buf += "}\n";
 		
 		return buf;
+	}
+	
+	/**
+	 * String型の文字列をテキストファイルに出力する
+	 * @param	output 出力する文字列
+	 * @param	fname  出力するテキストファイル名
+	 */
+	public static function outputStringToTextFile(output : String, fname : String) : Void {
+		var fileout = File.write(fname);
+		fileout.writeString(output);
+		fileout.close();
 	}
 }
