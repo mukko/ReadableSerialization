@@ -41,11 +41,11 @@ class SerializationReader {
 	 * @param	unserializedObjectData デシリアライズされたオブジェクト型の変数
 	 * @return  Json形式に整形した文字列データ
 	 */
-	public static function getObjectJsonData(unserializedObjectData : Dynamic) : StringBuf {
-		var buf  = new StringBuf();
+	public static function getObjectJsonData(unserializedObjectData : Dynamic) : String {
+		var buf = "";
 		
 		//デシリアライズデータ整形部分
-		buf.add("{\n");	//最初の「{」後は改行
+		buf += "{\n";	//最初の「{」後は改行
 		var fields = Reflect.fields(unserializedObjectData);
 		var numberOfData = 0;
 		for (field in fields) {
@@ -54,15 +54,17 @@ class SerializationReader {
 			
 			//最後のデータには「,」が付かないようにする
 			if (numberOfData == fields.length-1) {
-				buf.add('	"$field" : $reflectField - $type\n');
+				buf += '	"$field" : $reflectField - $type\n';
 			}
 			else {
-				buf.add('	"$field" : $reflectField - $type,\n');
+				buf += '	"$field" : $reflectField - $type,\n';
 			}
 			numberOfData++;
 		}
-		buf.add("}\n");
 
+		//最後の「}」を出力後は改行
+		buf += "}\n";
+		
 		return buf;
 	}
 }
