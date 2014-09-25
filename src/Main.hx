@@ -23,5 +23,9 @@ class Main {
 		trace(result1);
 		trace(result2);
 		trace(result3);
+		
+		//ファイル出力・読み込みのテスト
+		SerializationReader.outputString(result1, "out.txt");
+		trace(SerializationReader.readTextFile("out.txt"));
 	}
 }

@@ -1,0 +1,9 @@
+{
+	"__name__" : flash.geom.Matrix - String,
+	"a" : 1 - String,
+	"b" : 0 - String,
+	"c" : 0 - String,
+	"d" : 1 - String,
+	"tx" : 100 - String,
+	"ty" : 200 - String
+}
