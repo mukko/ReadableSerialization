@@ -74,9 +74,18 @@ class SerializationReader {
 	 * @param	output 出力する文字列
 	 * @param	fname  出力するテキストファイル名
 	 */
-	public static function outputStringToTextFile(output : String, fname : String) : Void {
-		var fileout = File.write(fname);
-		fileout.writeString(output);
-		fileout.close();
+	public static function outputString(output : String, fileName : String) : Void {
+		var fileOut = File.write(fileName);
+		fileOut.writeString(output);
+		fileOut.close();
+	}
+	
+	/**
+	 * テキストファイルから文字列を取得する
+	 * @param	fileName 読み込むテキストファイル名
+	 * @return  読み込んだテキストファイルのデータ
+	 */
+	public static function readTextFile(fileName : String) : String {
+		return File.getContent(fileName);
 	}
 }
