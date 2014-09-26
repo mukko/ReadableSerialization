@@ -92,6 +92,34 @@ class SerializationReader {
 	}
 	
 	/**
+	 * デシリアライズしたデータから得られたオブジェクトの型名を取得するメソッド
+	 * @param	v デシリアライズしたデータ
+	 * @return	要素の型名
+	 */ 
+	private static function typeof(v:Dynamic):SValueType {
+		if (Reflect.hasField(v, '__name__')) {
+			return SClass(Reflect.field(v, '__name__'));
+		}
+		return switch (Type.typeof(v)) {
+			case TNull     : SNull;
+			case TInt      : SInt;
+			case TFloat    : SFloat;
+			case TBool     : SBool;
+			case TObject   : SObject;
+			case TFunction : SFunction;
+			case TClass(c) : throw 'Internal Error';
+			case TEnum(e)  : 
+				switch (v) {
+					case DummyEnum.Dummy(e, c, p) :
+						SEnum(e, c, p);
+					case _ :
+						throw 'Internal Error';
+				}
+			case TUnknown  : SUnknown;
+		}
+	}
+	
+	/**
 	 * String型の文字列をテキストファイルに出力する
 	 * @param	output 出力する文字列
 	 * @param	fileName  出力するテキストファイル名
