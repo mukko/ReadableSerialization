@@ -2,6 +2,7 @@ package ;
 
 import haxe.Unserializer;
 import sys.io.File;
+import StringTools;
 
 /**
  * シリアライズされた文字列をJSON形式に整形し、
@@ -70,9 +71,30 @@ class SerializationReader {
 	}
 	
 	/**
+	 * 整形シリアライズデータからデシリアライズ可能な文字列を生成する
+	 * @param	整形シリアライズデータの文字列
+	 * @return  デシリアライズ可能な文字列
+	 */
+	public static function getOriginalUnserializedData(jsonData : String) : String {
+		var buf = "";
+		var buf2 = "";
+		//改行文字の削除
+		for (i in 0...jsonData.length) {
+			buf += StringTools.replace(jsonData.charAt(i), '\n', '');
+		}
+		//スペースの削除
+		for (i in 0...buf.length) {
+			buf2 += StringTools.ltrim(buf.charAt(i));
+		}
+
+		trace(buf2);
+		return buf2;
+	}
+	
+	/**
 	 * String型の文字列をテキストファイルに出力する
 	 * @param	output 出力する文字列
-	 * @param	fname  出力するテキストファイル名
+	 * @param	fileName  出力するテキストファイル名
 	 */
 	public static function outputString(output : String, fileName : String) : Void {
 		var fileOut = File.write(fileName);
