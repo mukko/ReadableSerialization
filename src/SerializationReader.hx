@@ -10,6 +10,8 @@ import StringTools;
  */
 
 class SerializationReader {
+	private static var TYPE_OF_CLASS_NAME = "_readable_serialization_class_name_";
+	
 	public function new() {
 	}
 	
@@ -52,7 +54,7 @@ class SerializationReader {
 		var numberOfData = 0;
 		for (field in fields) {
 			var reflectField = Reflect.field(unserializedObjectData, field);
-			var type = Type.getClassName(Type.getClass(field));
+			var type = typeof(reflectField);
 			
 			//最後のデータには「,」が付かないようにする
 			if (numberOfData == fields.length-1) {
@@ -97,8 +99,8 @@ class SerializationReader {
 	 * @return	要素の型名
 	 */ 
 	private static function typeof(v:Dynamic):SValueType {
-		if (Reflect.hasField(v, '__name__')) {
-			return SClass(Reflect.field(v, '__name__'));
+		if (Reflect.hasField(v, '$TYPE_OF_CLASS_NAME')) {
+			return SClass(Reflect.field(v, '$TYPE_OF_CLASS_NAME'));
 		}
 		return switch (Type.typeof(v)) {
 			case TNull     : SNull;
@@ -107,7 +109,7 @@ class SerializationReader {
 			case TBool     : SBool;
 			case TObject   : SObject;
 			case TFunction : SFunction;
-			case TClass(c) : throw 'Internal Error';
+			case TClass(c) : SClass(Type.getClassName(c));
 			case TEnum(e)  : 
 				switch (v) {
 					case DummyEnum.Dummy(e, c, p) :

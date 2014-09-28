@@ -1,9 +1,9 @@
 {
-	"__name__" : flash.geom.Matrix - String,
-	"a" : 1 - String,
-	"b" : 0 - String,
-	"c" : 0 - String,
-	"d" : 1 - String,
-	"tx" : 100 - String,
-	"ty" : 200 - String
+	"a" : 1 - SInt,
+	"b" : 0 - SInt,
+	"c" : 0 - SInt,
+	"d" : 1 - SInt,
+	"tx" : 100 - SInt,
+	"ty" : 200 - SInt,
+	"_readable_serialization_class_name_" : flash.geom.Matrix - SClass(String)
 }

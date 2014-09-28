@@ -22,7 +22,7 @@ class TypeHacker {
 					f.expr = macro untyped {
 						var o = __dollar__new(null);
 						__dollar__objsetproto(o, cl.prototype);
-						Reflect.setField(o, '__name__', cl);
+						Reflect.setField(o, '_readable_serialization_class_name_', cl);
 						return o;
 					};
 				case { name: 'createEnum', kind: FFun(f) } :
