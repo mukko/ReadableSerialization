@@ -20,12 +20,17 @@ class Main {
 		var result1 = SerializationReader.getObjectJsonData(exampleUnserializedData1);
 		var result2 = SerializationReader.getObjectJsonData(exampleUnserializedData2);
 		var result3 = SerializationReader.getObjectJsonData(exampleUnserializedData3);
+		var result4 = SerializationReader.getObjectJsonData(exampleUnserializedData4);
 		trace(result1);
 		trace(result2);
 		trace(result3);
+		trace(result4);
 		
 		//ファイル出力・読み込みのテスト
 		SerializationReader.outputString(result1, "out.txt");
-		trace(SerializationReader.readTextFile("out.txt"));
+		var data = SerializationReader.readTextFile("out.txt");
+		trace(data);
+		/*SerializationReader.getOriginalUnserializedData(data);
+		var dataS = Serializer.run(data);*/
 	}
 }

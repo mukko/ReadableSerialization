@@ -58,10 +58,10 @@ class SerializationReader {
 			
 			//最後のデータには「,」が付かないようにする
 			if (numberOfData == fields.length-1) {
-				buf += '	"$field" : $reflectField - $type\n';
+				buf += '	"$field" : $type = $reflectField\n';
 			}
 			else {
-				buf += '	"$field" : $reflectField - $type,\n';
+				buf += '	"$field" : $type = $reflectField,\n';
 			}
 			numberOfData++;
 		}

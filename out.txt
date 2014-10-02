@@ -1,9 +1,9 @@
 {
-	"a" : 1 - SInt,
-	"b" : 0 - SInt,
-	"c" : 0 - SInt,
-	"d" : 1 - SInt,
-	"tx" : 100 - SInt,
-	"ty" : 200 - SInt,
-	"_readable_serialization_class_name_" : flash.geom.Matrix - SClass(String)
+	"a" : SInt = 1,
+	"b" : SInt = 0,
+	"c" : SInt = 0,
+	"d" : SInt = 1,
+	"tx" : SInt = 100,
+	"ty" : SInt = 200,
+	"_readable_serialization_class_name_" : SClass(String) = flash.geom.Matrix
 }
