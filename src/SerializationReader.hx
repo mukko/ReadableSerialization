@@ -1,12 +1,10 @@
 package ;
 
-import haxe.Unserializer;
 import sys.io.File;
 import StringTools;
 
 /**
- * シリアライズされた文字列をJSON形式に整形し、
- * テキストファイルで出力する
+ * シリアライズされた文字列を整形シリアライズ形式に整形する
  */
 
 class SerializationReader {
@@ -16,36 +14,34 @@ class SerializationReader {
 	}
 	
 	/**
-	 * シリアライズされたデータをデシリアライズし、
-	 * Json形式に整形し出力するメソッド
-	 * 返り値をStringにするように修正予定。
-	 * @param	serializedData シリアライズされたデータ
+	 * シリアライズされたデータを拡張デシリアライザでデシリアライズし、
+	 * 解析した後整形シリアライズデータを取得するメソッド
+	 * @param	serializedData シリアライズされた文字列
+	 * @return  整形シリアライズ書式に整形した文字列
 	 */
-	public static function getJsonData(serializedData : String) : Void {
-		var unserializedData = Unserializer.run(serializedData);
+	public static function getTrim(serializedData : String) : String {
+		var buf = "";
+		//拡張デシリアライザを利用しデシリアライズデータを取得
+		var unserializedData = ExtendedUnserializer.run(serializedData);
 		
-		trace(unserializedData);
-		trace(serializedData);
-		
+		//シリアライズデータの先頭の文字を見て、オブジェクトを判別
+		var type = typeof(unserializedData);
 		switch(serializedData.charAt(0)) {
-			case('i') : trace('\n{\n  "" : $unserializedData - Int\n}'); 	//Int型変数の場合
-			case('d') : trace('\n{\n  "" : $unserializedData - Float\n}');	//Float型変数の場合
-			case('b') : trace('\n{\n   : $unserializedData - Hash\n}');		//Hash型変数の場合
-			//case('o') : traceObjectJsonData(unserializedData);				//Object型変数の場合
-			case _ : 	//それ以外の場合
+			case('o') : buf = getObjectTrim(unserializedData);		//Object型の場合
+			case('c') : buf = getObjectTrim(unserializedData);		//クラスの場合
+			case _ : buf = '{\n	"__name__" : $type = $unserializedData\n}';	//それ以外の場合
 		}
-
-		var x = Unserializer.run(serializedData);
-		//traceObjectJsonData(x);
+		
+		return buf;
 	}
 	
 	/**
 	 * デシリアライズされたオブジェクト型の変数をJson形式にして出力
 	 * 返り値をStringにするように修正予定。
 	 * @param	unserializedObjectData デシリアライズされたオブジェクト型の変数
-	 * @return  Json形式に整形した文字列データ
+	 * @return  整形シリアライズ書式に整形したオブジェクトの文字列
 	 */
-	public static function getObjectJsonData(unserializedObjectData : Dynamic) : String {
+	public static function getObjectTrim(unserializedObjectData : Dynamic) : String {
 		var buf = "";
 		
 		//デシリアライズデータ整形部分
