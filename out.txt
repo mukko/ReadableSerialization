@@ -1,9 +1,3 @@
 {
-	"a" : SInt = 1,
-	"b" : SInt = 0,
-	"c" : SInt = 0,
-	"d" : SInt = 1,
-	"tx" : SInt = 100,
-	"ty" : SInt = 200,
-	"_readable_serialization_class_name_" : SClass(String) = flash.geom.Matrix
+	"__name__" : SClass(haxe.ds.StringMap) = {YES => 123}
 }
