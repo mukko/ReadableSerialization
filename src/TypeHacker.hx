@@ -26,7 +26,7 @@ class TypeHacker {
 						return o;
 					};
 				case { name: 'createEnum', kind: FFun(f) } :
-					f.expr = macro untyped { return DummyEnum.Dummy(e, constr, params); };
+					f.expr = macro untyped { return DummyEnum.Dummy_Enum(e, constr, params); };
 				case _ :
 					
 			}

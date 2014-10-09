@@ -1,3 +1,7 @@
 {
-	"__name__" : SClass(haxe.ds.StringMap) = {YES => 123}
+	"a" : SClass(Array) = [1,2,3],
+	"b" : SClass(flash.geom.Point) = { x => 0, y => 100, _readable_serialization_class_name_ => flash.geom.Point },
+	"c" : SClass(flash.geom.Matrix) = { a => 1, b => 0, c => 0, d => 1, tx => 0, ty => 0, _readable_serialization_class_name_ => flash.geom.Matrix },
+	"d" : SEnum(Color,Red,null) = Dummy_Enum(Color,Red,null),
+	"e" : SEnum(Color,Rgb,[10]) = Dummy_Enum(Color,Rgb,[10])
 }

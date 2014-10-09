@@ -1,5 +1,5 @@
 package ;
 
 enum DummyEnum {
-	Dummy(e:Dynamic, constructorName:Dynamic, params:Array<Dynamic>);
+	Dummy_Enum(e:Dynamic, constructorName:Dynamic, params:Array<Dynamic>);
 }

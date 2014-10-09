@@ -33,10 +33,10 @@ class SerializationReader {
 		//シリアライズデータの先頭の文字を見て、オブジェクトを判別
 		var type = typeof(unserializedString);
 		switch(serializedString.charAt(0)) {
-			case('b') : buf = '{\n	"__name__" : $type = $unserializedHash\n}';		//ハッシュの場合
+			case('b') : buf = '{\n	"__type_name__" : $type = $unserializedHash\n}';		//ハッシュの場合
 			case('o') : buf = getObjectTrim(unserializedString);		//Object型の場合
 			case('c') : buf = getObjectTrim(unserializedString);		//クラスの場合
-			case _ : buf = '{\n	"__name__" : $type = $unserializedString\n}';	//それ以外の場合
+			case _ : buf = '{\n	"__type_name__" : $type = $unserializedString\n}';	//それ以外の場合
 		}
 		
 		return buf;
@@ -115,7 +115,7 @@ class SerializationReader {
 			case TClass(c) : SClass(Type.getClassName(c));
 			case TEnum(e)  : 
 				switch (v) {
-					case DummyEnum.Dummy(e, c, p) :
+					case DummyEnum.Dummy_Enum(e, c, p) :
 						SEnum(e, c, p);
 					case _ :
 						throw 'Internal Error';
