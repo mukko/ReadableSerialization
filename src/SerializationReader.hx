@@ -15,6 +15,65 @@ class SerializationReader {
 	}
 	
 	/**
+	 * デシリアライズされた変数のデータを整形シリアライズデータ形式にし、文字列として返す。
+	 * シリアライズされた文字列はあらかじめ拡張デシリアライザでデシリアライズし、
+	 * その変数のデータを引数に取る。
+	 * @param	unserializedData　拡張デシリアライザによってデシリアライズされたデータ
+	 * @return	整形シリアライズデータの文字列
+	 */
+	public static function getTrim2(unserializedData : Dynamic) : String {
+		var buf = "";							//整形シリアライズ文字列バッファー
+		var type = typeof(unserializedData);	//拡張デシリアライズデータの型取得
+		
+		//最初の「{」を出力
+		buf += "{\n";
+		
+		//デシリアライズデータの型で判定
+		switch(type) {
+		case(SValueType.SObject) : //オブジェクトの場合
+			var fields = Reflect.fields(unserializedData);
+			var numberOfData = 0;
+			for (field in fields) {
+				var reflectField = Reflect.field(unserializedData, field);
+				var field_type = typeof(reflectField);
+				var buf2 = getTrim2(reflectField);
+				//最後のデータには「,」が付かないようにする
+				if (numberOfData == fields.length-1) {
+					buf += '	"$field" : $field_type = $reflectField\n';
+				}
+				else {
+					buf += '	"$field" : $field_type = $reflectField,\n';
+				}
+				trace(buf2);
+				numberOfData++;
+			}
+		case(SValueType.SClass) : 
+			var fields = Reflect.fields(unserializedData);
+			var numberOfData = 0;
+			for (field in fields) {
+				var reflectField = Reflect.field(unserializedData, field);
+				var field_type = typeof(reflectField);
+				var buf2 = getTrim2(reflectField);
+				//最後のデータには「,」が付かないようにする
+				if (numberOfData == fields.length-1) {
+					buf += '	"$field" : $field_type = $reflectField\n';
+				}
+				else {
+					buf += '	"$field" : $field_type = $reflectField,\n';
+				}
+				trace(buf2);
+				numberOfData++;
+			}
+		case _ : 
+			buf += '"__type_name__" : $type = $unserializedData';
+		}
+		//最後の「}」を出力後は改行
+		buf += "}\n";
+		
+		return buf;
+	}
+	
+	/**
 	 * シリアライズされたデータを拡張デシリアライザでデシリアライズし、
 	 * 解析した後整形シリアライズデータを取得するメソッド
 	 * @param	serializedData シリアライズされた文字列
