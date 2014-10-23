@@ -33,7 +33,7 @@ class SerializationReader {
 		
 		//デシリアライズデータの型で判定
 		switch(type) {
-		case(SValueType.SObject) :
+		case SValueType.SObject, SValueType.SClass :
 			//フィールド走査
 			var fields = Reflect.fields(unserializedData);
 			var numberOfData = 0;
@@ -51,28 +51,10 @@ class SerializationReader {
 				}
 				numberOfData++;
 			}
-		case(SValueType.SClass) : 
-			//フィールド走査
-			var fields = Reflect.fields(unserializedData);
-			var numberOfData = 0;
-			for (field in fields) {
-				var reflectField = Reflect.field(unserializedData, field);
-				var field_type = typeof(reflectField);
-				var buf2 = getShapedSerializeData(reflectField,indent);
-				//最後のデータには「,」が付かないようにする
-				if (numberOfData == fields.length-1) {
-					buf += '"$field" : $field_type = $buf2\n';
-				}
-				else {
-					buf += '"$field" : $field_type = $buf2,\n';
-					for (i in 0...indent) buf += "	";
-				}
-				numberOfData++;
-			}
-		case _ : 
+		default : 
 			buf += '"__type_name__" : $type = $unserializedData\n';
 		}
-		//最後の「}」を出力
+		//インデントと最後の「}」を出力
 		for (i in 0...indent-1) buf += "	";
 		buf += "}";
 		
