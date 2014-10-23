@@ -80,39 +80,6 @@ class SerializationReader {
 	}
 	
 	/**
-	 * デシリアライズされたオブジェクト型の変数をJson形式にして出力
-	 * 返り値をStringにするように修正予定。
-	 * @param	unserializedObjectData デシリアライズされたオブジェクト型の変数
-	 * @return  整形シリアライズ書式に整形したオブジェクトの文字列
-	 */
-	public static function getObjectTrim(unserializedObjectData : Dynamic) : String {
-		var buf = "";
-		
-		//デシリアライズデータ整形部分
-		buf += "{\n";	//最初の「{」後は改行
-		var fields = Reflect.fields(unserializedObjectData);
-		var numberOfData = 0;
-		for (field in fields) {
-			var reflectField = Reflect.field(unserializedObjectData, field);
-			var type = typeof(reflectField);
-			
-			//最後のデータには「,」が付かないようにする
-			if (numberOfData == fields.length-1) {
-				buf += '	"$field" : $type = $reflectField\n';
-			}
-			else {
-				buf += '	"$field" : $type = $reflectField,\n';
-			}
-			numberOfData++;
-		}
-
-		//最後の「}」を出力後は改行
-		buf += "}\n";
-		
-		return buf;
-	}
-	
-	/**
 	 * 整形シリアライズデータからデシリアライズ可能な文字列を生成する
 	 * @param	整形シリアライズデータの文字列
 	 * @return  デシリアライズ可能な文字列
