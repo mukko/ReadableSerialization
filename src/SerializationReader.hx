@@ -80,34 +80,6 @@ class SerializationReader {
 	}
 	
 	/**
-	 * シリアライズされたデータを拡張デシリアライザでデシリアライズし、
-	 * 解析した後整形シリアライズデータを取得するメソッド
-	 * @param	serializedData シリアライズされた文字列
-	 * @return  整形シリアライズ書式に整形した文字列
-	 */
-	public static function getTrim(serializedString : String) : String {
-		var buf = "";
-		//拡張デシリアライザを利用しデシリアライズデータを取得
-		var unserializedString = ExtendedUnserializer.run(serializedString);
-		
-		//ハッシュを整形シリアライズデータ化する場合の変数を定義
-		var unserializedHash:StringMap<Int> = null;
-		if (serializedString.charAt(0) == 'b') {
-			unserializedHash = ExtendedUnserializer.run(serializedString);
-		}
-		//シリアライズデータの先頭の文字を見て、オブジェクトを判別
-		var type = typeof(unserializedString);
-		switch(serializedString.charAt(0)) {
-			case('b') : buf = '{\n	"__type_name__" : $type = $unserializedHash\n}';		//ハッシュの場合
-			case('o') : buf = getObjectTrim(unserializedString);		//Object型の場合
-			case('c') : buf = getObjectTrim(unserializedString);		//クラスの場合
-			case _ : buf = '{\n	"__type_name__" : $type = $unserializedString\n}';	//それ以外の場合
-		}
-		
-		return buf;
-	}
-	
-	/**
 	 * デシリアライズされたオブジェクト型の変数をJson形式にして出力
 	 * 返り値をStringにするように修正予定。
 	 * @param	unserializedObjectData デシリアライズされたオブジェクト型の変数
