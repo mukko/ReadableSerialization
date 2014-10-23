@@ -19,56 +19,62 @@ class SerializationReader {
 	 * シリアライズされた文字列はあらかじめ拡張デシリアライザでデシリアライズし、
 	 * その変数のデータを引数に取る。
 	 * @param	unserializedData　拡張デシリアライザによってデシリアライズされたデータ
+	 * @param   indent インデントの数を保持
 	 * @return	整形シリアライズデータの文字列
 	 */
-	public static function getTrim2(unserializedData : Dynamic) : String {
+	public static function getTrim2(unserializedData : Dynamic,indent : Int) : String {
 		var buf = "";							//整形シリアライズ文字列バッファー
 		var type = typeof(unserializedData);	//拡張デシリアライズデータの型取得
 		
-		//最初の「{」を出力
+		//インデント数を1増やした後、「}」と改行とインデントを格納
+		indent++;
 		buf += "{\n";
+		for (i in 0...indent) buf += "	";
 		
 		//デシリアライズデータの型で判定
 		switch(type) {
-		case(SValueType.SObject) : //オブジェクトの場合
+		case(SValueType.SObject) :
+			//フィールド走査
 			var fields = Reflect.fields(unserializedData);
 			var numberOfData = 0;
 			for (field in fields) {
 				var reflectField = Reflect.field(unserializedData, field);
 				var field_type = typeof(reflectField);
-				var buf2 = getTrim2(reflectField);
+				var buf2 = getTrim2(reflectField,indent);
 				//最後のデータには「,」が付かないようにする
 				if (numberOfData == fields.length-1) {
-					buf += '	"$field" : $field_type = $reflectField\n';
+					buf += '"$field" : $field_type = $buf2\n';
 				}
 				else {
-					buf += '	"$field" : $field_type = $reflectField,\n';
+					buf += '"$field" : $field_type = $buf2,\n';
+					for (i in 0...indent) buf += "	";
 				}
-				trace(buf2);
 				numberOfData++;
 			}
 		case(SValueType.SClass) : 
+			//フィールド走査
 			var fields = Reflect.fields(unserializedData);
 			var numberOfData = 0;
 			for (field in fields) {
 				var reflectField = Reflect.field(unserializedData, field);
 				var field_type = typeof(reflectField);
-				var buf2 = getTrim2(reflectField);
+				var buf2 = getTrim2(reflectField,indent);
 				//最後のデータには「,」が付かないようにする
 				if (numberOfData == fields.length-1) {
-					buf += '	"$field" : $field_type = $reflectField\n';
+					buf += '"$field" : $field_type = $buf2\n';
 				}
 				else {
-					buf += '	"$field" : $field_type = $reflectField,\n';
+					buf += '"$field" : $field_type = $buf2,\n';
+					for (i in 0...indent) buf += "	";
 				}
-				trace(buf2);
 				numberOfData++;
 			}
 		case _ : 
-			buf += '"__type_name__" : $type = $unserializedData';
+			buf += '"__type_name__" : $type = $unserializedData\n';
 		}
-		//最後の「}」を出力後は改行
-		buf += "}\n";
+		//最後の「}」を出力
+		for (i in 0...indent-1) buf += "	";
+		buf += "}";
 		
 		return buf;
 	}

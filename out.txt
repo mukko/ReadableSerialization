@@ -1,7 +1,60 @@
 {
-	"a" : SClass(Array) = [1,2,3],
-	"b" : SClass(flash.geom.Point) = { x => 0, y => 100, _readable_serialization_class_name_ => flash.geom.Point },
-	"c" : SClass(flash.geom.Matrix) = { a => 1, b => 0, c => 0, d => 1, tx => 0, ty => 0, _readable_serialization_class_name_ => flash.geom.Matrix },
-	"d" : SEnum(Color,Red,null) = Dummy_Enum(Color,Red,null),
-	"e" : SEnum(Color,Rgb,[10]) = Dummy_Enum(Color,Rgb,[10])
+	"a" : SClass(Array) = {
+		"__a" : SUnknown = {
+			"__type_name__" : SUnknown = [1,2,3]
+		},
+		"length" : SInt = {
+			"__type_name__" : SInt = 3
+		}
+	},
+	"b" : SClass(flash.geom.Point) = {
+		"x" : SInt = {
+			"__type_name__" : SInt = 0
+		},
+		"y" : SInt = {
+			"__type_name__" : SInt = 100
+		},
+		"_readable_serialization_class_name_" : SClass(String) = {
+			"__s" : SUnknown = {
+				"__type_name__" : SUnknown = flash.geom.Point
+			},
+			"length" : SInt = {
+				"__type_name__" : SInt = 16
+			}
+		}
+	},
+	"c" : SClass(flash.geom.Matrix) = {
+		"a" : SInt = {
+			"__type_name__" : SInt = 1
+		},
+		"b" : SInt = {
+			"__type_name__" : SInt = 0
+		},
+		"c" : SInt = {
+			"__type_name__" : SInt = 0
+		},
+		"d" : SInt = {
+			"__type_name__" : SInt = 1
+		},
+		"tx" : SInt = {
+			"__type_name__" : SInt = 0
+		},
+		"ty" : SInt = {
+			"__type_name__" : SInt = 0
+		},
+		"_readable_serialization_class_name_" : SClass(String) = {
+			"__s" : SUnknown = {
+				"__type_name__" : SUnknown = flash.geom.Matrix
+			},
+			"length" : SInt = {
+				"__type_name__" : SInt = 17
+			}
+		}
+	},
+	"d" : SEnum(Color,Red,null) = {
+		"__type_name__" : SEnum(Color,Red,null) = Dummy_Enum(Color,Red,null)
+	},
+	"e" : SEnum(Color,Rgb,[10]) = {
+		"__type_name__" : SEnum(Color,Rgb,[10]) = Dummy_Enum(Color,Rgb,[10])
+	}
 }
