@@ -20,7 +20,7 @@ class Main {
 		
 		//ファイル出力・読み込みのテスト
 		var unserialData = ExtendedUnserializer.run(exampleSerializedData4);
-		var out = SerializationReader.getTrim2(unserialData,0);
+		var out = SerializationReader.getShapedSerializeData(unserialData,0);
 		trace(out);
 		SerializationReader.outputString(out, "out.txt");
 		var read = SerializationReader.readTextFile("out.txt");

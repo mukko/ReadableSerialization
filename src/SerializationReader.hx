@@ -22,7 +22,7 @@ class SerializationReader {
 	 * @param   indent インデントの数を保持
 	 * @return	整形シリアライズデータの文字列
 	 */
-	public static function getTrim2(unserializedData : Dynamic,indent : Int) : String {
+	public static function getShapedSerializeData(unserializedData : Dynamic,indent : Int) : String {
 		var buf = "";							//整形シリアライズ文字列バッファー
 		var type = typeof(unserializedData);	//拡張デシリアライズデータの型取得
 		
@@ -40,7 +40,7 @@ class SerializationReader {
 			for (field in fields) {
 				var reflectField = Reflect.field(unserializedData, field);
 				var field_type = typeof(reflectField);
-				var buf2 = getTrim2(reflectField,indent);
+				var buf2 = getShapedSerializeData(reflectField,indent);
 				//最後のデータには「,」が付かないようにする
 				if (numberOfData == fields.length-1) {
 					buf += '"$field" : $field_type = $buf2\n';
@@ -58,7 +58,7 @@ class SerializationReader {
 			for (field in fields) {
 				var reflectField = Reflect.field(unserializedData, field);
 				var field_type = typeof(reflectField);
-				var buf2 = getTrim2(reflectField,indent);
+				var buf2 = getShapedSerializeData(reflectField,indent);
 				//最後のデータには「,」が付かないようにする
 				if (numberOfData == fields.length-1) {
 					buf += '"$field" : $field_type = $buf2\n';
