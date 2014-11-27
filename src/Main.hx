@@ -12,37 +12,41 @@ class Main {
 		var exampleSerializedData3 = 'awy5:Colory3:Rgb:1i128wR0y3:Red:0h';
 		var exampleSerializedData4 = 'oy1:bcy16:flash.geom.Pointy1:xzy1:yi100gy1:ewy5:Colory3:Rgb:1i10y1:ccy17:flash.geom.Matrixy2:txzy1:ai1y2:tyzR0zR7zy1:di1gR10ai1i2i3hR12wR5y3:Red:0g';
 		var exampleSerializedData5 = 'by3:YESi123h';
+		//var exampleSerializedData6 = SerializationReader.readTextFile(FILENAME);
 		
+		//マップ変数のテスト
 		var m:Map<Int, String> = [
             1 => "One",
             2 => "Two",
             3 => "Three",
         ];
-		var hash = Unserializer.run(exampleSerializedData5);
 		var map1 = new Map();
 		var map2 = new Map();
 		var map3 = new Map();
-		map1.set("foo", 51);
+		
+		var obj1 = {
+			a : 10,
+			b : 20,
+		}
+		var obj2 = {
+            x: 120,
+            y: 230,
+            z: obj1,
+            array: [10, 20],
+			bool : true,
+			hash : m,
+        }
+		map1.set("foo", obj2);
 		map2.set("bar", map1);
 		map3.set("hoge", map2);
-		trace(SerializationReader.getStringMapContents(map3));
-		
-		/*
-		var exampleSerializedData6 = Serializer.run(map3);
-		trace(ExtendedUnserializer.run(exampleSerializedData5));
-		//デシリアライズした整形前のデータを出力
-		trace(exampleSerializedData1);
-		trace(exampleSerializedData2);
-		trace(exampleSerializedData3);
-		trace(exampleSerializedData4);
-		trace(exampleSerializedData5);
-		trace(exampleSerializedData6);
+		var exampleSerializedData7 = Serializer.run(map3);
 		
 		//ファイル出力・読み込みのテスト
-		var unserialData = ExtendedUnserializer.run(exampleSerializedData4);
+		var unserialData = ExtendedUnserializer.run(exampleSerializedData7);
 		var out = SerializationReader.getShapedSerializeData(unserialData,0);
-		trace(out);
 		SerializationReader.outputString(out, "out.txt");
+		trace(out);
+		/*
 		var read = SerializationReader.readTextFile("out.txt");
 		trace(SerializationReader.getOriginalUnserializedData(read));
 		*/

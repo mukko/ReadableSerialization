@@ -1,60 +1,57 @@
 {
-	"a" : SClass(Array) = {
-		"__a" : SUnknown = {
-			"__type_name__" : SUnknown = [1,2,3]
-		},
-		"length" : SInt = {
-			"__type_name__" : SInt = 3
+	"h" : SUnknown = [hoge : SClass(String) --> {
+		"h" : SUnknown = [bar : SClass(String) --> {
+			"h" : SUnknown = [foo : SClass(String) --> {
+				"bool" : SBool = {
+					"__type_name__" : SBool = true
+				},
+				"hash" : SClass(haxe.ds.IntMap) = {
+					"h" : SUnknown = [3 : SInt --> {
+						"__s" : SUnknown = {
+							"__type_name__" : SUnknown = Three
+						},
+						"length" : SInt = {
+							"__type_name__" : SInt = 5
+						}
+					} : SClass(String)][1 : SInt --> {
+						"__s" : SUnknown = {
+							"__type_name__" : SUnknown = One
+						},
+						"length" : SInt = {
+							"__type_name__" : SInt = 3
+						}
+					} : SClass(String)][2 : SInt --> {
+						"__s" : SUnknown = {
+							"__type_name__" : SUnknown = Two
+						},
+						"length" : SInt = {
+							"__type_name__" : SInt = 3
+						}
+					} : SClass(String)]
+				},
+				"x" : SInt = {
+					"__type_name__" : SInt = 120
+				},
+				"y" : SInt = {
+					"__type_name__" : SInt = 230
+				},
+				"z" : SObject = {
+					"a" : SInt = {
+						"__type_name__" : SInt = 10
+					},
+					"b" : SInt = {
+						"__type_name__" : SInt = 20
+					}
+				},
+				"array" : SClass(Array) = {
+					"__a" : SUnknown = {
+						"__type_name__" : SUnknown = [10,20]
+					},
+					"length" : SInt = {
+						"__type_name__" : SInt = 2
+					}
+				}
+			} : SObject]
 		}
-	},
-	"b" : SClass(flash.geom.Point) = {
-		"x" : SInt = {
-			"__type_name__" : SInt = 0
-		},
-		"y" : SInt = {
-			"__type_name__" : SInt = 100
-		},
-		"_readable_serialization_class_name_" : SClass(String) = {
-			"__s" : SUnknown = {
-				"__type_name__" : SUnknown = flash.geom.Point
-			},
-			"length" : SInt = {
-				"__type_name__" : SInt = 16
-			}
-		}
-	},
-	"c" : SClass(flash.geom.Matrix) = {
-		"a" : SInt = {
-			"__type_name__" : SInt = 1
-		},
-		"b" : SInt = {
-			"__type_name__" : SInt = 0
-		},
-		"c" : SInt = {
-			"__type_name__" : SInt = 0
-		},
-		"d" : SInt = {
-			"__type_name__" : SInt = 1
-		},
-		"tx" : SInt = {
-			"__type_name__" : SInt = 0
-		},
-		"ty" : SInt = {
-			"__type_name__" : SInt = 0
-		},
-		"_readable_serialization_class_name_" : SClass(String) = {
-			"__s" : SUnknown = {
-				"__type_name__" : SUnknown = flash.geom.Matrix
-			},
-			"length" : SInt = {
-				"__type_name__" : SInt = 17
-			}
-		}
-	},
-	"d" : SEnum(Color,Red,null) = {
-		"__type_name__" : SEnum(Color,Red,null) = Dummy_Enum(Color,Red,null)
-	},
-	"e" : SEnum(Color,Rgb,[10]) = {
-		"__type_name__" : SEnum(Color,Rgb,[10]) = Dummy_Enum(Color,Rgb,[10])
 	}
 }
