@@ -73,11 +73,15 @@ class SerializationReader {
 		var buf = "";
 		
 		for (key in x.keys()) {
+			var keyType = typeof(key);
+			var valueType = typeof(x.get(key));
+			
+			trace(keyType+" , "+valueType);
 			if (Std.is(x.get(key), StringMap)) {
-				buf += "[ "+key + " --> " + getStringMapContents(x.get(key))+" ]";
+				buf += "["+key + " --> : "+keyType+" = "+getStringMapContents(x.get(key));
 			}
 			else {
-				buf += "["+key + " --> " + x.get(key)+"]";
+				buf += "["+key + " --> : "+keyType+" = "+x.get(key)+" : "+ valueType +"]";
 			}
         }
 		
