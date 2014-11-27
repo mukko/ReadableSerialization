@@ -3,6 +3,7 @@ import haxe.Serializer;
 import haxe.Unserializer;
 
 class Main {
+	private static var FILENAME = "sample.txt";
 	
 	public static function main() {
 		//デシリアライズした結果を変数に格納
