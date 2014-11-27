@@ -41,12 +41,33 @@ class SerializationReader {
 				var reflectField = Reflect.field(unserializedData, field);
 				var field_type = typeof(reflectField);
 				var buf2 = getShapedSerializeData(reflectField,indent);
+				var buf3 = "";	//マップ用文字列バッファ
+				
+				//フィールドが「h」だった場合はハッシュ・マップと判断して整形シリアライズ文字列を生成する
+				if (field == "h") {
+					var x:Map<Dynamic,Dynamic> = unserializedData;
+					for (key in x.keys()) {
+						var keyType = typeof(key);			//キーの型情報を取得
+						var valueType = typeof(x.get(key));	//値の情報を取得
+						
+						//ハッシュ・マップの値を引数に入れて再帰的に呼び出す
+						if (Std.is(x.get(key), StringMap)) {
+							buf3 += '[$key : $keyType --> ' +getShapedSerializeData(x.get(key),indent);
+						}
+						else {
+							buf3 += '[$key : $keyType --> '+getShapedSerializeData(x.get(key),indent)+' : $valueType]';
+						}
+					}
+				}
+				
 				//最後のデータには「,」が付かないようにする
-				if (numberOfData == fields.length-1) {
-					buf += '"$field" : $field_type = $buf2\n';
+				if (numberOfData == fields.length - 1) {
+					if (field == "h") buf += '"$field" : $field_type = $buf3\n';
+					else  buf += '"$field" : $field_type = $buf2\n';
 				}
 				else {
-					buf += '"$field" : $field_type = $buf2,\n';
+					if (field == "h") buf += '"$field" : $field_type = $buf3,\n';
+					else buf += '"$field" : $field_type = $buf2,\n';
 					for (i in 0...indent) buf += "	";
 				}
 				numberOfData++;
