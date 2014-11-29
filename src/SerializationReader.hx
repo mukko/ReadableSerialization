@@ -43,6 +43,7 @@ class SerializationReader {
 				var field_type = typeof(reflectField);
 				var buf2 = getShapedSerializeData(reflectField,indent);
 				var buf3 = "";	//マップ用文字列バッファ
+				var buf4 = "";	//配列用文字列バッファ
 				
 				//フィールドが「h」だった場合はハッシュ・マップと判断して整形シリアライズ文字列を生成する
 				if (field == "h") {
@@ -59,18 +60,23 @@ class SerializationReader {
 							buf3 += '[$key : $keyType --> '+getShapedSerializeData(x.get(key),indent)+' : $valueType]';
 						}
 					}
-				}
-				
-				if (field == "h") {
 					buf += '"$field" : $field_type = $buf3,\n';
 				}
-				else {
-					buf += '"$field" : $field_type = $buf2,\n';
+				
+				//フィールドが「__a」だった場合は配列と判断して整形シリアライズ文字列を生成する
+				if (field == "__a") {
+					var obj:Array<Dynamic> = unserializedData;
+					for (i in 0...obj.length) {
+						buf4 += getShapedSerializeData(obj[i],indent) + ",\n"+INDENT;
+					}
+					buf += '"$field" : $field_type = $buf4\n';
 				}
+				
+				buf += '"$field" : $field_type = $buf2,\n';
 				
 				//インデント出力
 				if (numberOfData != fields.length - 1) {
-					for (i in 0...indent) buf += "	";
+					for (i in 0...indent) buf += INDENT;
 				}
 				numberOfData++;
 			}
