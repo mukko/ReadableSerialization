@@ -80,6 +80,12 @@ class SerializationReader {
 				}
 				numberOfData++;
 			}
+		case SValueType.SEnum : 
+			var dummyEnum : DummyEnum = unserializedData;
+			var array = dummyEnum.getParameters();
+			//Enumのパラメータを引数に取り、再帰的に呼び出し
+			buf += getShapedSerializeData(array[2],indent) + "\n";
+			
 		default : 
 			buf += '"__type_name__" : $type = $unserializedData\n';
 		}
