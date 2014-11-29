@@ -10,6 +10,7 @@ import StringTools;
 
 class SerializationReader {
 	private static var TYPE_OF_CLASS_NAME = "_readable_serialization_class_name_";
+	private static var INDENT = "	";
 	
 	public function new() {
 	}
@@ -29,7 +30,7 @@ class SerializationReader {
 		//インデント数を1増やした後、「}」と改行とインデントを格納
 		indent++;
 		buf += "{\n";
-		for (i in 0...indent) buf += "	";
+		for (i in 0...indent) buf += INDENT;
 		
 		//デシリアライズデータの型で判定
 		switch(type) {
@@ -76,7 +77,7 @@ class SerializationReader {
 			buf += '"__type_name__" : $type = $unserializedData\n';
 		}
 		//インデントと最後の「}」を出力
-		for (i in 0...indent-1) buf += "	";
+		for (i in 0...indent-1) buf += INDENT;
 		buf += "}";
 		
 		return buf;
