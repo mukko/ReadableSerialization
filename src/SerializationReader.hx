@@ -61,14 +61,15 @@ class SerializationReader {
 					}
 				}
 				
-				//最後のデータには「,」が付かないようにする
-				if (numberOfData == fields.length - 1) {
-					if (field == "h") buf += '"$field" : $field_type = $buf3\n';
-					else  buf += '"$field" : $field_type = $buf2\n';
+				if (field == "h") {
+					buf += '"$field" : $field_type = $buf3,\n';
 				}
 				else {
-					if (field == "h") buf += '"$field" : $field_type = $buf3,\n';
-					else buf += '"$field" : $field_type = $buf2,\n';
+					buf += '"$field" : $field_type = $buf2,\n';
+				}
+				
+				//インデント出力
+				if (numberOfData != fields.length - 1) {
 					for (i in 0...indent) buf += "	";
 				}
 				numberOfData++;
