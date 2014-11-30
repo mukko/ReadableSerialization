@@ -61,15 +61,17 @@ class SerializationReader {
 						}
 					}
 					buf += '"$field" : $field_type = $mapStrBuf,\n';
+					for (i in 0...indent) buf += INDENT;
 				}
 				
 				//フィールドが「__a」だった場合は配列と判断して整形シリアライズ文字列を生成する
 				if (field == "__a") {
 					var array:Array<Dynamic> = unserializedData;
 					for (i in 0...array.length) {
-						arrayStrBuf += getShapedSerializeData(array[i],indent) + ",\n"+INDENT;
+						arrayStrBuf += getShapedSerializeData(array[i],indent) + ",";
 					}
 					buf += '"$field" : $field_type = $arrayStrBuf\n';
+					for (i in 0...indent) buf += INDENT;
 				}
 				
 				buf += '"$field" : $field_type = $recursiveStrBuf,\n';
