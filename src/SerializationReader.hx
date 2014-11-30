@@ -99,33 +99,6 @@ class SerializationReader {
 	}
 	
 	/**
-	 * 入れ子構造のマップやハッシュデータを再帰的に探索し、
-	 * 文字列として返す
-	 * マップの整形シリアライズデータ生成処理の試作メソッド
-	 * @param   mapマップ・ハッシュ型の変数
-	 * @return  可視化したマップ・ハッシュの文字列
-	 */
-	public static function getStringMapContents(map : Dynamic) : String{
-		var x:Map<Dynamic,Dynamic> = map;
-		var buf = "";
-		
-		for (key in x.keys()) {
-			var keyType = typeof(key);
-			var valueType = typeof(x.get(key));
-			
-			trace(keyType+" , "+valueType);
-			if (Std.is(x.get(key), StringMap)) {
-				buf += "["+key + " --> : "+keyType+" = "+getStringMapContents(x.get(key));
-			}
-			else {
-				buf += "["+key + " --> : "+keyType+" = "+x.get(key)+" : "+ valueType +"]";
-			}
-        }
-		
-		return buf;
-	}
-	
-	/**
 	 * 整形シリアライズデータからデシリアライズ可能な文字列を生成する
 	 * @param	整形シリアライズデータの文字列
 	 * @return  デシリアライズ可能な文字列
