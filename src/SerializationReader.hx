@@ -47,6 +47,7 @@ class SerializationReader {
 				
 				//フィールドが「h」だった場合はハッシュ・マップと判断して整形シリアライズ文字列を生成する
 				if (field == "h") {
+					field_type = SValueType.SClass("HashMap");
 					var x:Map<Dynamic,Dynamic> = unserializedData;
 					for (key in x.keys()) {
 						var keyType = typeof(key);			//キーの型情報を取得
@@ -66,6 +67,7 @@ class SerializationReader {
 				
 				//フィールドが「__a」だった場合は配列と判断して整形シリアライズ文字列を生成する
 				if (field == "__a") {
+					field_type = SValueType.SClass("Array");
 					var array:Array<Dynamic> = unserializedData;
 					for (i in 0...array.length) {
 						arrayStrBuf += getShapedSerializeData(array[i],indent) + ",";
