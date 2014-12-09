@@ -35,11 +35,15 @@ class Main {
             array: [10, 20],
 			bool : true,
 			hash : m,
+			food: Food.Etc("appple"),
         }
 		map1.set("foo", obj2);
 		map2.set("bar", map1);
 		map3.set("hoge", map2);
-		var exampleSerializedData7 = Serializer.run(map3);
+		var enumf = Food.Etc("appple");
+		var array : Array<Dynamic> = [10, 20, 30, 10.59];
+		var d:Dynamic = { "ten":"10", "twenty":"20" };
+		var exampleSerializedData7 = Serializer.run(array);
 		
 		//ファイル出力・読み込みのテスト
 		var unserialData = ExtendedUnserializer.run(exampleSerializedData7);
