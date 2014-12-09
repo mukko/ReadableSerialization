@@ -45,38 +45,46 @@ class SerializationReader {
 				var mapStrBuf = "";	//マップ用文字列バッファ
 				var arrayStrBuf = "";	//配列用文字列バッファ
 				
-				//フィールドが「h」だった場合はハッシュ・マップと判断して整形シリアライズ文字列を生成する
-				if (field == "h") {
-					field_type = SValueType.SClass("HashMap");
-					var x:Map<Dynamic,Dynamic> = unserializedData;
-					for (key in x.keys()) {
-						var keyType = typeof(key);			//キーの型情報を取得
-						var valueType = typeof(x.get(key));	//値の情報を取得
+				//フィールド変数の文字で出力形式を変更
+				switch(field) {
+					case "h" : //フィールドが「h」だった場合はハッシュ・マップと判断して整形シリアライズ文字列を生成する
+						field_type = SValueType.SClass("HashMap");
+						var x:Map<Dynamic,Dynamic> = unserializedData;
+						for (key in x.keys()) {
+							var keyType = typeof(key);			//キーの型情報を取得
+							var valueType = typeof(x.get(key));	//値の情報を取得
 						
-						//ハッシュ・マップの値を引数に入れて再帰的に呼び出す
-						if (Std.is(x.get(key), StringMap)) {
-							mapStrBuf += '[$key : $keyType --> ' +getShapedSerializeData(x.get(key),indent);
+							//ハッシュ・マップの値を引数に入れて再帰的に呼び出す
+							if (Std.is(x.get(key), StringMap)) {
+								mapStrBuf += '[$key : $keyType --> ' +getShapedSerializeData(x.get(key),indent);
+							}
+							else {
+								mapStrBuf += '[$key : $keyType --> '+getShapedSerializeData(x.get(key),indent)+' : $valueType]';
+							}
 						}
-						else {
-							mapStrBuf += '[$key : $keyType --> '+getShapedSerializeData(x.get(key),indent)+' : $valueType]';
+						buf += '"$field" : $field_type = $mapStrBuf,\n';
+						for (i in 0...indent) {
+							buf += INDENT;
 						}
-					}
-					buf += '"$field" : $field_type = $mapStrBuf,\n';
-					for (i in 0...indent) buf += INDENT;
+						
+					//フィールドが「__a」だった場合は配列と判断して整形シリアライズ文字列を生成する
+					case "__a" :
+						field_type = SValueType.SClass("Array");
+						var array:Array<Dynamic> = unserializedData;
+						for (i in 0...array.length) {
+							arrayStrBuf += getShapedSerializeData(array[i],indent) + ",";
+						}
+						buf += '"$field" : $field_type = $arrayStrBuf\n';
+						for (i in 0...indent) {
+							buf += INDENT;
+						}
+						
+					//lengthの場合には何も出力しない
+					case "length" : indent--;
+						
+					default : 
+						buf += '"$field" : $field_type = $recursiveStrBuf,\n';
 				}
-				
-				//フィールドが「__a」だった場合は配列と判断して整形シリアライズ文字列を生成する
-				if (field == "__a") {
-					field_type = SValueType.SClass("Array");
-					var array:Array<Dynamic> = unserializedData;
-					for (i in 0...array.length) {
-						arrayStrBuf += getShapedSerializeData(array[i],indent) + ",";
-					}
-					buf += '"$field" : $field_type = $arrayStrBuf\n';
-					for (i in 0...indent) buf += INDENT;
-				}
-				
-				buf += '"$field" : $field_type = $recursiveStrBuf,\n';
 				
 				//インデント出力
 				if (numberOfData != fields.length - 1) {
