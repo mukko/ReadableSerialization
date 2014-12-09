@@ -27,17 +27,17 @@ class SerializationReader {
 		var buf = "";							//整形シリアライズ文字列バッファー
 		var type = typeof(unserializedData);	//拡張デシリアライズデータの型取得
 		
-		//インデント数を1増やした後、「}」と改行とインデントを格納
+		//インデント数を1増やした後、「{」と改行とインデントを格納
 		indent++;
 		buf += "{\n";
-		for (i in 0...indent) buf += INDENT;
-		
+		for (i in 0...indent) {
+			buf += INDENT;
+		}
 		//デシリアライズデータの型で判定
 		switch(type) {
 		case SValueType.SObject, SValueType.SClass :
 			//フィールド走査
 			var fields = Reflect.fields(unserializedData);
-			var numberOfData = 0;
 			for (field in fields) {
 				var reflectField = Reflect.field(unserializedData, field);
 				var field_type = typeof(reflectField);
@@ -63,9 +63,6 @@ class SerializationReader {
 							}
 						}
 						buf += '"$field" : $field_type = $mapStrBuf,\n';
-						for (i in 0...indent) {
-							buf += INDENT;
-						}
 						
 					//フィールドが「__a」だった場合は配列と判断して整形シリアライズ文字列を生成する
 					case "__a" :
@@ -75,22 +72,16 @@ class SerializationReader {
 							arrayStrBuf += getShapedSerializeData(array[i],indent) + ",";
 						}
 						buf += '"$field" : $field_type = $arrayStrBuf\n';
+						
+					//lengthの場合には何も出力しない
+					case "length" :
+						
+					default : 
 						for (i in 0...indent) {
 							buf += INDENT;
 						}
-						
-					//lengthの場合には何も出力しない
-					case "length" : indent--;
-						
-					default : 
 						buf += '"$field" : $field_type = $recursiveStrBuf,\n';
 				}
-				
-				//インデント出力
-				if (numberOfData != fields.length - 1) {
-					for (i in 0...indent) buf += INDENT;
-				}
-				numberOfData++;
 			}
 		case SValueType.SEnum : 
 			var dummyEnum : DummyEnum = unserializedData;
@@ -102,7 +93,9 @@ class SerializationReader {
 			buf += '"__type_name__" : $type = $unserializedData\n';
 		}
 		//インデントと最後の「}」を出力
-		for (i in 0...indent-1) buf += INDENT;
+		for (i in 0...indent - 1) {
+			buf += INDENT;
+		}
 		buf += "}";
 		
 		return buf;
