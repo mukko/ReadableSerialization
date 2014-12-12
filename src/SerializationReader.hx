@@ -42,33 +42,8 @@ class SerializationReader {
 				var reflectField = Reflect.field(unserializedData, field);
 				var field_type = typeof(reflectField);
 				var recursiveStrBuf = getShapedSerializeData(reflectField,indent);	//再帰呼び出す用文字列バッファ
-				var mapStrBuf = "";	//マップ用文字列バッファ
 				
-				//フィールド変数の文字で出力形式を変更
-				switch(field) {
-					case "h" : //フィールドが「h」だった場合はハッシュ・マップと判断して整形シリアライズ文字列を生成する
-						field_type = SValueType.SClass("HashMap");
-						var x:Map<Dynamic,Dynamic> = unserializedData;
-						for (key in x.keys()) {
-							var keyType = typeof(key);			//キーの型情報を取得
-							var valueType = typeof(x.get(key));	//値の情報を取得
-						
-							//ハッシュ・マップの値を引数に入れて再帰的に呼び出す
-							if (Std.is(x.get(key), StringMap)) {
-								mapStrBuf += '[$key : $keyType --> ' +getShapedSerializeData(x.get(key),indent);
-							}
-							else {
-								mapStrBuf += '[$key : $keyType --> '+getShapedSerializeData(x.get(key),indent)+' : $valueType]';
-							}
-						}
-						buf += '"$field" : $field_type = $mapStrBuf,\n';
-						
-					default : 
-						for (i in 0...indent) {
-							buf += INDENT;
-						}
-						buf += '"$field" : $field_type = $recursiveStrBuf,\n';
-				}
+				buf += '"$field" : $field_type = $recursiveStrBuf,\n';
 			}
 			
 		case SArray : 
@@ -100,6 +75,23 @@ class SerializationReader {
 			else {
 				buf += '"$name" : $type = $unserializedData,\n';
 			}
+			
+		case SIntMap, SStringMap, SEnumValueMap, SObjectMap:
+			var x:Map<Dynamic,Dynamic> = unserializedData;
+			var mapStrBuf = "";	//マップ用文字列バッファ
+			for (key in x.keys()) {
+				var keyType = typeof(key);			//キーの型情報を取得
+				var valueType = typeof(x.get(key));	//値の情報を取得
+				
+				//値を引数に入れて再帰的に呼び出す
+				if (Std.is(x.get(key), Map)) {
+					mapStrBuf += '[$key : $keyType -> ' +getShapedSerializeData(x.get(key),indent);
+				}
+				else {
+					mapStrBuf += '[$key : $keyType -> '+x.get(key)+' : $valueType]';
+				}
+			}
+			buf += '"__map_name__" : $type = $mapStrBuf,\n';
 			
 		case SValueType.SEnum : 
 			var dummyEnum : DummyEnum = unserializedData;
