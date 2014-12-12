@@ -43,7 +43,6 @@ class SerializationReader {
 				var field_type = typeof(reflectField);
 				var recursiveStrBuf = getShapedSerializeData(reflectField,indent);	//再帰呼び出す用文字列バッファ
 				var mapStrBuf = "";	//マップ用文字列バッファ
-				var arrayStrBuf = "";	//配列用文字列バッファ
 				
 				//フィールド変数の文字で出力形式を変更
 				switch(field) {
@@ -73,12 +72,22 @@ class SerializationReader {
 			}
 			
 		case SArray : 
-			var arrayStrBuf = "";	//配列用文字列バッファ
+			//フィールドのインデックスの0番目に配列のインスタンス名が保持されている
+			var fields = Reflect.fields(unserializedData);
+			var name = fields[0];
+			//配列用文字列バッファ
+			var arrayStrBuf = "";
 			var array:Array<Dynamic> = unserializedData;
 			for (i in 0...array.length) {
 				arrayStrBuf += getShapedSerializeData(array[i],indent) + ",";
 			}
-			buf += '__topLevelValue : $type = $arrayStrBuf\n';
+			//インスタンス名が「__a」だった場合はトップレベルの配列であることを名前部分に出力する
+			if (name == "__a") {
+				buf += '__topLevelValue : $type = $arrayStrBuf\n';
+			}
+			else {
+				buf += '$name : $type = $arrayStrBuf\n';
+			}
 			
 		case SString :
 			var fields = Reflect.fields(unserializedData);
