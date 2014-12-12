@@ -158,7 +158,7 @@ class SerializationReader {
 					case "haxe.ds.StringMap"	: SStringMap;
 					case "haxe.ds.EnumValueMap"	: SEnumValueMap;
 					case "haxe.ds.ObjectMap"	: SObjectMap;
-					default						: SUnknown; 
+					default						: SClass(Type.getClassName(c)); 
 				};
 			case TEnum(e)  : 
 				switch (v) {
