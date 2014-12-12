@@ -64,18 +64,6 @@ class SerializationReader {
 						}
 						buf += '"$field" : $field_type = $mapStrBuf,\n';
 						
-					//フィールドが「__a」だった場合は配列と判断して整形シリアライズ文字列を生成する
-					case "__a" :
-						field_type = SValueType.SClass("Array");
-						var array:Array<Dynamic> = unserializedData;
-						for (i in 0...array.length) {
-							arrayStrBuf += getShapedSerializeData(array[i],indent) + ",";
-						}
-						buf += '"$field" : $field_type = $arrayStrBuf\n';
-						
-					//lengthの場合には何も出力しない
-					case "length" :
-						
 					default : 
 						for (i in 0...indent) {
 							buf += INDENT;
@@ -83,6 +71,15 @@ class SerializationReader {
 						buf += '"$field" : $field_type = $recursiveStrBuf,\n';
 				}
 			}
+			
+		case SArray : 
+			var arrayStrBuf = "";	//配列用文字列バッファ
+			var array:Array<Dynamic> = unserializedData;
+			for (i in 0...array.length) {
+				arrayStrBuf += getShapedSerializeData(array[i],indent) + ",";
+			}
+			buf += '__topLevelValue : $type = $arrayStrBuf\n';
+			
 		case SString :
 			var fields = Reflect.fields(unserializedData);
 			//フィールドのインデックスの0番目に文字列のインスタンス名が保持されている
@@ -102,7 +99,7 @@ class SerializationReader {
 			buf += '"'+enumParam[0]+'"'+" : SEnum("+enumParam[1]+") = "+getShapedSerializeData(enumParam[2],indent)+"\n";
 		
 		default : 
-			buf += '"__type_name__" : $type = $unserializedData\n';
+			buf += '"__type_name__" : $type = $unserializedData,\n';
 		}
 		//インデントと最後の「}」を出力
 		for (i in 0...indent - 1) {
