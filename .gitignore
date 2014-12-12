@@ -3,4 +3,4 @@ build/*
 ReadableSerialization.hxproj
 bin/Main.swf
 *.hxproj
-sample.txt
+samples/
