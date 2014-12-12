@@ -83,6 +83,18 @@ class SerializationReader {
 						buf += '"$field" : $field_type = $recursiveStrBuf,\n';
 				}
 			}
+		case SString :
+			var fields = Reflect.fields(unserializedData);
+			//フィールドのインデックスの0番目に文字列のインスタンス名が保持されている
+			var name = fields[0];
+			//インスタンス名が「__s」だった場合は名前を出力しない
+			if (name == "__s") {
+				buf += '"" : $type = $unserializedData,\n';
+			}
+			else {
+				buf += '"$name" : $type = $unserializedData,\n';
+			}
+			
 		case SValueType.SEnum : 
 			var dummyEnum : DummyEnum = unserializedData;
 			var enumParam = dummyEnum.getParameters();
