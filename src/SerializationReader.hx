@@ -138,7 +138,16 @@ class SerializationReader {
 			case TBool     : SBool;
 			case TObject   : SObject;
 			case TFunction : SFunction;
-			case TClass(c) : SClass(Type.getClassName(c));
+			case TClass(c) : //trace(Type.getClassName(c));	//デバッグ用
+				switch (Type.getClassName(c)) {
+					case "Array"				: SArray;
+					case "String"				: SString;
+					case "haxe.ds.IntMap"		: SIntMap;
+					case "haxe.ds.StringMap"	: SStringMap;
+					case "haxe.ds.EnumValueMap"	: SEnumValueMap;
+					case "haxe.ds.ObjectMap"	: SObjectMap;
+					default						: SUnknown; 
+				};
 			case TEnum(e)  : 
 				switch (v) {
 					case DummyEnum.Dummy_Enum(e, c, p) :
