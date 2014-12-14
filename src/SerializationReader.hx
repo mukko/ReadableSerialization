@@ -35,7 +35,7 @@ class SerializationReader {
 		}
 		//デシリアライズデータの型で判定
 		switch(type) {
-		case SValueType.SObject, SValueType.SClass :
+		case SValueType.SClass :
 			//フィールド走査
 			var fields = Reflect.fields(unserializedData);
 			for (field in fields) {
@@ -45,6 +45,29 @@ class SerializationReader {
 				
 				buf += '"$field" : $field_type = $recursiveStrBuf,\n';
 			}
+			
+		case SObject :
+			indent++;
+			buf += '"__type_name__" : $type = {\n';
+			var fields = Reflect.fields(unserializedData);
+			for (field in fields) {
+				var reflectField = Reflect.field(unserializedData, field);
+				var field_type = typeof(reflectField);
+				
+				for (i in 0...indent) buf += INDENT;
+				//再帰呼び出しが必要の無い型
+				if (field_type == SNull || field_type == SInt ||
+					field_type == SFloat|| field_type == SBool) {
+					buf += '"$field" : $field_type = $reflectField,\n';
+				}
+				else {
+					var objStrBuf = getShapedSerializeData(reflectField,indent);	//再帰呼び出す用文字列バッファ
+					buf += '"$field" : $field_type = $objStrBuf,\n';
+				}
+			}
+			indent--;
+			for (i in 0...indent) buf += INDENT;
+			buf += "}\n";
 			
 		case SArray : 
 			//フィールドのインデックスの0番目に配列のインスタンス名が保持されている
@@ -102,6 +125,7 @@ class SerializationReader {
 		default : 
 			buf += '"__type_name__" : $type = $unserializedData,\n';
 		}
+		
 		//インデントと最後の「}」を出力
 		for (i in 0...indent - 1) {
 			buf += INDENT;
