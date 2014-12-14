@@ -35,18 +35,7 @@ class SerializationReader {
 		}
 		//デシリアライズデータの型で判定
 		switch(type) {
-		case SValueType.SClass :
-			//フィールド走査
-			var fields = Reflect.fields(unserializedData);
-			for (field in fields) {
-				var reflectField = Reflect.field(unserializedData, field);
-				var field_type = typeof(reflectField);
-				var recursiveStrBuf = getShapedSerializeData(reflectField,indent);	//再帰呼び出す用文字列バッファ
-				
-				buf += '"$field" : $field_type = $recursiveStrBuf,\n';
-			}
-			
-		case SObject :
+		case SValueType.SClass, SObject:
 			indent++;
 			buf += '"__type_name__" : $type = {\n';
 			var fields = Reflect.fields(unserializedData);
