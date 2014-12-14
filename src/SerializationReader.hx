@@ -56,8 +56,8 @@ class SerializationReader {
 				
 				for (i in 0...indent) buf += INDENT;
 				//再帰呼び出しが必要の無い型
-				if (field_type == SNull || field_type == SInt ||
-					field_type == SFloat|| field_type == SBool) {
+				if (field_type == SNull || field_type == SInt || field_type == SString || 
+					field_type == SFloat|| field_type == SBool|| field_type == SUnknown) {
 					buf += '"$field" : $field_type = $reflectField,\n';
 				}
 				else {
