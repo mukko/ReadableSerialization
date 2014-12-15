@@ -36,14 +36,20 @@ class SerializationReader {
 		//デシリアライズデータの型で判定
 		switch(type) {
 		case SValueType.SClass, SObject:
-			indent++;
-			buf += '"__type_name__" : $type = {\n';
+			if (indent > 1 ) {
+				buf = "{\n";
+			}
+			else {
+				indent++;
+				buf += '"" : $type = {\n';
+			}
 			var fields = Reflect.fields(unserializedData);
 			for (field in fields) {
 				var reflectField = Reflect.field(unserializedData, field);
 				var field_type = typeof(reflectField);
 				
-				for (i in 0...indent) buf += INDENT;
+				if (indent > 1) for (i in 0...indent) buf += INDENT;
+				
 				//再帰呼び出しが必要の無い型
 				if (field_type == SNull || field_type == SInt || field_type == SString || 
 					field_type == SFloat|| field_type == SBool|| field_type == SUnknown) {
