@@ -60,14 +60,6 @@ class SerializationReader {
 					buf += '"$field" : $field_type = $objStrBuf,\n';
 				}
 			}
-			indent--;
-			for (i in 0...indent) buf += INDENT;
-			if (indent > 1 ) {
-				indent--;
-			}
-			else {
-				buf += '},\n';
-			}
 			
 		case SArray : 
 			//フィールドのインデックスの0番目に配列のインスタンス名が保持されている
