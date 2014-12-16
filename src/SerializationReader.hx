@@ -62,7 +62,12 @@ class SerializationReader {
 			}
 			indent--;
 			for (i in 0...indent) buf += INDENT;
-			buf += "}\n";
+			if (indent > 1 ) {
+				indent--;
+			}
+			else {
+				buf += '},\n';
+			}
 			
 		case SArray : 
 			//フィールドのインデックスの0番目に配列のインスタンス名が保持されている
@@ -84,7 +89,7 @@ class SerializationReader {
 				}
 				else {
 					for (i in 0...indent) arrayStrBuf += INDENT;
-					arrayStrBuf += '"" : $field_type = '+getShapedSerializeData(array[i],indent) + ",";
+					arrayStrBuf += '"" : $field_type = '+getShapedSerializeData(array[i],indent) + ",\n";
 				}
 			}
 			//インスタンス名が「__a」だった場合はトップレベルの配列であることを名前部分に出力する
@@ -122,10 +127,11 @@ class SerializationReader {
 					mapStrBuf += '[$key : $keyType -> ' +getShapedSerializeData(x.get(key),indent);
 				}
 				else {
-					mapStrBuf += '[$key : $keyType -> '+x.get(key)+' : $valueType]';
+					mapStrBuf += '[$key : $keyType -> '+x.get(key)+' : $valueType],';
 				}
 			}
-			buf += '"__map_name__" : $type = $mapStrBuf,\n';
+			
+			buf += '"__map_name__" : $type = $mapStrBuf\n';
 			
 		case SValueType.SEnum : 
 			var dummyEnum : DummyEnum = unserializedData;
@@ -136,7 +142,7 @@ class SerializationReader {
 				buf += '"" : SEnum = ';
 				for (i in 0...params.length) {
 					//Enumのパラメータを引数に取り、再帰的に呼び出し
-					buf += getShapedSerializeData(params[i], indent);
+					buf += getShapedSerializeData(params[i], indent)+"\n";
 				}
 			}
 			else{
@@ -147,12 +153,15 @@ class SerializationReader {
 			buf += '"__type_name__" : $type = $unserializedData,\n';
 		}
 		
-		//インデントと最後の「}」を出力
-		for (i in 0...indent - 1) {
-			buf += INDENT;
+		if (indent > 1 ) {
+			for (i in 0...indent - 1) {
+				buf += INDENT;
+			}
+			buf += '}';
 		}
-		buf += "}";
-		
+		else {
+			buf += '}\n';
+		}
 		return buf;
 	}
 	
