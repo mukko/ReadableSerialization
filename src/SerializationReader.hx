@@ -71,16 +71,32 @@ class SerializationReader {
 			//配列用文字列バッファ
 			var arrayStrBuf = "";
 			var array:Array<Dynamic> = unserializedData;
+			
+			indent++;
 			for (i in 0...array.length) {
-				arrayStrBuf += getShapedSerializeData(array[i],indent) + ",";
+				//再帰呼び出しが必要の無い型
+				var field_type = typeof(array[i]);
+				if (field_type == SNull || field_type == SInt || field_type == SString || 
+					field_type == SFloat || field_type == SBool || field_type == SUnknown) {
+					
+					for (i in 0...indent) arrayStrBuf += INDENT;
+					arrayStrBuf += '"" : $field_type = ' + array[i] + ',\n';
+				}
+				else {
+					for (i in 0...indent) arrayStrBuf += INDENT;
+					arrayStrBuf += '"" : $field_type = '+getShapedSerializeData(array[i],indent) + ",";
+				}
 			}
 			//インスタンス名が「__a」だった場合はトップレベルの配列であることを名前部分に出力する
 			if (name == "__a") {
-				buf += '__topLevelValue : $type = $arrayStrBuf\n';
+				buf += '__topLevelValue : $type = [\n$arrayStrBuf';
 			}
 			else {
 				buf += '$name : $type = $arrayStrBuf\n';
 			}
+			indent--;
+			for (i in 0...indent) buf += INDENT;
+			buf += "]\n";
 			
 		case SString :
 			var fields = Reflect.fields(unserializedData);
