@@ -114,9 +114,19 @@ class SerializationReader {
 		case SValueType.SEnum : 
 			var dummyEnum : DummyEnum = unserializedData;
 			var enumParam = dummyEnum.getParameters();
-			//Enumのパラメータを引数に取り、再帰的に呼び出し
-			buf += '"'+enumParam[0]+'"'+" : SEnum("+enumParam[1]+") = "+getShapedSerializeData(enumParam[2],indent)+"\n";
-		
+			var params : Array<Dynamic> = enumParam[2];
+			
+			if (params != null) {
+				buf += '"" : SEnum = ';
+				for (i in 0...params.length) {
+					//Enumのパラメータを引数に取り、再帰的に呼び出し
+					buf += getShapedSerializeData(params[i], indent);
+				}
+			}
+			else{
+				buf += '"'+enumParam[0]+'"'+" : SEnum = "+enumParam[1]+"\n";
+			}
+			
 		default : 
 			buf += '"__type_name__" : $type = $unserializedData,\n';
 		}
