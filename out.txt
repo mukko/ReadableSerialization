@@ -1,57 +1,44 @@
 {
-	"h" : SUnknown = [hoge : SClass(String) --> {
-		"h" : SUnknown = [bar : SClass(String) --> {
-			"h" : SUnknown = [foo : SClass(String) --> {
-				"bool" : SBool = {
-					"__type_name__" : SBool = true
+	__topLevelValue : SArray = [
+		"" : SInt = 10,
+		"" : SInt = 20,
+		"" : SInt = 30,
+		"" : SFloat = 10.59,
+		"" : SString = aabb,
+		"" : SArray = {
+			__topLevelValue : SArray = [
+				"" : SInt = 1,
+				"" : SNull = null,
+				"" : SNull = null,
+				"" : SFloat = 248.55,
+				"" : SString = test,
+			]
+		},
+		"" : SObject = {
+			"bool" : SBool = true,
+			"food" : SEnum(Food,Sukiyaki,null) = {
+				"Food" : SEnum = Sukiyaki
+			},
+			"hash" : SIntMap = {
+				"__map_name__" : SIntMap = [3 : SInt -> Three : SString],[1 : SInt -> One : SString],[2 : SInt -> Two : SString],
+			},
+			"x" : SInt = 120,
+			"y" : SInt = 230,
+			"z" : SObject = {
+				"a" : SInt = 10,
+				"b" : SInt = 20,
+				"o" : SObject = {
+					"i" : SInt = 500,
+					"j" : SInt = 100,
 				},
-				"hash" : SClass(haxe.ds.IntMap) = {
-					"h" : SUnknown = [3 : SInt --> {
-						"__s" : SUnknown = {
-							"__type_name__" : SUnknown = Three
-						},
-						"length" : SInt = {
-							"__type_name__" : SInt = 5
-						}
-					} : SClass(String)][1 : SInt --> {
-						"__s" : SUnknown = {
-							"__type_name__" : SUnknown = One
-						},
-						"length" : SInt = {
-							"__type_name__" : SInt = 3
-						}
-					} : SClass(String)][2 : SInt --> {
-						"__s" : SUnknown = {
-							"__type_name__" : SUnknown = Two
-						},
-						"length" : SInt = {
-							"__type_name__" : SInt = 3
-						}
-					} : SClass(String)]
-				},
-				"x" : SInt = {
-					"__type_name__" : SInt = 120
-				},
-				"y" : SInt = {
-					"__type_name__" : SInt = 230
-				},
-				"z" : SObject = {
-					"a" : SInt = {
-						"__type_name__" : SInt = 10
-					},
-					"b" : SInt = {
-						"__type_name__" : SInt = 20
-					}
-				},
-				"array" : SClass(Array) = {
-					"__a" : SUnknown = {
-						"__type_name__" : SUnknown = [10,20]
-					},
-					"length" : SInt = {
-						"__type_name__" : SInt = 2
-					}
-				}
-			} : SObject]
-		}
-	}
+			},
+			"str" : SString = test,
+			"array" : SArray = {
+				__topLevelValue : SArray = [
+					"" : SInt = 10,
+					"" : SInt = 20,
+				]
+			},
+		},
+	]
 }
