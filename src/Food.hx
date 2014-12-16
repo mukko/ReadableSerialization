@@ -5,5 +5,5 @@ enum Food
 	Hamburg;
 	Sukiyaki;
 	Banana;
-	Etc(name:String);
+	Etc(name:String,aji:String,Price:Int,obj:Food);
 }
