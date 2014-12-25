@@ -114,16 +114,15 @@ class SerializationReader {
 				var keyType = typeof(key);			//キーの型情報を取得
 				var valueType = typeof(x.get(key));	//値の情報を取得
 				
-				//値を引数に入れて再帰的に呼び出す
-				if (Std.is(x.get(key), Map)) {
-					mapStrBuf += '[$key : $keyType -> ' +getShapedSerializeData(x.get(key),indent);
-				}
-				else {
-					mapStrBuf += '[$key : $keyType -> '+x.get(key)+' : $valueType],';
+				//値の型が再帰が必要な場合、値を引数に入れて再帰的に呼び出す
+				switch(valueType) {
+					case SIntMap, SStringMap, SEnumValueMap, SObjectMap, SObject, SArray,SValueType.SClass,SValueType.SEnum: 
+						mapStrBuf += '($key : $keyType => ' +getShapedSerializeData(x.get(key),indent)+') : $valueType';
+					default : 
+						mapStrBuf += '($key : $keyType => '+x.get(key)+' : $valueType),';
 				}
 			}
-			
-			buf += '"__map_name__" : $type = $mapStrBuf\n';
+			buf += '"" : $type = $mapStrBuf\n';
 			
 		case SValueType.SEnum : 
 			var dummyEnum : DummyEnum = unserializedData;
