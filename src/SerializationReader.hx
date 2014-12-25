@@ -11,6 +11,7 @@ import StringTools;
 class SerializationReader {
 	private static var TYPE_OF_CLASS_NAME = "_readable_serialization_class_name_";
 	private static var INDENT = "	";
+	private static var NOT_OUTPUT_VALUE_TYPE_INDENT_NUMBER = 2;
 	
 	public function new() {
 	}
@@ -29,14 +30,19 @@ class SerializationReader {
 		
 		//インデント数を1増やした後、「{」と改行とインデントを格納
 		indent++;
-		buf += "{\n";
-		for (i in 0...indent) {
-			buf += INDENT;
+		if (type == SArray && indent > NOT_OUTPUT_VALUE_TYPE_INDENT_NUMBER) {
+			buf += "[";
+		}
+		else { 
+			buf += "{\n";
+			for (i in 0...indent) {
+				buf += INDENT;
+			}
 		}
 		//デシリアライズデータの型で判定
 		switch(type) {
 		case SValueType.SClass, SObject:
-			if (indent > 1 ) {
+			if (indent > NOT_OUTPUT_VALUE_TYPE_INDENT_NUMBER ) {
 				buf = "{\n";
 			}
 			else {
@@ -86,7 +92,12 @@ class SerializationReader {
 			}
 			//インスタンス名が「__a」だった場合はトップレベルの配列であることを名前部分に出力する
 			if (name == "__a") {
-				buf += '__topLevelValue : $type = [\n$arrayStrBuf';
+				if (indent == NOT_OUTPUT_VALUE_TYPE_INDENT_NUMBER) {
+					buf += '__topLevelValue : $type = [\n$arrayStrBuf';
+				}
+				else {
+					buf += '\n$arrayStrBuf';
+				}
 			}
 			else {
 				buf += '$name : $type = $arrayStrBuf\n';
