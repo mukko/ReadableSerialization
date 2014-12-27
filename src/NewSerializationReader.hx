@@ -128,6 +128,40 @@ class NewSerializationReader {
 	}
 	
 	/**
+	 * SArray型の拡張デシリアライズデータを整形シリアライズ文字列にして返す
+	 * @param	exUnserializedData 拡張デシリアライズデータ
+	 * @param	type 拡張デシリアライズデータの型
+	 * @return  改行・インデント無しの整形シリアライズ文字列
+	 */
+	private function getSArrayReadableSerializedText(exUnserializedData : Dynamic, type : SValueType) : String {
+		var strbuf = "";		//整形シリアライズデータ保持用バッファ
+		var array : Array<Dynamic> = exUnserializedData;	//デシリアライズデータを明示的に配列に代入
+		var fields = Reflect.fields(exUnserializedData);	//フィールド取得
+		var name = fields[0];	//フィールドのインデックスの0番目に配列のインスタンス名が保持されている
+		
+		//インスタンス名が「__a」だった場合はトップレベルの配列であることを名前部分に出力する
+		if (name == "__a") {
+			if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE) strbuf += '[';
+			else strbuf += '__topLevelValue : $type = [';
+		}
+		
+		for (i in 0...array.length) {
+			var fieldType = typeof(array[i]);	//配列の要素の型を取得
+			if (isRecursive(fieldType)) {
+				strbuf += '"" : $fieldType = '+getReadableSerializedText(array[i])+',';
+			}
+			else {
+				strbuf += '"" : $fieldType = '+array[i]+',';
+			}
+		}
+		
+		if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE) strbuf += ']';
+		else strbuf += '],';
+		
+		return strbuf;
+	}
+	
+	/**
 	 * 引数の型が再帰が必要な型かを返す
 	 * @param	t SValueTypeのコンストラクタ
 	 * @return  再帰が必要な場合はtrue、必要無い場合はfalse
