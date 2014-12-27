@@ -30,6 +30,25 @@ class NewSerializationReader {
 		trace(indent);
 		return this.extendedUnserializedData;
 	/**
+	 * 拡張デシリアライズデータを引数に取り、整形シリアライズ文字列を返す
+	 * @return インデント・改行無しの整形シリアライズ文字列
+	 */
+	private function getReadableSerializedText(exUnserializedData : Dynamic) : String {
+		var strbuf = "";						//整形シリアライズ文字列バッファー
+		var type = typeof(exUnserializedData);	//拡張デシリアライズデータの型取得
+
+		if (recursiveDepth == 0) strbuf += "{";
+		recursiveDepth++;
+		switch(type) {
+			case SObject : strbuf += getSObjectReadableSerializedText(exUnserializedData,type);
+			default : 
+		}
+		recursiveDepth--;
+		if (recursiveDepth == 0) strbuf += "}";
+		return strbuf;
+	}
+	
+	/**
 	 * SObject型の拡張デシリアライズデータを整形シリアライズ文字列にして返す
 	 * @param	exUnserializedData 拡張デシリアライズデータ
 	 * @param	type 拡張デシリアライズデータの型
