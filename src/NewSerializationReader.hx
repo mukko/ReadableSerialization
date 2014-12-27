@@ -91,11 +91,14 @@ class NewSerializationReader {
 		
 		//デシリアライズデータの型で判定
 		switch(type) {
-			case SObject , SValueType.SClass : strbuf += getSObjectReadableSerializedText(exUnserializedData,type);
-			case SArray  : strbuf += getSArrayReadableSerializedText(exUnserializedData, type);
-			case SString :
+			case SObject , SValueType.SClass : 
+				strbuf += getSObjectReadableSerializedText(exUnserializedData, type);
+			case SArray : 
+				strbuf += getSArrayReadableSerializedText(exUnserializedData, type);
 			case SIntMap, SStringMap, SEnumValueMap, SObjectMap : 
-			case SValueType.SEnum :
+				strbuf += getSMapReadableSerializedText(exUnserializedData, type);
+			case SValueType.SEnum : 
+				strbuf += getSEnumReadableSerializedText(exUnserializedData, type);
 			default : strbuf += '"" : $type = $exUnserializedData,';
 		}
 		
