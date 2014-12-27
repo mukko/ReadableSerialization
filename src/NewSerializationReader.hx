@@ -87,12 +87,20 @@ class NewSerializationReader {
 
 		if (recursiveDepth == 0) strbuf += "{";
 		recursiveDepth++;
+		
+		//デシリアライズデータの型で判定
 		switch(type) {
-			case SObject : strbuf += getSObjectReadableSerializedText(exUnserializedData,type);
-			default : 
+			case SObject , SValueType.SClass : strbuf += getSObjectReadableSerializedText(exUnserializedData,type);
+			case SArray  : strbuf += getSArrayReadableSerializedText(exUnserializedData, type);
+			case SString :
+			case SIntMap, SStringMap, SEnumValueMap, SObjectMap : 
+			case SValueType.SEnum :
+			default : strbuf += '"" : $type = $exUnserializedData,';
 		}
+		
 		recursiveDepth--;
 		if (recursiveDepth == 0) strbuf += "}";
+		
 		return strbuf;
 	}
 	
