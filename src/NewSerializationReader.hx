@@ -25,6 +25,20 @@ class NewSerializationReader {
 		indent++;
 		trace(indent);
 		return this.extendedUnserializedData;
+	/**
+	 * 引数の型が再帰が必要な型かを返す
+	 * @param	t SValueTypeのコンストラクタ
+	 * @return  再帰が必要な場合はtrue、必要無い場合はfalse
+	 */
+	private static function isRecursive(t : SValueType) : Bool{
+		switch(t) {
+			//オブジェクト・クラス・Enum・配列は再帰が必要
+			case SObject, SValueType.SClass, SValueType.SEnum, SArray : return true;
+			//マップ型も再帰が必要
+			case SIntMap, SStringMap, SEnumValueMap, SObjectMap : return true;
+			//それ以外はプリミティブ型と判断し、再帰が必要でないとする
+			default : return false;
+		}
 	}
 	
 	/**
