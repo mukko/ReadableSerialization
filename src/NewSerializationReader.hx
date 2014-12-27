@@ -171,6 +171,32 @@ class NewSerializationReader {
 	}
 	
 	/**
+	 * マップ型の拡張デシリアライズデータを整形シリアライズ文字列にして返す
+	 * @param	exUnserializedData 拡張デシリアライズデータ
+	 * @param	type 拡張デシリアライズデータの型
+	 * @return  改行・インデント無しの整形シリアライズ文字列
+	 */
+	private function getSMapReadableSerializedText(exUnserializedData : Dynamic, type : SValueType) : String {
+		var map : Map<Dynamic,Dynamic> = exUnserializedData;
+		var strBuf = "";	//マップ用文字列バッファ
+		
+		strBuf += '"" : $type = ';
+		for (key in map.keys()) {
+			var keyType = typeof(key);				//キーの型情報を取得
+			var valueType = typeof(map.get(key));	//値の情報を取得
+			
+			//値の型が再帰が必要な場合、値を引数に入れて再帰的に呼び出す
+			if (isRecursive(valueType)) {
+				strBuf += '($key : $keyType => ' +getReadableSerializedText(map.get(key))+') : $valueType,';
+			}
+			else {
+				strBuf += '($key : $keyType => '+map.get(key)+' : $valueType),';
+			}
+		}
+		return strBuf;
+	}
+	
+	/**
 	 * 引数の型が再帰が必要な型かを返す
 	 * @param	t SValueTypeのコンストラクタ
 	 * @return  再帰が必要な場合はtrue、必要無い場合はfalse
