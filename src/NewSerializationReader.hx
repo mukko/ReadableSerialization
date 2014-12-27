@@ -197,6 +197,31 @@ class NewSerializationReader {
 	}
 	
 	/**
+	 * SEnum型の拡張デシリアライズデータを整形シリアライズ文字列にして返す
+	 * @param	exUnserializedData 拡張デシリアライズデータ
+	 * @param	type 拡張デシリアライズデータの型
+	 * @return  改行・インデント無しの整形シリアライズ文字列
+	 */
+	private function getSEnumReadableSerializedText(exUnserializedData : Dynamic, type : SValueType) : String {
+		var dummyEnum : DummyEnum = exUnserializedData;
+		var enumParam = dummyEnum.getParameters();
+		var params : Array<Dynamic> = enumParam[2];	//Enumのパラメータを取得
+		var strBuf = "";	//マップ用文字列バッファ
+		
+		if (params != null) {
+			strBuf += '"" : SEnum = ';
+			for (i in 0...params.length) {
+				//Enumのパラメータを引数に取り、再帰的に呼び出し
+				strBuf += getReadableSerializedText(params[i])+"\n";
+			}
+		}
+		else{
+			strBuf += '"" : SEnum('+enumParam[0]+') = '+enumParam[1]+",\n";
+		}
+		return strBuf;
+	}
+	
+	/**
 	 * 引数の型が再帰が必要な型かを返す
 	 * @param	t SValueTypeのコンストラクタ
 	 * @return  再帰が必要な場合はtrue、必要無い場合はfalse
