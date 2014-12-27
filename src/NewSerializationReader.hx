@@ -30,6 +30,15 @@ class NewSerializationReader {
 		trace(indent);
 		return this.extendedUnserializedData;
 	/**
+	 * 整形シリアライズ文字列を読み込み、改行とインデントを付け足す
+	 * @param	readableSerializedText 整形シリアライズ文字列
+	 * @return  改行とインデントが含まれた整形シリアライズ文字列
+	 */
+	private function addIndentAndNewLine(readableSerializedData : String) : String{
+		return readableSerializedData;
+	}
+	
+	/**
 	 * 拡張デシリアライズデータを引数に取り、整形シリアライズ文字列を返す
 	 * @return インデント・改行無しの整形シリアライズ文字列
 	 */
