@@ -19,4 +19,48 @@ class NewSerializationReader {
 		this.serializedText = serializedText;
 		extendedUnserializedData = ExtendedUnserializer.run(serializedText);
 	}
+	
+	public function getSeikeiSerializedData() : String {
+		trace(indent);
+		indent++;
+		trace(indent);
+		return this.extendedUnserializedData;
+	}
+	
+	/**
+	 * デシリアライズしたデータから得られたオブジェクトの型名を取得するメソッド
+	 * @param	v デシリアライズしたデータ
+	 * @return	要素の型名
+	 */ 
+	private static function typeof(v:Dynamic):SValueType {
+		if (Reflect.hasField(v, '_readable_serialization_class_name_')) {
+			return SClass(Reflect.field(v, '_readable_serialization_class_name_'));
+		}
+		return switch (Type.typeof(v)) {
+			case TNull     : SNull;
+			case TInt      : SInt;
+			case TFloat    : SFloat;
+			case TBool     : SBool;
+			case TObject   : SObject;
+			case TFunction : SFunction;
+			case TClass(c) : //trace(Type.getClassName(c));	//デバッグ用
+				switch (Type.getClassName(c)) {
+					case "Array"				: SArray;
+					case "String"				: SString;
+					case "haxe.ds.IntMap"		: SIntMap;
+					case "haxe.ds.StringMap"	: SStringMap;
+					case "haxe.ds.EnumValueMap"	: SEnumValueMap;
+					case "haxe.ds.ObjectMap"	: SObjectMap;
+					default						: SClass(Type.getClassName(c)); 
+				};
+			case TEnum(e)  : 
+				switch (v) {
+					case DummyEnum.Dummy_Enum(e, c, p) :
+						SEnum(e, c, p);
+					case _ :
+						throw 'Internal Error';
+				}
+			case TUnknown  : SUnknown;
+		}
+	}
 }
