@@ -24,11 +24,15 @@ class NewSerializationReader {
 		readableSerializedText = "";
 	}
 	
-	public function getSeikeiSerializedData() : String {
-		trace(indent);
-		indent++;
-		trace(indent);
-		return this.extendedUnserializedData;
+	/**
+	 * 拡張デシリアライズデータから整形シリアライズ文字列を取得し、
+	 * インデントと改行を挿入した整形シリアライズ文字列を返す
+	 */
+	public function run() : String {
+		readableSerializedText = getReadableSerializedText(extendedUnserializedData);
+		return addIndentAndNewLine(readableSerializedText);
+	}
+	
 	/**
 	 * 整形シリアライズ文字列を読み込み、改行とインデントを付け足す
 	 * @param	readableSerializedText 整形シリアライズ文字列
