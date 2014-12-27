@@ -50,7 +50,8 @@ class NewSerializationReader {
 					for (i in 0...indent) strBuf += INDENT;
 				case "}": 
 					//「}」の次の文字が「,」だったら改行を出力しない
-					if (readableSerializedData.charAt(i + 1) == ",") {
+					if (readableSerializedData.charAt(i + 1) == "," ||
+						readableSerializedData.charAt(i + 1) == ")") {
 						strBuf += readableSerializedData.charAt(i);
 					}
 					else {
