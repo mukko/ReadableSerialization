@@ -38,8 +38,39 @@ class NewSerializationReader {
 	 * @param	readableSerializedText 整形シリアライズ文字列
 	 * @return  改行とインデントが含まれた整形シリアライズ文字列
 	 */
-	private function addIndentAndNewLine(readableSerializedData : String) : String{
-		return readableSerializedData;
+	private function addIndentAndNewLine(readableSerializedData : String) : String {
+		var strBuf = "";
+		for (i in 0...readableSerializedData.length) {
+			switch(readableSerializedData.charAt(i)) {
+				case "{":
+					strBuf += readableSerializedData.charAt(i);
+					strBuf += "\n";
+					indent++;
+					for (i in 0...indent) strBuf += INDENT;
+				case "}": 
+					if (readableSerializedData.charAt(i + 1) == ",") {
+						strBuf += readableSerializedData.charAt(i);
+					}
+					else {
+						strBuf += readableSerializedData.charAt(i);
+						strBuf += "\n";
+						indent--;
+					}
+				case ",": 
+					if (readableSerializedData.charAt(i + 1) == "}") {
+						strBuf += readableSerializedData.charAt(i);
+						strBuf += "\n";
+						indent--;
+					}
+					else {
+						strBuf += readableSerializedData.charAt(i);
+						strBuf += "\n";
+					}
+					for (i in 0...indent) strBuf += INDENT;
+				default : strBuf += readableSerializedData.charAt(i);
+			}
+		}
+		return strBuf;
 	}
 	
 	/**
