@@ -30,6 +30,38 @@ class NewSerializationReader {
 		trace(indent);
 		return this.extendedUnserializedData;
 	/**
+	 * SObject型の拡張デシリアライズデータを整形シリアライズ文字列にして返す
+	 * @param	exUnserializedData 拡張デシリアライズデータ
+	 * @param	type 拡張デシリアライズデータの型
+	 * @return  改行・インデント無しの整形シリアライズ文字列
+	 */
+	private function getSObjectReadableSerializedText(exUnserializedData : Dynamic, type : SValueType) : String{
+		var strbuf = "";		//整形シリアライズデータ保持用バッファ
+		var fields = Reflect.fields(exUnserializedData);
+		//2回目移行の再帰の場合は変数名と型名を出力しない
+		if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE) {
+			strbuf += '{';
+		}
+		else {
+			strbuf += '"" : $type = {';
+		}
+		//フィールド走査を行いそれぞれのフィールドを整形シリアライズデータ形式にする
+		for (field in fields) {
+			var reflectField = Reflect.field(exUnserializedData, field);
+			var fieldType = typeof(reflectField);
+			
+			if (isRecursive(fieldType)) {
+				strbuf += '"$field" : $fieldType = '+getReadableSerializedText(reflectField)+',';
+			}
+			else {
+				strbuf += '"$field" : $fieldType = $reflectField,';
+			}
+		}
+		strbuf += '}';
+		return strbuf;
+	}
+	
+	/**
 	 * 引数の型が再帰が必要な型かを返す
 	 * @param	t SValueTypeのコンストラクタ
 	 * @return  再帰が必要な場合はtrue、必要無い場合はfalse
