@@ -39,11 +39,11 @@ class NewSerializationReader {
 	 */
 	private function addIndentAndNewLine(readableSerializedData : String) : String {
 		var strBuf = "";	//文字列保持用のバッファ
-		var indent = 0;　	//整形時のインデント保持用変数
+		var indent = 0; 	//整形時のインデント保持用変数
 		
 		for (i in 0...readableSerializedData.length) {
 			switch(readableSerializedData.charAt(i)) {
-				case "{":
+				case "{","[":
 					strBuf += readableSerializedData.charAt(i);
 					strBuf += "\n";
 					indent++;
@@ -60,7 +60,8 @@ class NewSerializationReader {
 					}
 				case ",": 
 					//「,」の次の文字が「}」だったら改行を出力してインデントの数を減らす
-					if (readableSerializedData.charAt(i + 1) == "}") {
+					if (readableSerializedData.charAt(i + 1) == "}" ||
+						readableSerializedData.charAt(i + 1) == "]") {
 						strBuf += readableSerializedData.charAt(i);
 						strBuf += "\n";
 						indent--;
