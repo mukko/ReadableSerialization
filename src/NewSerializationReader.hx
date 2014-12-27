@@ -8,7 +8,6 @@ class NewSerializationReader {
 	public var serializedText(default, null) : String;				//シリアライズ文字列
 	public var extendedUnserializedData(default, null) : Dynamic;	//拡張デシリアライザデータ
 	public var readableSerializedText(default, null) : String;		//整形シリアライズ文字列
-	private var indent : Int = 0;		//整形時のインデント保持用変数
 	private var recursiveDepth:Int = 0;	//再帰の深度を保持する変数
 	private static var INDENT = "	";	//スペース4個分のインデント文字列
 	private static var NOT_OUTPUT_VALUE_TYPE = 2;	//変数名と型を出力しない再帰深度
@@ -39,7 +38,9 @@ class NewSerializationReader {
 	 * @return  改行とインデントが含まれた整形シリアライズ文字列
 	 */
 	private function addIndentAndNewLine(readableSerializedData : String) : String {
-		var strBuf = "";
+		var strBuf = "";	//文字列保持用のバッファ
+		var indent = 0;　	//整形時のインデント保持用変数
+		
 		for (i in 0...readableSerializedData.length) {
 			switch(readableSerializedData.charAt(i)) {
 				case "{":
@@ -48,6 +49,7 @@ class NewSerializationReader {
 					indent++;
 					for (i in 0...indent) strBuf += INDENT;
 				case "}": 
+					//「}」の次の文字が「,」だったら改行を出力しない
 					if (readableSerializedData.charAt(i + 1) == ",") {
 						strBuf += readableSerializedData.charAt(i);
 					}
@@ -57,6 +59,7 @@ class NewSerializationReader {
 						indent--;
 					}
 				case ",": 
+					//「,」の次の文字が「}」だったら改行を出力してインデントの数を減らす
 					if (readableSerializedData.charAt(i + 1) == "}") {
 						strBuf += readableSerializedData.charAt(i);
 						strBuf += "\n";
