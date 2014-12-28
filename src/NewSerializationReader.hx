@@ -85,7 +85,7 @@ class NewSerializationReader {
 	private function getReadableSerializedText(exUnserializedData : Dynamic) : String {
 		var strbuf = "";						//整形シリアライズ文字列バッファー
 		var type = typeof(exUnserializedData);	//拡張デシリアライズデータの型取得
-
+		
 		if (recursiveDepth == 0) strbuf += "{";
 		recursiveDepth++;
 		
@@ -210,18 +210,30 @@ class NewSerializationReader {
 		var dummyEnum : DummyEnum = exUnserializedData;
 		var enumParam = dummyEnum.getParameters();
 		var params : Array<Dynamic> = enumParam[2];	//Enumのパラメータを取得
-		var strBuf = "";	//マップ用文字列バッファ
+		var strBuf = "";	//文字列バッファ
 		
 		if (params != null) {
-			strBuf += '"" : SEnum = ';
-			for (i in 0...params.length) {
-				//Enumのパラメータを引数に取り、再帰的に呼び出し
-				strBuf += getReadableSerializedText(params[i])+"\n";
+			if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE) {
+				strBuf += '{';
+				for (i in 0...params.length) {
+					//Enumのパラメータを引数に取り、再帰的に呼び出し
+					strBuf += getReadableSerializedText(params[i]);
+				}
+				strBuf += '}';
+			}
+			else {
+				strBuf += '"" : $type = {';
+				for (i in 0...params.length) {
+					//Enumのパラメータを引数に取り、再帰的に呼び出し
+					strBuf += getReadableSerializedText(params[i]);
+				}
+				strBuf += '},';
 			}
 		}
-		else{
-			strBuf += '"" : SEnum('+enumParam[0]+') = '+enumParam[1]+",\n";
+		else {
+			strBuf += '"" : $type = ' + enumParam[1]+",";
 		}
+		
 		return strBuf;
 	}
 	
