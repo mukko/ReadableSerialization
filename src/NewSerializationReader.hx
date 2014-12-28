@@ -184,7 +184,8 @@ class NewSerializationReader {
 		var map : Map<Dynamic,Dynamic> = exUnserializedData;
 		var strBuf = "";	//マップ用文字列バッファ
 		
-		strBuf += '"" : $type = ';
+		if (recursiveDepth < NOT_OUTPUT_VALUE_TYPE) strBuf += '"" : $type = ';
+		
 		for (key in map.keys()) {
 			var keyType = typeof(key);				//キーの型情報を取得
 			var valueType = typeof(map.get(key));	//値の情報を取得
