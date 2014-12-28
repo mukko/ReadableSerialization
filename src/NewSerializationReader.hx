@@ -43,33 +43,33 @@ class NewSerializationReader {
 		
 		for (i in 0...readableSerializedData.length) {
 			switch(readableSerializedData.charAt(i)) {
-				case "{","[":
+				case '{','[':
 					strBuf += readableSerializedData.charAt(i);
-					strBuf += "\n";
+					strBuf += '\n';
 					indent++;
 					for (i in 0...indent) strBuf += INDENT;
-				case "}": 
+				case '}': 
 					//「}」の次の文字が「,」だったら改行を出力しない
-					if (readableSerializedData.charAt(i + 1) == "," ||
-						readableSerializedData.charAt(i + 1) == ")") {
+					if (readableSerializedData.charAt(i + 1) == ',' ||
+						readableSerializedData.charAt(i + 1) == ')') {
 						strBuf += readableSerializedData.charAt(i);
 					}
 					else {
 						strBuf += readableSerializedData.charAt(i);
-						strBuf += "\n";
+						strBuf += '\n';
 						indent--;
 					}
-				case ",": 
+				case ',': 
 					//「,」の次の文字が「}」だったら改行を出力してインデントの数を減らす
-					if (readableSerializedData.charAt(i + 1) == "}" ||
-						readableSerializedData.charAt(i + 1) == "]") {
+					if (readableSerializedData.charAt(i + 1) == '}' ||
+						readableSerializedData.charAt(i + 1) == ']') {
 						strBuf += readableSerializedData.charAt(i);
-						strBuf += "\n";
+						strBuf += '\n';
 						indent--;
 					}
 					else {
 						strBuf += readableSerializedData.charAt(i);
-						strBuf += "\n";
+						strBuf += '\n';
 					}
 					for (i in 0...indent) strBuf += INDENT;
 				default : strBuf += readableSerializedData.charAt(i);
