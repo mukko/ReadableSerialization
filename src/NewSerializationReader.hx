@@ -270,7 +270,7 @@ class NewSerializationReader {
 			case TEnum(e)  : 
 				switch (v) {
 					case DummyEnum.Dummy_Enum(e, c, p) :
-						SEnum(e, c, p);
+						SEnum(e);
 					case _ :
 						throw 'Internal Error';
 				}
