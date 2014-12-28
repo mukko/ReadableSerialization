@@ -8,7 +8,7 @@ enum SValueType {
 	SObject;
 	SFunction;
 	SClass(c:String);
-	SEnum(e:Dynamic, n:Dynamic, p:Dynamic);
+	SEnum(e:Dynamic);
 	SArray;
 	SString;
 	SIntMap;
