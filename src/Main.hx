@@ -41,27 +41,25 @@ class Main {
 			bool : true,
 			str : "test",
 			hash : m,
-			food: Food.Sukiyaki,
+			food: Food.Etc("appple", "good", 100, Hamburg),
+			food2 : Food.Banana,
         }
-		map1.set("foo", 10);
-		map2.set("bar", map1);
-		map3.set("hoge", map2);
-		var enumf = Food.Etc("appple", "good", 100, Hamburg);
-		var enume = Food.Banana;
+		var enumTest1 = Food.Etc("appple", "good", 100, Food.Etc("pop","aaaa",50,Food.Etc("a","b",1,Banana)));
+		var enumTest2 = Food.Banana;
 		var array2: Array<Dynamic> = [1,null,null,248.55,"test"];
-		var array : Array<Dynamic> = [10, 20, 30, 10.59, "aabb",array2,obj2];
+		var array : Array<Dynamic> = [10, 10.59, "aabb",obj2,enumTest1];
 		var d:Dynamic = { "ten":"10", "twenty":"20" };
 		var str = "aaabbb";
+		map1.set("foo", obj2);
+		map2.set("bar", map1);
+		map3.set("hoge", map2);
 		var exampleSerializedData7 = Serializer.run(array);
-		//ファイル出力・読み込みのテスト
-		var unserialData = ExtendedUnserializer.run(exampleSerializedData7);
-		
-		var out = SerializationReader.getShapedSerializeData(unserialData,0);
-		SerializationReader.outputString(out, "out.txt");
-		//trace(out);
-		/*
-		var read = SerializationReader.readTextFile("out.txt");
-		trace(SerializationReader.getOriginalUnserializedData(read));
-		*/
+		//trace(enumTest1);
+		/*var sss = ExtendedUnserializer.run(exampleSerializedData6);
+		var out = SerializationReader.getShapedSerializeData(sss, 0);
+		SerializationReader.outputString(out, "out_new.txt");*/
+		var sr = new NewSerializationReader(exampleSerializedData6);
+		var out = sr.run();
+		SerializationReader.outputString(out, "out_new.txt");
 	}
 }

@@ -9,6 +9,7 @@ class NewSerializationReader {
 	public var extendedUnserializedData(default, null) : Dynamic;	//拡張デシリアライザデータ
 	public var readableSerializedText(default, null) : String;		//整形シリアライズ文字列
 	private var recursiveDepth:Int = 0;	//再帰の深度を保持する変数
+	private var isEnumRec:Bool = false;	//Enumの再帰であるかを保持
 	private static var INDENT = "	";	//スペース4個分のインデント文字列
 	private static var NOT_OUTPUT_VALUE_TYPE = 2;	//変数名と型を出力しない再帰深度
 	
@@ -214,27 +215,34 @@ class NewSerializationReader {
 		var strBuf = "";	//文字列バッファ
 		
 		if (params != null) {
-			if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE) {
-				strBuf += '{';
+			if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE && isEnumRec == false) {
 				for (i in 0...params.length) {
 					//Enumのパラメータを引数に取り、再帰的に呼び出し
+					isEnumRec = true;
 					strBuf += getReadableSerializedText(params[i]);
 				}
-				strBuf += '}';
+				if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE && isEnumRec == false) strBuf += ",";
 			}
 			else {
 				strBuf += '"" : $type = {';
 				for (i in 0...params.length) {
 					//Enumのパラメータを引数に取り、再帰的に呼び出し
+					isEnumRec = true;
 					strBuf += getReadableSerializedText(params[i]);
 				}
-				strBuf += '},';
+				strBuf += '}';
+				//if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE && isEnumRec == false) strBuf += ",";
 			}
 		}
 		else {
-			strBuf += '"" : $type = ' + enumParam[1]+",";
+			if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE && isEnumRec == false) {
+				strBuf += enumParam[1];
+			}
+			else {
+				strBuf += '{"" : $type = ' + enumParam[1]+",}";
+			}
 		}
-		
+		isEnumRec = false;
 		return strBuf;
 	}
 	
