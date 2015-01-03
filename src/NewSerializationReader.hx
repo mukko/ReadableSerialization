@@ -1,4 +1,5 @@
 package ;
+import StringBuf;
 
 /**
  * シリアライズ文字列を整形シリアライズデータ形式に整形する
@@ -39,44 +40,43 @@ class NewSerializationReader {
 	 * @return  改行とインデントが含まれた整形シリアライズ文字列
 	 */
 	private function addIndentAndNewLine(readableSerializedData : String) : String {
-		var strBuf = "";	//文字列保持用のバッファ
+		var strBuf = new StringBuf();	//文字列保持用のバッファ
 		var indent = 0; 	//整形時のインデント保持用変数
+		var currentChar = '';
+		var nextChar = '';
 		
 		for (i in 0...readableSerializedData.length) {
+			currentChar = readableSerializedData.charAt(i);	//現在の文字を保持
 			switch(readableSerializedData.charAt(i)) {
 				case '{','[':
-					strBuf += readableSerializedData.charAt(i);
-					strBuf += '\n';
+					strBuf.add(currentChar+'\n');
 					indent++;
-					for (i in 0...indent) strBuf += INDENT;
+					for (i in 0...indent) strBuf.add(INDENT);
 				case '}': 
 					//「}」の次の文字が「,」だったら改行を出力しない
-					if (readableSerializedData.charAt(i + 1) == ',' ||
-						readableSerializedData.charAt(i + 1) == ')') {
-						strBuf += readableSerializedData.charAt(i);
+					nextChar = readableSerializedData.charAt(i + 1);	//現在の次の文字を保持	
+					if (nextChar == ',' || nextChar == ')') {
+						strBuf.add(currentChar);
 					}
 					else {
-						strBuf += readableSerializedData.charAt(i);
-						strBuf += '\n';
+						strBuf.add(currentChar+'\n');
 						indent--;
 					}
 				case ',': 
 					//「,」の次の文字が「}」だったら改行を出力してインデントの数を減らす
-					if (readableSerializedData.charAt(i + 1) == '}' ||
-						readableSerializedData.charAt(i + 1) == ']') {
-						strBuf += readableSerializedData.charAt(i);
-						strBuf += '\n';
+					nextChar = readableSerializedData.charAt(i + 1);	//現在の次の文字を保持	
+					if (nextChar == '}' || nextChar == ']') {
+						strBuf.add(currentChar+'\n');
 						indent--;
 					}
 					else {
-						strBuf += readableSerializedData.charAt(i);
-						strBuf += '\n';
+						strBuf.add(currentChar+'\n');
 					}
-					for (i in 0...indent) strBuf += INDENT;
-				default : strBuf += readableSerializedData.charAt(i);
+					for (i in 0...indent) strBuf.add(INDENT);
+				default : strBuf.add(currentChar);
 			}
 		}
-		return strBuf;
+		return strBuf.toString();
 	}
 	
 	/**
