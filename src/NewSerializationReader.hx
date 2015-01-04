@@ -84,29 +84,32 @@ class NewSerializationReader {
 	 * @return インデント・改行無しの整形シリアライズ文字列
 	 */
 	private function getReadableSerializedText(exUnserializedData : Dynamic) : String {
-		var strbuf = "";						//整形シリアライズ文字列バッファー
+		var strbuf = new StringBuf();						//整形シリアライズ文字列バッファー
 		var type = typeof(exUnserializedData);	//拡張デシリアライズデータの型取得
 		
-		if (recursiveDepth == 0) strbuf += "{";
+		if (recursiveDepth == 0) {
+			strbuf.add('{');
+		}
 		recursiveDepth++;
 		
 		//デシリアライズデータの型で判定
 		switch(type) {
 			case SObject , SValueType.SClass : 
-				strbuf += getSObjectReadableSerializedText(exUnserializedData, type);
+				strbuf.add(getSObjectReadableSerializedText(exUnserializedData, type));
 			case SArray : 
-				strbuf += getSArrayReadableSerializedText(exUnserializedData, type);
+				strbuf.add( getSArrayReadableSerializedText(exUnserializedData, type));
 			case SIntMap, SStringMap, SEnumValueMap, SObjectMap : 
-				strbuf += getSMapReadableSerializedText(exUnserializedData, type);
+				strbuf.add(getSMapReadableSerializedText(exUnserializedData, type));
 			case SValueType.SEnum : 
-				strbuf += getSEnumReadableSerializedText(exUnserializedData, type);
-			default : strbuf += '"" : $type = $exUnserializedData,';
+				strbuf.add(getSEnumReadableSerializedText(exUnserializedData, type));
+			default : strbuf.add('"" : $type = $exUnserializedData,');
 		}
 		
 		recursiveDepth--;
-		if (recursiveDepth == 0) strbuf += "}";
-		
-		return strbuf;
+		if (recursiveDepth == 0) {
+			strbuf.add('}');
+		}
+		return strbuf.toString();
 	}
 	
 	/**
@@ -116,14 +119,14 @@ class NewSerializationReader {
 	 * @return  改行・インデント無しの整形シリアライズ文字列
 	 */
 	private function getSObjectReadableSerializedText(exUnserializedData : Dynamic, type : SValueType) : String{
-		var strbuf = "";		//整形シリアライズデータ保持用バッファ
+		var strbuf = new StringBuf();		//整形シリアライズデータ保持用バッファ
 		var fields = Reflect.fields(exUnserializedData);
 		//2回目移行の再帰の場合は変数名と型名を出力しない
 		if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE) {
-			strbuf += '{';
+			strbuf.add('{');
 		}
 		else {
-			strbuf += '"" : $type = {';
+			strbuf.add('"" : $type = {');
 		}
 		//フィールド走査を行いそれぞれのフィールドを整形シリアライズデータ形式にする
 		for (field in fields) {
@@ -131,14 +134,14 @@ class NewSerializationReader {
 			var fieldType = typeof(reflectField);
 			
 			if (isRecursive(fieldType)) {
-				strbuf += '"$field" : $fieldType = '+getReadableSerializedText(reflectField)+',';
+				strbuf.add('"$field" : $fieldType = '+getReadableSerializedText(reflectField)+',');
 			}
 			else {
-				strbuf += '"$field" : $fieldType = $reflectField,';
+				strbuf.add('"$field" : $fieldType = $reflectField,');
 			}
 		}
-		strbuf += '}';
-		return strbuf;
+		strbuf.add('}');
+		return strbuf.toString();
 	}
 	
 	/**
@@ -148,31 +151,35 @@ class NewSerializationReader {
 	 * @return  改行・インデント無しの整形シリアライズ文字列
 	 */
 	private function getSArrayReadableSerializedText(exUnserializedData : Dynamic, type : SValueType) : String {
-		var strbuf = "";		//整形シリアライズデータ保持用バッファ
+		var strbuf = new StringBuf();		//整形シリアライズデータ保持用バッファ
 		var array : Array<Dynamic> = exUnserializedData;	//デシリアライズデータを明示的に配列に代入
 		var fields = Reflect.fields(exUnserializedData);	//フィールド取得
 		var name = fields[0];	//フィールドのインデックスの0番目に配列のインスタンス名が保持されている
 		
 		//インスタンス名が「__a」だった場合はトップレベルの配列であることを名前部分に出力する
 		if (name == "__a") {
-			if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE) strbuf += '[';
-			else strbuf += '__topLevelValue : $type = [';
+			if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE) strbuf.add('[');
+			else strbuf.add('__topLevelValue : $type = [');
 		}
 		
 		for (i in 0...array.length) {
 			var fieldType = typeof(array[i]);	//配列の要素の型を取得
 			if (isRecursive(fieldType)) {
-				strbuf += '"" : $fieldType = '+getReadableSerializedText(array[i])+',';
+				strbuf.add('"" : $fieldType = '+getReadableSerializedText(array[i])+',');
 			}
 			else {
-				strbuf += '"" : $fieldType = '+array[i]+',';
+				strbuf.add('"" : $fieldType = '+array[i]+',');
 			}
 		}
 		
-		if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE) strbuf += ']';
-		else strbuf += '],';
+		if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE) {
+			strbuf.add(']');
+		}
+		else {
+			strbuf.add('],');
+		}
 		
-		return strbuf;
+		return strbuf.toString();
 	}
 	
 	/**
@@ -183,9 +190,11 @@ class NewSerializationReader {
 	 */
 	private function getSMapReadableSerializedText(exUnserializedData : Dynamic, type : SValueType) : String {
 		var map : Map<Dynamic,Dynamic> = exUnserializedData;
-		var strBuf = "";	//マップ用文字列バッファ
+		var strBuf = new StringBuf();	//マップ用文字列バッファ
 		
-		if (recursiveDepth < NOT_OUTPUT_VALUE_TYPE) strBuf += '"" : $type = ';
+		if (recursiveDepth < NOT_OUTPUT_VALUE_TYPE) {
+			strBuf.add('"" : $type = ');
+		}
 		
 		for (key in map.keys()) {
 			var keyType = typeof(key);				//キーの型情報を取得
@@ -193,13 +202,13 @@ class NewSerializationReader {
 			
 			//値の型が再帰が必要な場合、値を引数に入れて再帰的に呼び出す
 			if (isRecursive(valueType)) {
-				strBuf += '($key : $keyType => ' +getReadableSerializedText(map.get(key))+') : $valueType,';
+				strBuf.add('($key : $keyType => ' +getReadableSerializedText(map.get(key))+') : $valueType,');
 			}
 			else {
-				strBuf += '($key : $keyType => '+map.get(key)+' : $valueType),';
+				strBuf.add('($key : $keyType => '+map.get(key)+' : $valueType),');
 			}
 		}
-		return strBuf;
+		return strBuf.toString();
 	}
 	
 	/**
@@ -212,38 +221,38 @@ class NewSerializationReader {
 		var dummyEnum : DummyEnum = exUnserializedData;
 		var enumParam = dummyEnum.getParameters();
 		var params : Array<Dynamic> = enumParam[2];	//Enumのパラメータを取得
-		var strBuf = "";	//文字列バッファ
+		var strBuf = new StringBuf();	//文字列バッファ
 		
 		if (params != null) {
 			if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE && isEnumRec == false) {
 				for (i in 0...params.length) {
 					//Enumのパラメータを引数に取り、再帰的に呼び出し
 					isEnumRec = true;
-					strBuf += getReadableSerializedText(params[i]);
+					strBuf.add(getReadableSerializedText(params[i]));
 				}
-				if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE && isEnumRec == false) strBuf += ",";
+				if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE && isEnumRec == false) strBuf.add(',');
 			}
 			else {
-				strBuf += '"" : $type = {';
+				strBuf.add('"" : $type = {');
 				for (i in 0...params.length) {
 					//Enumのパラメータを引数に取り、再帰的に呼び出し
 					isEnumRec = true;
-					strBuf += getReadableSerializedText(params[i]);
+					strBuf.add(getReadableSerializedText(params[i]));
 				}
-				strBuf += '}';
+				strBuf.add('}');
 				//if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE && isEnumRec == false) strBuf += ",";
 			}
 		}
 		else {
 			if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE && isEnumRec == false) {
-				strBuf += enumParam[1];
+				strBuf.add(enumParam[1]);
 			}
 			else {
-				strBuf += '{"" : $type = ' + enumParam[1]+",}";
+				strBuf.add('{"" : $type = ' + enumParam[1]+",}");
 			}
 		}
 		isEnumRec = false;
-		return strBuf;
+		return strBuf.toString();
 	}
 	
 	/**
