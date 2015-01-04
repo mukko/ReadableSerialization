@@ -10,7 +10,6 @@ class NewSerializationReader {
 	public var extendedUnserializedData(default, null) : Dynamic;	//拡張デシリアライザデータ
 	public var readableSerializedText(default, null) : String;		//整形シリアライズ文字列
 	private var recursiveDepth:Int = 0;	//再帰の深度を保持する変数
-	private var isEnumRec:Bool = false;	//Enumの再帰であるかを保持
 	private static var INDENT = "	";	//スペース4個分のインデント文字列
 	private static var NOT_OUTPUT_VALUE_TYPE = 2;	//変数名と型を出力しない再帰深度
 	
@@ -221,37 +220,42 @@ class NewSerializationReader {
 		var dummyEnum : DummyEnum = exUnserializedData;
 		var enumParam = dummyEnum.getParameters();
 		var params : Array<Dynamic> = enumParam[2];	//Enumのパラメータを取得
+		var paramType;	//Enumのパラメータの型を保持
 		var strBuf = new StringBuf();	//文字列バッファ
 		
+		//パラメータがnullでない場合は再帰
 		if (params != null) {
-			if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE && isEnumRec == false) {
-				for (i in 0...params.length) {
-					//Enumのパラメータを引数に取り、再帰的に呼び出し
-					isEnumRec = true;
-					strBuf.add(getReadableSerializedText(params[i]));
-				}
-				if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE && isEnumRec == false) strBuf.add(',');
+			if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE) {
+				strBuf.add('{');
 			}
 			else {
 				strBuf.add('"" : $type = {');
-				for (i in 0...params.length) {
-					//Enumのパラメータを引数に取り、再帰的に呼び出し
-					isEnumRec = true;
-					strBuf.add(getReadableSerializedText(params[i]));
+			}
+			for (param in params) {
+				//Enumのパラメータを引数に取り、再帰的に呼び出し
+				paramType = typeof(param);
+				if (isRecursive(paramType)) {
+					strBuf.add('"" : $paramType = '+getReadableSerializedText(param)+',');
 				}
+				else {
+					strBuf.add('"" : $paramType = $param,');
+				}
+			}
+			if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE) {
 				strBuf.add('}');
-				//if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE && isEnumRec == false) strBuf += ",";
+			}
+			else {
+				strBuf.add('},');
 			}
 		}
 		else {
-			if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE && isEnumRec == false) {
+			if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE) {
 				strBuf.add(enumParam[1]);
 			}
 			else {
 				strBuf.add('{"" : $type = ' + enumParam[1]+",}");
 			}
 		}
-		isEnumRec = false;
 		return strBuf.toString();
 	}
 	
