@@ -48,10 +48,17 @@ class NewSerializationReader {
 		for (i in 0...readableSerializedData.length) {
 			currentChar = readableSerializedData.charAt(i);	//現在の文字を保持
 			switch(readableSerializedData.charAt(i)) {
-				case '{','[':
-					strBuf.add(currentChar+'\n');
-					indent++;
-					for (i in 0...indent) strBuf.add(INDENT);
+				case '{', '[':
+					nextChar = readableSerializedData.charAt(i + 1);	//現在の次の文字を保持	
+					strBuf.add(currentChar + '\n');
+					//「{」・「[」の次の文字が「}」・「]」だった場合は空列と判断しインデントを増加させない
+					if (nextChar == '}' || nextChar == ']') {
+						for (i in 0...indent) strBuf.add(INDENT);
+					}
+					else {
+						indent++;
+						for (i in 0...indent) strBuf.add(INDENT);
+					}
 				case '}': 
 					//「}」の次の文字が「,」だったら改行を出力しない
 					nextChar = readableSerializedData.charAt(i + 1);	//現在の次の文字を保持	
