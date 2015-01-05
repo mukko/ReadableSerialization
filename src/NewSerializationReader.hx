@@ -137,7 +137,10 @@ class NewSerializationReader {
 				strbuf.add('"$field" : $fieldType = '+getReadableSerializedText(reflectField)+',');
 			}
 			else {
-				strbuf.add('"$field" : $fieldType = $reflectField,');
+				//フィールド名がマクロによって返されたクラス名以外だったら出力
+				if (field != TYPE_HACKER_CLASS_NAME) {
+					strbuf.add('"$field" : $fieldType = $reflectField,');
+				}
 			}
 		}
 		strbuf.add('}');
