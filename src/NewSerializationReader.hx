@@ -210,12 +210,23 @@ class NewSerializationReader {
 			var keyType = typeof(key);				//キーの型情報を取得
 			var valueType = typeof(map.get(key));	//値の情報を取得
 			
-			//値の型が再帰が必要な場合、値を引数に入れて再帰的に呼び出す
-			if (isRecursive(valueType)) {
-				strBuf.add('($key : $keyType => ' +getReadableSerializedText(map.get(key))+') : $valueType,');
+			//キーの型が再帰が必要な場合、キーを引数に入れて再帰的に呼び出す.
+			if (isRecursive(keyType)) {
+				//値の型が再帰が必要な場合、値を引数に入れて再帰的に呼び出す.
+				if (isRecursive(valueType)) {
+					strBuf.add('('+getReadableSerializedText(key)+': $keyType => ' +getReadableSerializedText(map.get(key))+') : $valueType,');
+				}
+				else {
+					strBuf.add('('+getReadableSerializedText(key)+': $keyType => '+map.get(key)+' : $valueType),');
+				}
 			}
 			else {
-				strBuf.add('($key : $keyType => '+map.get(key)+' : $valueType),');
+				if (isRecursive(valueType)) {
+					strBuf.add('($key : $keyType => ' +getReadableSerializedText(map.get(key))+') : $valueType,');
+				}
+				else {
+					strBuf.add('($key : $keyType => '+map.get(key)+' : $valueType),');
+				}
 			}
 		}
 		return strBuf.toString();
