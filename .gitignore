@@ -4,3 +4,4 @@ ReadableSerialization.hxproj
 bin/Main.swf
 *.hxproj
 samples/
+out/
