@@ -12,6 +12,7 @@ class NewSerializationReader {
 	private var recursiveDepth:Int = 0;	//再帰の深度を保持する変数
 	private static var INDENT = "	";	//スペース4個分のインデント文字列
 	private static var NOT_OUTPUT_VALUE_TYPE = 2;	//変数名と型を出力しない再帰深度
+	private static var TYPE_HACKER_CLASS_NAME = '_readable_serialization_class_name_';	
 	
 	/**
 	 * シリアライズ文字列を引数に取る
@@ -281,8 +282,8 @@ class NewSerializationReader {
 	 * @return	要素の型名
 	 */ 
 	private static function typeof(v:Dynamic):SValueType {
-		if (Reflect.hasField(v, '_readable_serialization_class_name_')) {
-			return SClass(Reflect.field(v, '_readable_serialization_class_name_'));
+		if (Reflect.hasField(v, TYPE_HACKER_CLASS_NAME)) {
+			return SClass(Reflect.field(v, TYPE_HACKER_CLASS_NAME));
 		}
 		return switch (Type.typeof(v)) {
 			case TNull     : SNull;
