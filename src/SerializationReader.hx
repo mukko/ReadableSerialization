@@ -242,6 +242,10 @@ class SerializationReader {
 	 * @return  読み込んだテキストファイルのデータ
 	 */
 	public static function readTextFile(fileName : String) : String {
-		return File.getContent(fileName);
+		try {
+			return File.getContent(fileName);
+		}catch( unknown : Dynamic ){
+			return null;
+		}
 	}
 }
