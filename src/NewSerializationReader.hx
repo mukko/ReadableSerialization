@@ -301,6 +301,24 @@ class NewSerializationReader {
 	}
 	
 	/**
+	 * SString型の拡張デシリアライズデータを整形シリアライズ文字列にして返す
+	 * URLデコードを使用して拡張デシリアライズデータから文字列を取得する
+	 * @param	exUnserializedData 拡張デシリアライズデータ
+	 * @param	type 拡張デシリアライズデータの型
+	 * @return  改行・インデント無しの整形シリアライズ文字列
+	 */
+	private function getSStringReadableSerializedText(exUnserializedData : Dynamic, type : SValueType) : String {
+		var strBuf = new StringBuf();
+		if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE) {
+			strBuf.add(StringTools.urlDecode(exUnserializedData));
+		}
+		else {
+			strBuf.add('"" = : $type = '+StringTools.urlDecode(exUnserializedData));
+		}
+		return strBuf.toString();
+	}
+	
+	/**
 	 * 引数の型が再帰が必要な型かを返す
 	 * @param	t SValueTypeのコンストラクタ
 	 * @return  再帰が必要な場合はtrue、必要無い場合はfalse
