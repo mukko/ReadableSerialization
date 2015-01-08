@@ -126,6 +126,8 @@ class NewSerializationReader {
 				strbuf.add( getSArrayReadableSerializedText(exUnserializedData, type));
 			case SIntMap, SStringMap, SEnumValueMap, SObjectMap : 
 				strbuf.add(getSMapReadableSerializedText(exUnserializedData, type));
+			case SString : 
+				strbuf.add(getSStringReadableSerializedText(exUnserializedData, type));
 			case SValueType.SEnum : 
 				strbuf.add(getSEnumReadableSerializedText(exUnserializedData, type));
 			default : strbuf.add('"" : $type = $exUnserializedData,');
@@ -160,13 +162,13 @@ class NewSerializationReader {
 			var fieldType = typeof(reflectField);
 			
 			if (isRecursive(fieldType)) {
-				strbuf.add('"$field" : $fieldType = '+getReadableSerializedText(reflectField)+',');
-			}
-			else {
 				//フィールド名がマクロによって返されたクラス名以外だったら出力
 				if (field != TYPE_HACKER_CLASS_NAME) {
-					strbuf.add('"$field" : $fieldType = $reflectField,');
+					strbuf.add('"$field" : $fieldType = ' + getReadableSerializedText(reflectField) + ',');
 				}
+			}
+			else {
+				strbuf.add('"$field" : $fieldType = $reflectField,');
 			}
 		}
 		strbuf.add('}');
