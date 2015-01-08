@@ -100,7 +100,7 @@ class NewSerializationReader {
 		var currentChar = '';
 		for (i in 0...str.length) {
 			currentChar = str.charAt(i);
-			strBuf.add(StringTools.replace(currentChar, '\n', ''));
+			strBuf.add((~/\n/g.replace(currentChar, "")));
 		}
 		return strBuf.toString();
 	}
