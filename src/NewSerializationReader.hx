@@ -87,6 +87,20 @@ class NewSerializationReader {
 	}
 	
 	/**
+	 * 文字列内の改行文字を取った文字列を返す
+	 * @param	str 改行文字の含まれる文字列
+	 * @return 改行文字が除かれた文字列
+	 */
+	private function removeNewLine(str : String) : String {
+		var strBuf = new StringBuf();
+		var currentChar = '';
+		for (i in 0...str.length) {
+			currentChar = str.charAt(i);
+			strBuf.add(StringTools.replace(currentChar, '\n', ''));
+		}
+		return strBuf.toString();
+	}
+	/**
 	 * 拡張デシリアライズデータを引数に取り、整形シリアライズ文字列を返す
 	 * @return インデント・改行無しの整形シリアライズ文字列
 	 */
