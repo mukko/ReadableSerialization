@@ -31,7 +31,7 @@ class NewSerializationReader {
 	 */
 	public function run() : String {
 		readableSerializedText = getReadableSerializedText(extendedUnserializedData);
-		return addIndentAndNewLine(readableSerializedText);
+		return addIndentAndNewLine(removeNewLine(readableSerializedText));
 	}
 	
 	/**
@@ -75,11 +75,15 @@ class NewSerializationReader {
 					if (nextChar == '}' || nextChar == ']') {
 						strBuf.add(currentChar+'\n');
 						indent--;
+						for (i in 0...indent) strBuf.add(INDENT);
+					}
+					else if(nextChar == '"'){
+						strBuf.add(currentChar + '\n');
+						for (i in 0...indent) strBuf.add(INDENT);
 					}
 					else {
-						strBuf.add(currentChar+'\n');
+						strBuf.add(currentChar);
 					}
-					for (i in 0...indent) strBuf.add(INDENT);
 				default : strBuf.add(currentChar);
 			}
 		}
@@ -100,6 +104,7 @@ class NewSerializationReader {
 		}
 		return strBuf.toString();
 	}
+	
 	/**
 	 * 拡張デシリアライズデータを引数に取り、整形シリアライズ文字列を返す
 	 * @return インデント・改行無しの整形シリアライズ文字列
