@@ -10,13 +10,13 @@ class Main extends mcli.CommandLine {
 		}
 		else {
 			//指定したファイルからシリアライズ文字列を取得
-			var sr = SerializationReader.readTextFile(name);
+			var sr = FileTools.readTextFile(name);
 			if (sr == null) {
 				Sys.println("No such file "+name);
 			}
 			else {
 				var sr = new NewSerializationReader(sr);
-				SerializationReader.outputString(sr.run(),"out_"+name+".txt");
+				FileTools.outputString(sr.run(),"out_"+name+".txt");
 				Sys.println("Save as out_"+name+".txt");
 			}
 		}
