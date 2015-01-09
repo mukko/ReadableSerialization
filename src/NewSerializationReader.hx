@@ -296,11 +296,15 @@ class NewSerializationReader {
 	 */
 	private function getSStringReadableSerializedText(exUnserializedData : Dynamic, type : SValueType) : String {
 		var strBuf = new StringBuf();
+		//改行文字を変換
+		var str = StringTools.replace(exUnserializedData, '\n', '\\n');
+		//文字列が空列だった場合には「""」を代入
+		if (str == '') str = '""';
 		if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE) {
-			strBuf.add(StringTools.urlDecode(exUnserializedData));
+			strBuf.add(str);
 		}
 		else {
-			strBuf.add('"" = : $type = '+StringTools.urlDecode(exUnserializedData));
+			strBuf.add('"" = : $type = $str');
 		}
 		return strBuf.toString();
 	}
