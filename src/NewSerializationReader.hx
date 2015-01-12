@@ -98,9 +98,6 @@ class NewSerializationReader {
 		var strbuf = new StringBuf();						//整形シリアライズ文字列バッファー
 		var type = typeof(exUnserializedData);	//拡張デシリアライズデータの型取得
 		
-		if (recursiveDepth == 0) {
-			strbuf.add('{');
-		}
 		recursiveDepth++;
 		
 		//デシリアライズデータの型で判定
@@ -119,9 +116,6 @@ class NewSerializationReader {
 		}
 		
 		recursiveDepth--;
-		if (recursiveDepth == 0) {
-			strbuf.add('}');
-		}
 		return strbuf.toString();
 	}
 	
