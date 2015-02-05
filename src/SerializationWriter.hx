@@ -11,12 +11,28 @@ class SerializationWriter {
 	private var line : String = "";		//整形シリアライズ文字列の1行を保持
 	
 	/**
-	 * 整形シリアライズデータの文字列の書かれたテキストファイル名を
+	 * 整形シリアライズデータの文字列が書かれたテキストファイル名を
 	 * 引数に取り、文字列を読み込んでフィールドに保持
 	 * @param	filename 読み込むテキストファイル名
 	 */
 	public function new(filename : String) {
 		readableSerializedText = FileTools.readTextFile(filename);
+	}
+	
+	/**
+	 * 整形シリアライズデータから元のデータを生成
+	 * @return シリアライズ元データ
+	 */
+	public function run() : Dynamic { 
+		line = readableSerializedText;	//修正予定
+		var type = typeof();	//型情報を習得
+		
+		//元のデータを生成
+		switch (type) {
+			case TInt: originalValue = getInt();
+			default : originalValue = null;
+		}
+		return originalValue;
 	}
 	
 	/**
