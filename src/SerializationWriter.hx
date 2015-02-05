@@ -6,7 +6,8 @@ package ;
  */
 class SerializationWriter {
 	public var readableSerializedText(default, null) : String;	//整形シリアライズ文字列
-	public var originalValue(default, null) : Dynamic;			//シリアライズ元の
+	private var originalValue : Dynamic;//シリアライズ元のデータ
+	private var line : String = "";		//整形シリアライズ文字列の1行を保持
 	
 	/**
 	 * 整形シリアライズデータの文字列の書かれたテキストファイル名を
