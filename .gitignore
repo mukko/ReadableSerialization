@@ -5,3 +5,5 @@ bin/Main.swf
 *.hxproj
 samples/
 out/
+*.n
+*.txt
