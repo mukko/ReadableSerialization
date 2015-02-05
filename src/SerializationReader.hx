@@ -5,7 +5,7 @@ import StringBuf;
  * シリアライズ文字列を整形シリアライズデータ形式に整形する
  * @author 000ubird
  */
-class NewSerializationReader {
+class SerializationReader {
 	public var serializedText(default, null) : String;				//シリアライズ文字列
 	public var extendedUnserializedData(default, null) : Dynamic;	//拡張デシリアライザデータ
 	public var readableSerializedText(default, null) : String;		//整形シリアライズ文字列
