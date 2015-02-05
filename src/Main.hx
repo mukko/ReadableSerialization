@@ -15,7 +15,7 @@ class Main extends mcli.CommandLine {
 				Sys.println("No such file "+name);
 			}
 			else {
-				var sr = new NewSerializationReader(sr);
+				var sr = new SerializationReader(sr);
 				FileTools.outputString(sr.run(),"out_"+name+".txt");
 				Sys.println("Save as out_"+name+".txt");
 			}
