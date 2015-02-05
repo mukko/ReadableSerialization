@@ -19,6 +19,19 @@ class SerializationWriter {
 		readableSerializedText = FileTools.readTextFile(filename);
 	}
 	
+	/**
+	 * 整形シリアライズ文字列の1行分のデータからInt型の数値を返す
+	 * @return Int型の値
+	 */
+	private function getInt() : Int {
+		var r : EReg = ~/=.*,/;	//型名を取り出す正規表現
+		r.match(line);
+		var value = r.matched(0);	//正規表現によって抽出された文字列を保持
+		value = StringTools.replace(value, '=','');	//「=」の削除
+		value = StringTools.replace(value, ',', '');//「,」の削除
+		value = StringTools.replace(value, ' ', '');//スペースの削除
+		return Std.parseInt(value);
+	}
 	
 	/**
 	 * 整形シリアライズ文字列の1行分のデータから型情報を取り出す
