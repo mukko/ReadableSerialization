@@ -6,7 +6,9 @@ class Main extends mcli.CommandLine {
 	
 	public function runDefault(?name:String) {
 		if (name == null) {
-			Sys.println("No files selected.");
+			var sw = new SerializationWriter("intSample.txt");
+			Sys.println("Value => "+sw.run());
+			//Sys.println("No files selected.");
 		}
 		else {
 			//指定したファイルからシリアライズ文字列を取得
