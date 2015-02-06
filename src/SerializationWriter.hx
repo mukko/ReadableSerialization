@@ -30,6 +30,7 @@ class SerializationWriter {
 		//元のデータを生成
 		switch (type) {
 			case TInt: originalValue = getInt();
+			case TFloat: originalValue = getFloat();
 			default : originalValue = null;
 		}
 		return originalValue;
@@ -40,12 +41,7 @@ class SerializationWriter {
 	 * @return Int型の値
 	 */
 	private function getInt() : Int {
-		var r : EReg = ~/=.*,/;	//型名を取り出す正規表現
-		r.match(line);
-		var value = r.matched(0);	//正規表現によって抽出された文字列を保持
-		value = StringTools.replace(value, '=','');	//「=」の削除
-		value = StringTools.replace(value, ',', '');//「,」の削除
-		value = StringTools.replace(value, ' ', '');//スペースの削除
+		var value = getPrimitiveValue();
 		return Std.parseInt(value);
 	}
 	
@@ -54,12 +50,7 @@ class SerializationWriter {
 	 * @return Float型の値
 	 */
 	private function getFloat() : Float {
-		var r : EReg = ~/=.*,/;	//型名を取り出す正規表現
-		r.match(line);
-		var value = r.matched(0);	//正規表現によって抽出された文字列を保持
-		value = StringTools.replace(value, '=','');	//「=」の削除
-		value = StringTools.replace(value, ',', '');//「,」の削除
-		value = StringTools.replace(value, ' ', '');//スペースの削除
+		var value = getPrimitiveValue();
 		return Std.parseFloat(value);
 	}
 	
