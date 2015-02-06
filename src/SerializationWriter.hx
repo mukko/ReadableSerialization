@@ -31,6 +31,7 @@ class SerializationWriter {
 		switch (type) {
 			case TInt: originalValue = getInt();
 			case TFloat: originalValue = getFloat();
+			case TBool : originalValue = getBool();
 			default : originalValue = null;
 		}
 		return originalValue;
@@ -52,6 +53,16 @@ class SerializationWriter {
 	private function getFloat() : Float {
 		var value = getPrimitiveValue();
 		return Std.parseFloat(value);
+	}
+	
+	/**
+	 * 整形シリアライズ文字列の1行分のデータからBool型の値を返す
+	 * @return Bool型の値
+	 */
+	private function getBool() : Bool {
+		var value = getPrimitiveValue();
+		if (value == "true") return true;
+		else return false;
 	}
 	
 	/**
