@@ -31,4 +31,23 @@ class FileTools {
 			return null;
 		}
 	}
+	
+	/**
+	 * テキストファイルから指定した1行を取得し返す
+	 * @param	fileName 読み取るテキストファイル名
+	 * @param	lineNumber 読み取る行
+	 * @return 取得した1行の文字列
+	 */
+	public static function readLine(fileName, lineNumber) : String {
+		var fin = sys.io.File.read(fileName, false);
+		var line = "";
+		try {
+			for (i in 0...lineNumber) {
+				fin.readLine();	
+			}
+			line = fin.readLine();
+			fin.close();
+		} catch (e:haxe.io.Eof) { return null; }
+		return line;
+	}
 }
