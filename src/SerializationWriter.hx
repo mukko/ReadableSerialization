@@ -25,15 +25,23 @@ class SerializationWriter {
 	 * @return シリアライズ元データ
 	 */
 	public function run() : Dynamic { 
-		line = readableSerializedText;	//修正予定
-		var type = typeof();	//型情報を習得
+		while(true){
+			//文字列を取得
+			line = FileTools.readLine(fileName, currentLine);
+			if (line == null) break;
+			/*
+			 *ここにある1行に対しての処理を追加予定
+			 */
+			var type = typeof();	//型情報を習得
 		
-		//元のデータを生成
-		switch (type) {
-			case TInt: originalValue = getInt();
-			case TFloat: originalValue = getFloat();
-			case TBool : originalValue = getBool();
-			default : originalValue = null;
+			//元のデータを生成
+			switch (type) {
+				case TInt: originalValue = getInt();
+				case TFloat: originalValue = getFloat();
+				case TBool : originalValue = getBool();
+				default : originalValue = null;
+			}
+			currentLine++;
 		}
 		return originalValue;
 	}
