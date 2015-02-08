@@ -75,6 +75,14 @@ class SerializationWriter {
 	}
 	
 	/**
+	 * 整形シリアライズ文字列の1行分のデータからString型の値を返す
+	 * @return String型の値
+	 */
+	private function getString() : String {
+		var value = getPrimitiveValue();
+		return value.toString();
+	}
+	
 	 * 整形シリアライズ文字列の1行分のデータから値の部分の文字列を抽出して返す
 	 * 「=」と「,」に囲まれた部分を抽出する。
 	 * プリミティブ型の場合のみ正しく動作する
