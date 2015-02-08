@@ -6,7 +6,7 @@ import Type;
  * @author 000ubird
  */
 class SerializationWriter {
-	public var originalValue(default,null) : Dynamic;	//シリアライズ元のデータ
+	//public var originalValue(default,null) : Dynamic;	//シリアライズ元のデータ
 	private var fileName : String = "";	//整形シリアライズデータの書かれたテキストファイル名
 	private var line : String = "";		//整形シリアライズ文字列の1行を保持
 	private var currentLine : Int = 0;		//読み取る行数
@@ -21,10 +21,19 @@ class SerializationWriter {
 	}
 	
 	/**
-	 * 整形シリアライズデータから元のデータを生成
+	 * 整形シリアライズデータから元のデータを生成を実行
 	 * @return シリアライズ元データ
 	 */
 	public function run() : Dynamic { 
+		return getOriginalValue();
+	}
+	
+	/**
+	 * 整形シリアライズデータから元のデータを生成
+	 * @return シリアライズ元データ
+	 */
+	private function getOriginalValue() : Dynamic {
+		var originalValue : Dynamic;
 		while(true){
 			//文字列を取得
 			line = FileTools.readLine(fileName, currentLine);
@@ -39,6 +48,8 @@ class SerializationWriter {
 				case TInt: originalValue = getInt();
 				case TFloat: originalValue = getFloat();
 				case TBool : originalValue = getBool();
+				case TClass(String) : originalValue = getString();
+				//case TObject : currentLine++; originalValueTmp = getOriginalValue();
 				default : originalValue = null;
 			}
 			currentLine++;

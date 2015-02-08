@@ -6,8 +6,9 @@ class Main extends mcli.CommandLine {
 	
 	public function runDefault(?name:String) {
 		if (name == null) {
-			var sw = new SerializationWriter("intSample.txt");
-			Sys.println("Value => "+sw.run());
+			var sw = new SerializationWriter("stringSample.txt");
+			var originValue = sw.run();
+			Sys.println("type => "+Type.typeof(originValue)+" , Value => "+originValue);
 			//Sys.println("No files selected.");
 		}
 		else {
