@@ -83,6 +83,20 @@ class SerializationWriter {
 		return value.toString();
 	}
 	
+	/**
+	 * 整形シリアライズ文字列の1行分のデータから変数名を取得する
+	 * ダブルクオーテーションで囲まれた部分を抽出する
+	 * @return 
+	 */
+	private function getValueName() : String {
+		var r : EReg = ~/".*"/;	//型名を取り出す正規表現
+		r.match(line);
+		var value = r.matched(0);	//正規表現によって抽出された文字列を保持
+		value = StringTools.replace(value, '"','');	//「"」の削除
+		return value.toString();
+	}
+	
+	/**
 	 * 整形シリアライズ文字列の1行分のデータから値の部分の文字列を抽出して返す
 	 * 「=」と「,」に囲まれた部分を抽出する。
 	 * プリミティブ型の場合のみ正しく動作する
