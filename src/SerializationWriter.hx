@@ -89,10 +89,12 @@ class SerializationWriter {
 	 * @return 
 	 */
 	private function getValueName() : String {
-		var r : EReg = ~/".*"/;	//型名を取り出す正規表現
+		var r : EReg = ~/".*" : /;	//型名を取り出す正規表現
 		r.match(line);
 		var value = r.matched(0);	//正規表現によって抽出された文字列を保持
-		value = StringTools.replace(value, '"','');	//「"」の削除
+		value = StringTools.replace(value, ':','');		//「:」の削除
+		value = StringTools.replace(value, '"', '');	//「"」の削除
+		value = StringTools.replace(value, ' ', '');	//スペースの削除
 		return value.toString();
 	}
 	
