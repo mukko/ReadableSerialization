@@ -49,7 +49,7 @@ class SerializationWriter {
 				case TFloat: originalValue = getFloat();
 				case TBool : originalValue = getBool();
 				case TClass(String) : originalValue = getString();
-				//case TObject : currentLine++; originalValueTmp = getOriginalValue();
+				case TObject : currentLine++; originalValue = getObject();
 				default : originalValue = null;
 			}
 			currentLine++;
@@ -92,6 +92,35 @@ class SerializationWriter {
 	private function getString() : String {
 		var value = getPrimitiveValue();
 		return value.toString();
+	}
+	
+	/**
+	 * 整形シリアライズデータ文字列からObject型の値を返す
+	 * 再帰構造になっているオブジェクトには未対応。要実装
+	 * @return Object型の値
+	 */
+	private function getObject() : Dynamic {
+		var obj = {};
+		while(true){
+			//文字列を取得
+			line = FileTools.readLine(fileName, currentLine);
+			if (line == "}") break;	//オブジェクトの終わりを示す記号が来たらループを抜ける
+			
+			//型情報を習得
+			var type = typeof();
+			
+			//元のデータを生成
+			switch (type) {
+				case TNull : Reflect.setField(obj, getValueName(), null);				//trace(type,obj);
+				case TInt: Reflect.setField(obj,getValueName(),getInt());				//trace(type,obj);
+				case TFloat: Reflect.setField(obj,getValueName(),getFloat());			//trace(type,obj);
+				case TBool : Reflect.setField(obj,getValueName(),getBool());			//trace(type,obj);
+				case TClass(String) : Reflect.setField(obj,getValueName(),getString());	//trace(type,obj);
+				default : obj = null;
+			}
+			currentLine++;
+		}
+		return obj;
 	}
 	
 	/**
