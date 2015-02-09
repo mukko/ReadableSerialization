@@ -93,6 +93,10 @@ class SerializationWriter {
 	 */
 	private function getString() : String {
 		var value = getPrimitiveValue();
+		
+		//String型の値が「""」だった場合は空列を代入
+		if (value == '""') value = '';
+		
 		return value.toString();
 	}
 	
