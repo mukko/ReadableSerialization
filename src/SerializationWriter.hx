@@ -124,6 +124,16 @@ class SerializationWriter {
 	}
 	
 	/**
+	 * 現在の行がオブジェクトの終わりを示す文字列であるかを取得
+	 * @return　オブジェクトの終わりなら真を返す
+	 */
+	private function isObjectEnd() : Bool {
+		//インデント文字列を除いた文字列が「}」なら真
+		if (StringTools.replace(line, '	', '') == '}') return true;
+		else return false;
+	}
+	
+	/**
 	 * 整形シリアライズ文字列の1行分のデータから変数名を取得する
 	 * ダブルクオーテーションで囲まれた部分を抽出する
 	 * @return 
