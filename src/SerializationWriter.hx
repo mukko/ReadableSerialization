@@ -111,7 +111,7 @@ class SerializationWriter {
 		while(true){
 			//文字列を取得
 			line = FileTools.readLine(fileName, currentLine);
-			if (isObjectEnd()) break;	//オブジェクトの終わりを示す記号が来たらループを抜ける
+			if (isEndOfInstance()) break;	//オブジェクトの終わりを示す記号が来たらループを抜ける
 			
 			//型情報を習得
 			var type = typeof();
@@ -134,12 +134,14 @@ class SerializationWriter {
 	}
 	
 	/**
-	 * 現在の行がオブジェクトの終わりを示す文字列であるかを取得
-	 * @return　オブジェクトの終わりなら真を返す
+	 * 現在の行がオブジェクト・クラス・配列の終わりを示す文字列であるかを取得
+	 * @return　終わりを示す記号だった場合は真を返す
 	 */
-	private function isObjectEnd() : Bool {
-		//インデント文字列を除いた文字列が「}」なら真
-		if (StringTools.replace(line, '	', '') == '}') return true;
+	private function isEndOfInstance () : Bool {
+		//インデント文字列と「,」を除いた文字列が「}」なら真
+		var str = StringTools.replace(line, '	', '');
+		str = StringTools.replace(str, ',', '');
+		if (str == '}' || str == ']') return true;
 		else return false;
 	}
 	
