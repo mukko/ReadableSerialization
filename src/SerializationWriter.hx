@@ -144,9 +144,26 @@ class SerializationWriter {
 	}
 	
 	/**
+	 * 整形シリアライズ文字列の1行分のデータからクラス名を取得する
+	 * SClassの次に記述される括弧内の文字列を抽出する
+	 * @return クラス名の文字列
+	 */
+	private function getClassName() : String {
+		var r : EReg = ~/SClass(.*) =/;	//クラス名を取り出す正規表現
+		r.match(line);
+		var value = r.matched(0);	//正規表現によって抽出された文字列を保持
+		value = StringTools.replace(value, 'SClass','');//不要な文字の削除
+		value = StringTools.replace(value, '(', '');	//「(」の削除
+		value = StringTools.replace(value, ')', '');	//「)」の削除
+		value = StringTools.replace(value, ' ', '');	//スペースの削除
+		value = StringTools.replace(value, '=', '');	//「=」の削除
+		return value.toString();
+	}
+	
+	/**
 	 * 整形シリアライズ文字列の1行分のデータから変数名を取得する
 	 * ダブルクオーテーションで囲まれた部分を抽出する
-	 * @return 
+	 * @return 変数名の文字列
 	 */
 	private function getValueName() : String {
 		var r : EReg = ~/".*" : /;	//型名を取り出す正規表現
