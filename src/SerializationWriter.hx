@@ -45,6 +45,7 @@ class SerializationWriter {
 		
 			//元のデータを生成
 			switch (type) {
+				case TNull : originalValue = null;
 				case TInt: originalValue = getInt();
 				case TFloat: originalValue = getFloat();
 				case TBool : originalValue = getBool();
