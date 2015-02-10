@@ -6,10 +6,10 @@ import Type;
  * @author 000ubird
  */
 class SerializationWriter {
-	//public var originalValue(default,null) : Dynamic;	//シリアライズ元のデータ
 	private var fileName : String = "";	//整形シリアライズデータの書かれたテキストファイル名
 	private var line : String = "";		//整形シリアライズ文字列の1行を保持
 	private var currentLine : Int = 0;		//読み取る行数
+	private static var MAX_SET_CONSTRUCTORS = 8;	//クラス生成時の最大コンストラクタ数
 	
 	/**
 	 * 整形シリアライズデータの文字列が書かれたテキストファイル名を
@@ -103,7 +103,6 @@ class SerializationWriter {
 	
 	/**
 	 * 整形シリアライズデータ文字列からObject型の値を返す
-	 * 再帰構造になっているオブジェクトには未対応。要実装
 	 * @return Object型の値
 	 */
 	private function getObject() : Dynamic {
@@ -131,6 +130,44 @@ class SerializationWriter {
 			currentLine++;
 		}
 		return obj;
+	}
+	
+	/**
+	 * 整形シリアライズデータ文字列からクラスのインスタンスを返す
+	 * @return　Classのインスタンス
+	 */
+	private function getClass() : Class<Dynamic> {
+		var className = getClassName();
+		var resolveClass = Type.resolveClass(className);
+		var originalClass = Type.createEmptyInstance(resolveClass);
+		var numberOfConstructors = 0;
+		
+		while(true){
+			//文字列を取得
+			line = FileTools.readLine(fileName, currentLine);
+			//インスタンスの終わりを示す記号が来たらループを抜ける
+			if (isEndOfInstance()) break;
+			//設定可能コンストラクタ数を超えたらエラーを出力
+			if (numberOfConstructors > MAX_SET_CONSTRUCTORS) throw "Too many arguments";
+			//型情報を習得
+			var type = typeof();
+			
+			//元のデータを生成
+			switch (type) {
+				case TNull : Reflect.setField(originalClass, getValueName(), null);		//trace(type,obj);
+				case TInt: Reflect.setField(originalClass,getValueName(),getInt());		//trace(type,obj);
+				case TFloat: Reflect.setField(originalClass,getValueName(),getFloat());	//trace(type,obj);
+				case TBool : Reflect.setField(originalClass,getValueName(),getBool());	//trace(type,obj);
+				case TClass(String) : Reflect.setField(originalClass, getValueName(), getString()); //trace(type,obj);
+				case TObject :
+					currentLine++;
+					Reflect.setField(originalClass, getValueName(), getObject());	//trace(type,obj);
+				default : originalClass = null;
+			}
+			numberOfConstructors++;
+			currentLine++;
+		}
+		return originalClass;
 	}
 	
 	/**
