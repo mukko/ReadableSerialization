@@ -1,6 +1,13 @@
 -cp src
 --macro TypeHacker.run()
 
--neko Main.n
--main Main
+-neko sr.n
+-main serializationReader.Main
+-lib mcli
+
+--next
+
+-cp src
+-neko sw.n
+-main serializationWriter.Main
 -lib mcli
