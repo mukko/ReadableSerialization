@@ -1,4 +1,4 @@
-package ;
+package serializationReader;
 
 enum SValueType {
 	SNull;

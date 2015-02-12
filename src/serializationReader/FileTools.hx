@@ -1,4 +1,4 @@
-package ;
+package serializationReader;
 
 import sys.io.File;
 

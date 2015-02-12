@@ -1,4 +1,4 @@
-package ;
+package serializationReader;
 
 import haxe.Unserializer;
 
