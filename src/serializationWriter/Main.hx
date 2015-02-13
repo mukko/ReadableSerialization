@@ -2,30 +2,20 @@ package serializationWriter;
 import haxe.Serializer;
 import haxe.Unserializer;
 
-class Main extends mcli.CommandLine {
-	
-	public function runDefault(?name:String) {
-		if (name == null) {
-			//var sw = new SerializationWriter("objectSample.txt");
-			//var originValue = sw.run();
-			//Sys.println("type => "+Type.typeof(originValue)+" , Value => "+originValue);
-			Sys.println("No files selected.");
-		}
-		else {
-			//指定したファイルからシリアライズ文字列を取得
-			/*var sr = FileTools.readTextFile(name);
-			if (sr == null) {
-				Sys.println("No such file "+name);
-			}
-			else {
-				var sr = new SerializationReader(sr);
-				FileTools.outputString(sr.run(),"out_"+name+".txt");
-				Sys.println("Save as out_"+name+".txt");
-			}*/
-		}
-	}
+class Main {
 	
 	public static function main() {
-		new mcli.Dispatch(Sys.args()).dispatch(new Main());
+		var className = "";
+		var resolveClass = Type.resolveClass(className);
+		if (resolveClass == null) throw 'class not found';
+		trace(resolveClass);	//デバッグ
+		
+		//フィールド変数を代入
+		var originalClassSample = Type.createEmptyInstance(resolveClass);
+		Reflect.setField(originalClassSample, "x", 10);
+		Reflect.setField(originalClassSample, "y", 20);
+		Reflect.setField(originalClassSample, "x", 30);
+		
+		trace(originalClassSample);	//デバッグ
 	}
 }
