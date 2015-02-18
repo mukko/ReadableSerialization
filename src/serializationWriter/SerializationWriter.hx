@@ -235,6 +235,15 @@ class SerializationWriter {
 	}
 	
 	/**
+	 * 整形シリアライズ文字列1行がクラス型のデータであるかを判定
+	 * @return クラス型であった場合には真を返す
+	 */
+	private function isClass() : Bool {
+		var r : EReg = ~/ SClass\(.*\) /;
+		return r.match(line);
+	}
+	
+	/**
 	 * 整形シリアライズ文字列の1行分のデータから型情報を取り出す
 	 * @return データの型
 	 */
