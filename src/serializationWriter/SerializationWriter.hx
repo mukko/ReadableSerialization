@@ -51,6 +51,10 @@ class SerializationWriter {
 				case TFloat: originalValue = getFloat();
 				case TBool : originalValue = getBool();
 				case TClass(String) : originalValue = getString();
+				//外部クラスを動的に生成するように要変更
+				case TClass(sampleClass.Point) : 
+					currentLine++;
+					originalValue = getClass();
 				case TObject : 
 					currentLine++;
 					originalValue = getObject();
