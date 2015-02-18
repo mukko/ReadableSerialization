@@ -248,12 +248,23 @@ class SerializationWriter {
 	 * @return データの型
 	 */
 	private function typeof() : ValueType {
-		var r : EReg = ~/:.*=/;	//型名を取り出す正規表現
-		r.match(line);
-		var type = r.matched(0);	//正規表現によって抽出された文字列を保持
-		type = StringTools.replace(type, ':','');	//「:」の削除
-		type = StringTools.replace(type, '=', '');	//「=」の削除
-		type = StringTools.replace(type, ' ', '');	//スペースの削除
+		var type = "";	//型情報を保持する文字列
+		
+		//型が外部クラスだった場合はリゾルバクラスを取得する
+		if (isClass()) {
+			var className = getClassName();
+			var resolveClass = Type.resolveClass(className);
+			return TClass(resolveClass);
+		}
+		//型が外部クラスでない場合は型名を取得
+		else {
+			var r : EReg = ~/:.*=/;	//型名を取り出す正規表現
+			r.match(line);
+			type = r.matched(0);	//正規表現によって抽出された文字列を保持
+			type = StringTools.replace(type, ':','');	//「:」の削除
+			type = StringTools.replace(type, '=', '');	//「=」の削除
+			type = StringTools.replace(type, ' ', '');	//スペースの削除
+		}
 		
 		//型情報を元にTypeのEnumコンストラクタを返す
 		switch (type) {
