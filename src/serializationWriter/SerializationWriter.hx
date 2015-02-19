@@ -2,6 +2,8 @@ package serializationWriter;
 import serializationReader.FileTools;
 import Type;
 
+import sampleClass.Point;
+
 /**
  * 整形シリアライズデータを元に元のデータを生成する
  * @author 000ubird
@@ -50,11 +52,14 @@ class SerializationWriter {
 				case TInt: originalValue = getInt();
 				case TFloat: originalValue = getFloat();
 				case TBool : originalValue = getBool();
-				case TClass(String) : originalValue = getString();
-				//外部クラスを動的に生成するように要変更
-				case TClass(sampleClass.Point) : 
-					currentLine++;
-					originalValue = getClass();
+				case TClass(c) : 
+					switch(Type.getClassName(c)) {
+						case "String" : originalValue = getString();
+						//TODO : case "Array" : hoge;
+						//外部クラスの場合はインポートが必要
+						default : currentLine++;
+								  originalValue = getClass();
+					}
 				case TObject : 
 					currentLine++;
 					originalValue = getObject();
