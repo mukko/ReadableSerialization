@@ -205,7 +205,7 @@ class SerializationWriter {
 		var className = getClassName();
 		var resolveClass = Type.resolveClass(className);
 		//クラスが見つからなかった場合はエラーと読み取った行数を出力
-		if (resolveClass == null) throw '$currentLine : class not found';
+		if (resolveClass == null) throw '$currentLine : class "$className" is not found';
 		
 		var originalClass = Type.createEmptyInstance(resolveClass);
 		var numberOfConstructors = 0;
