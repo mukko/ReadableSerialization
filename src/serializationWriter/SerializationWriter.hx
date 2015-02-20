@@ -57,8 +57,9 @@ class SerializationWriter {
 						case "String" : originalValue = getString();
 						//TODO : case "Array" : hoge;
 						//外部クラスの場合はインポートが必要
-						default : currentLine++;
-								  originalValue = getClass();
+						default : 
+							currentLine++;
+							originalValue = getClass();
 					}
 				case TObject : 
 					currentLine++;
@@ -131,7 +132,14 @@ class SerializationWriter {
 				case TInt: Reflect.setField(obj,getValueName(),getInt());				//trace(type,obj);
 				case TFloat: Reflect.setField(obj,getValueName(),getFloat());			//trace(type,obj);
 				case TBool : Reflect.setField(obj,getValueName(),getBool());			//trace(type,obj);
-				case TClass(String) : Reflect.setField(obj, getValueName(), getString()); //trace(type,obj);
+				case TClass(c) : 
+					switch(Type.getClassName(c)) {
+						case "String" : Reflect.setField(obj, getValueName(), getString());
+						//外部クラスの場合はインポートが必要
+						default : 
+							currentLine++;
+							Reflect.setField(obj, getValueName(), getClass());
+					}
 				case TObject :
 					currentLine++;
 					Reflect.setField(obj, getValueName(), getObject());	//trace(type,obj);
@@ -171,7 +179,13 @@ class SerializationWriter {
 				case TInt: Reflect.setField(originalClass,getValueName(),getInt());		//trace(type,obj);
 				case TFloat: Reflect.setField(originalClass,getValueName(),getFloat());	//trace(type,obj);
 				case TBool : Reflect.setField(originalClass,getValueName(),getBool());	//trace(type,obj);
-				case TClass(String) : Reflect.setField(originalClass, getValueName(), getString()); //trace(type,obj);
+				case TClass(c) : 
+					switch(Type.getClassName(c)) {
+						case "String" : Reflect.setField(originalClass, getValueName(), getString());
+						//外部クラスの場合はインポートが必要
+						default : currentLine++;
+								  Reflect.setField(originalClass, getValueName(), getClass());
+					}
 				case TObject :
 					currentLine++;
 					Reflect.setField(originalClass, getValueName(), getObject());	//trace(type,obj);
