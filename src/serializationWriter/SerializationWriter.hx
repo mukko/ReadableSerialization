@@ -55,7 +55,9 @@ class SerializationWriter {
 				case TClass(c) : 
 					switch(Type.getClassName(c)) {
 						case "String" : originalValue = getString();
-						//TODO : case "Array" : hoge;
+						case "Array" : 
+							currentLine++;
+							originalValue = getArray();
 						//外部クラスの場合はインポートが必要
 						default : 
 							currentLine++;
@@ -170,13 +172,16 @@ class SerializationWriter {
 			
 			//元のデータを生成
 			switch (type) {
-				case TNull : Reflect.setField(obj, getValueName(), null);				//trace(type,obj);
-				case TInt: Reflect.setField(obj,getValueName(),getInt());				//trace(type,obj);
-				case TFloat: Reflect.setField(obj,getValueName(),getFloat());			//trace(type,obj);
-				case TBool : Reflect.setField(obj,getValueName(),getBool());			//trace(type,obj);
+				case TNull : Reflect.setField(obj, getValueName(), null);
+				case TInt: Reflect.setField(obj,getValueName(),getInt());
+				case TFloat: Reflect.setField(obj,getValueName(),getFloat());
+				case TBool : Reflect.setField(obj,getValueName(),getBool());
 				case TClass(c) : 
 					switch(Type.getClassName(c)) {
 						case "String" : Reflect.setField(obj, getValueName(), getString());
+						case "Array" : 
+							currentLine++;
+							Reflect.setField(obj, getValueName(), getArray());
 						//外部クラスの場合はインポートが必要
 						default : 
 							currentLine++;
@@ -184,7 +189,7 @@ class SerializationWriter {
 					}
 				case TObject :
 					currentLine++;
-					Reflect.setField(obj, getValueName(), getObject());	//trace(type,obj);
+					Reflect.setField(obj, getValueName(), getObject());
 				default : obj = null;
 			}
 			currentLine++;
@@ -224,6 +229,9 @@ class SerializationWriter {
 				case TClass(c) : 
 					switch(Type.getClassName(c)) {
 						case "String" : Reflect.setField(originalClass, getValueName(), getString());
+						case "Array" : 
+							currentLine++;
+							Reflect.setField(originalClass, getValueName(), getArray());
 						//外部クラスの場合はインポートが必要
 						default : currentLine++;
 								  Reflect.setField(originalClass, getValueName(), getClass());
