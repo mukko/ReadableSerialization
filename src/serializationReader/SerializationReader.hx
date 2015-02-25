@@ -77,7 +77,7 @@ class SerializationReader {
 						indent--;
 						for (i in 0...indent) strBuf.add(INDENT);
 					}
-					else if(nextChar == '"'){
+					else if(nextChar == '"' || nextChar == '('){
 						strBuf.add(currentChar + '\n');
 						for (i in 0...indent) strBuf.add(INDENT);
 					}
@@ -201,14 +201,15 @@ class SerializationReader {
 	private function getSMapReadableSerializedText(exUnserializedData : Dynamic, type : SValueType) : String {
 		var map : Map<Dynamic,Dynamic> = exUnserializedData;
 		var strBuf = new StringBuf();	//マップ用文字列バッファ
-
+		
+		//変数名と型名を出力
+		if (recursiveDepth < NOT_OUTPUT_VALUE_TYPE) {
+			strBuf.add('"" : $type = ');
+		}
+		
 		for (key in map.keys()) {
 			var keyType = typeof(key);				//キーの型情報を取得
 			var valueType = typeof(map.get(key));	//値の情報を取得
-			//変数名と型名を出力
-			if (recursiveDepth < NOT_OUTPUT_VALUE_TYPE) {
-				strBuf.add('"" : $type = ');
-			}
 			
 			//キーの型が再帰が必要な場合、キーを引数に入れて再帰的に呼び出す.
 			if (isRecursive(keyType)) {
