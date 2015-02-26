@@ -215,18 +215,18 @@ class SerializationReader {
 			if (isRecursive(keyType)) {
 				//値の型が再帰が必要な場合、値を引数に入れて再帰的に呼び出す.
 				if (isRecursive(valueType)) {
-					strBuf.add('('+getReadableSerializedText(key)+' : $keyType => __mapValue : $valueType = ' +getReadableSerializedText(map.get(key))+'),');
+					strBuf.add('( __mapKey : $keyType = '+getReadableSerializedText(key)+'=> __mapValue : $valueType = ' +getReadableSerializedText(map.get(key))+'),');
 				}
 				else {
-					strBuf.add('('+getReadableSerializedText(key)+' : $keyType => '+map.get(key)+' : $valueType),');
+					strBuf.add('( __mapKey : $keyType = '+getReadableSerializedText(key)+'=> __mapValue : $valueType = '+map.get(key)+'),');
 				}
 			}
 			else {
 				if (isRecursive(valueType)) {
-					strBuf.add('($key : $keyType => __mapValue : $valueType = ' +getReadableSerializedText(map.get(key))+'),');
+					strBuf.add('( __mapKey : $keyType = $key => __mapValue : $valueType = ' +getReadableSerializedText(map.get(key))+'),');
 				}
 				else {
-					strBuf.add('($key : $keyType => '+map.get(key)+' : $valueType),');
+					strBuf.add('( __mapKey : $keyType = $key => __mapValue : $valueType = '+map.get(key)+'),');
 				}
 			}
 		}
