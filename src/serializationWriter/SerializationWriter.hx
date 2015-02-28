@@ -44,16 +44,24 @@ class SerializationWriter {
 	 * @return シリアライズ元データ
 	 */
 	private function getOriginalValue() : Dynamic {
-		var originalValue : Dynamic;
-		while(true){
+		var originalValue : Dynamic = null;
+		while (true) {
+			var type = null;
 			//文字列を取得
 			line = FileTools.readLine(fileName, currentLine);
+			
 			if (line == null) break;
-			/*
-			 *ここにある1行に対しての処理を追加予定
-			 */
-			var type = typeof(line);	//型情報を習得
-		
+			//TODO typeofメソッド内に記述
+			if (isMap()) {
+				var r : EReg = ~/ : S.*Map = \(/;
+				r.match(line);
+				var mapType = r.matched(0);
+				type = typeof(mapType);
+			}
+			else {
+				type = typeof(line);	//型情報を習得
+			}
+			
 			//元のデータを生成
 			switch (type) {
 				case TNull : originalValue = null;
