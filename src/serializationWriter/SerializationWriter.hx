@@ -329,6 +329,15 @@ class SerializationWriter {
 	}
 	
 	/**
+	 * 整形シリアライズ文字列1行がMap型のデータであるかを判定
+	 * @return SIntMap・SStringMap・SEnumValueMap・SObjectMapの場合は真を返す
+	 */
+	private function isMap() : Bool {
+		var r : EReg = ~/: S.*Map = \(/;
+		return r.match(line);
+	}
+	
+	/**
 	 * 整形シリアライズ文字列の1行分のデータから型情報を取り出す
 	 * @param str 型を取得したい文字列
 	 * @return データの型
