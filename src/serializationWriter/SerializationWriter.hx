@@ -25,10 +25,16 @@ class SerializationWriter {
 	
 	/**
 	 * 整形シリアライズデータから元のデータを生成を実行
+	 * データの生成に失敗した場合は問題のある行数を出力し、nullを返す
 	 * @return シリアライズ元データ
 	 */
 	public function run() : Dynamic { 
-		return getOriginalValue();
+		try {
+			return getOriginalValue();
+		}catch (msg : String) {
+			trace('error in $currentLine : $msg');
+			return null;
+		}
 	}
 	
 	/**
