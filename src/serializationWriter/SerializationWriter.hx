@@ -71,6 +71,11 @@ class SerializationWriter {
 				case TClass(c) : 
 					switch(Type.getClassName(c)) {
 						case "String" : originalValue = getString();
+						case "haxe.ds.IntMap","haxe.ds.StringMap",
+							 "haxe.ds.EnumValueMap","haxe.ds.ObjectMap" :
+							//TODO マップの生成処理の実装
+							trace(getMapKeyType());
+							trace(getMapValueType());
 						case "Array" : 
 							currentLine++;
 							originalValue = getArray();
