@@ -29,10 +29,12 @@ class SerializationWriter {
 	 * @return シリアライズ元データ
 	 */
 	public function run() : Dynamic { 
+		//TODO エラーメッセージを詳細化
 		try {
 			return getOriginalValue();
 		}catch (msg : String) {
-			trace('error in $currentLine : $msg');
+			var line = StringTools.replace(this.line, '	', '');	//インデント文字の削除
+			trace('\nError in line $currentLine \nLine detail : $line \nError message : $msg');
 			return null;
 		}
 	}
