@@ -315,8 +315,18 @@ class SerializationWriter {
 		return value.toString();
 	}
 	
-	private function getMapKeyType() : ValueType{
-		return null;
+	/**
+	 * マップ(IntMap,StringMap,ObjectMap,SEnumValueMap)のキーの型を取得する
+	 * @return マップのキーの型
+	 */
+	private function getMapKeyType() : ValueType {
+		//マップのキーの部分の文字列を抽出し型情報を取得
+		var r : EReg = ~/__mapKey.*->/;
+		r.match(line);
+		var keyTypeStr = r.matched(0);
+		
+		return typeof(keyTypeStr);
+	}
 	}
 	
 	/**
