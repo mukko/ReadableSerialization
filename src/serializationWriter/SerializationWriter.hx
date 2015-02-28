@@ -327,6 +327,18 @@ class SerializationWriter {
 		
 		return typeof(keyTypeStr);
 	}
+	
+	/**
+	 * マップ(IntMap,StringMap,ObjectMap,SEnumValueMap)の値の型を取得する
+	 * @return マップの値の型
+	 */
+	private function getMapValueType() :ValueType {
+		//マップの値の部分の文字列を抽出し型情報を取得
+		var r : EReg = ~/ __mapValue :.*=/;
+		r.match(line);
+		var valueTypeStr = r.matched(0);
+		
+		return typeof(valueTypeStr);
 	}
 	
 	/**
