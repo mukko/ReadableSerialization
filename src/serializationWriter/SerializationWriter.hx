@@ -50,7 +50,7 @@ class SerializationWriter {
 			/*
 			 *ここにある1行に対しての処理を追加予定
 			 */
-			var type = typeof();	//型情報を習得
+			var type = typeof(line);	//型情報を習得
 		
 			//元のデータを生成
 			switch (type) {
@@ -133,7 +133,7 @@ class SerializationWriter {
 			if (isEndOfInstance()) break;	//オブジェクトの終わりを示す記号が来たらループを抜ける
 			
 			//型情報を習得
-			var type = typeof();
+			var type = typeof(line);
 			
 			//元のデータを生成
 			switch (type) {
@@ -174,7 +174,7 @@ class SerializationWriter {
 			if (isEndOfInstance()) break;	//オブジェクトの終わりを示す記号が来たらループを抜ける
 			
 			//型情報を習得
-			var type = typeof();
+			var type = typeof(line);
 			
 			//元のデータを生成
 			switch (type) {
@@ -224,7 +224,7 @@ class SerializationWriter {
 			//設定可能コンストラクタ数を超えたらエラーを出力
 			if (numberOfConstructors > MAX_SET_CONSTRUCTORS) throw "Too many arguments";
 			//型情報を習得
-			var type = typeof();
+			var type = typeof(line);
 			
 			//元のデータを生成
 			switch (type) {
@@ -313,6 +313,10 @@ class SerializationWriter {
 		return value.toString();
 	}
 	
+	private function getMapKeyType() : ValueType{
+		return null;
+	}
+	
 	/**
 	 * 整形シリアライズ文字列1行がクラス型のデータであるかを判定
 	 * @return クラス型であった場合には真を返す
@@ -324,9 +328,10 @@ class SerializationWriter {
 	
 	/**
 	 * 整形シリアライズ文字列の1行分のデータから型情報を取り出す
+	 * @param str 型を取得したい文字列
 	 * @return データの型
 	 */
-	private function typeof() : ValueType {
+	private function typeof(str :String) : ValueType {
 		var type = "";	//型情報を保持する文字列
 		
 		//型が外部クラスだった場合はリゾルバクラスを取得する
@@ -338,7 +343,7 @@ class SerializationWriter {
 		//型が外部クラスでない場合は型名を取得
 		else {
 			var r : EReg = ~/:.*=/;	//型名を取り出す正規表現
-			r.match(line);
+			r.match(str);
 			type = r.matched(0);	//正規表現によって抽出された文字列を保持
 			type = StringTools.replace(type, ':','');	//「:」の削除
 			type = StringTools.replace(type, '=', '');	//「=」の削除
