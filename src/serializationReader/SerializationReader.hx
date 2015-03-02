@@ -207,6 +207,11 @@ class SerializationReader {
 			strBuf.add('"" : $type = ');
 		}
 		
+		//キーの設定が何も無かった場合は型名と値に「__none」という文字列を出力する
+		if (!map.keys().hasNext()) {
+			strBuf.add('( __mapKey : __none = __none -> __mapValue : __none = __none )');
+		}
+		
 		for (key in map.keys()) {
 			var keyType = typeof(key);				//キーの型情報を取得
 			var valueType = typeof(map.get(key));	//値の情報を取得
