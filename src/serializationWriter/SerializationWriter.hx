@@ -49,9 +49,12 @@ class SerializationWriter {
 			var type = null;
 			//文字列を取得
 			line = FileTools.readLine(fileName, currentLine);
-			
-			if (line == null) break;
-			//TODO typeofメソッド内に記述
+			//読み取った行がnullになるのは最後の行
+			if (line == null) {
+				//最後の行になったらループを抜ける
+				break;
+			}
+			//現在の行のデータがマップだった場合は型情報の部分を抽出して型情報を取得
 			if (isMap()) {
 				var r : EReg = ~/ : S.*Map = \(/;
 				r.match(line);
@@ -74,6 +77,7 @@ class SerializationWriter {
 						case "haxe.ds.IntMap","haxe.ds.StringMap",
 							 "haxe.ds.EnumValueMap","haxe.ds.ObjectMap" :
 							//TODO マップの生成処理の実装
+							trace(isMapValueAndKeyNone());
 							trace(getMapKeyType());
 							trace(getMapValueType());
 						case "Array" : 
@@ -345,13 +349,22 @@ class SerializationWriter {
 	 * マップ(IntMap,StringMap,ObjectMap,SEnumValueMap)の値の型を取得する
 	 * @return マップの値の型
 	 */
-	private function getMapValueType() :ValueType {
+	private function getMapValueType() : ValueType {
 		//マップの値の部分の文字列を抽出し型情報を取得
 		var r : EReg = ~/ __mapValue :.*=/;
 		r.match(line);
 		var valueTypeStr = r.matched(0);
 		
 		return typeof(valueTypeStr);
+	}
+	
+	/**
+	 * 読み込んだ行のマップ変数の値はキーと値が登録されているかを判定
+	 * @return 登録されていない場合は真を返す
+	 */
+	private function isMapValueAndKeyNone() : Bool {
+		var r : EReg = ~/__mapKey : __none = __none -> __mapValue : __none = __none/;
+		return r.match(line);
 	}
 	
 	/**
