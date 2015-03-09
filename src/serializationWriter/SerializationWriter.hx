@@ -149,7 +149,9 @@ class SerializationWriter {
 		while(true){
 			//文字列を取得
 			line = FileTools.readLine(fileName, currentLine);
-			if (isEndOfInstance()) break;	//オブジェクトの終わりを示す記号が来たらループを抜ける
+			
+			//オブジェクトかマップのキーの終わりを示す記号が来たらループを抜ける
+			if (isEndOfInstance() || isMapKeyEnd()) break;
 			
 			//型情報を習得
 			var type = typeof(line);
