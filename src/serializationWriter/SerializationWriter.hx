@@ -341,8 +341,18 @@ class SerializationWriter {
 	private function getMapKeyType() : ValueType {
 		//マップのキーの部分の文字列を抽出し型情報を取得
 		var r : EReg = ~/__mapKey.*->/;
-		r.match(line);
-		var keyTypeStr = r.matched(0);
+		var keyTypeStr = "";
+		
+		//再帰が必要でない場合の型の抽出
+		if (r.match(line)) {
+			keyTypeStr = r.matched(0);	
+		}
+		//再帰が必要な場合の型の抽出
+		else {
+			r = ~/__mapKey.*=/;
+			r.match(line);
+			keyTypeStr = r.matched(0);
+		}
 		
 		return typeof(keyTypeStr);
 	}
