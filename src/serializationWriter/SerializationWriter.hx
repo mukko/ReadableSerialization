@@ -389,6 +389,15 @@ class SerializationWriter {
 	}
 	
 	/**
+	 * 読み込んだ行がマップ変数の値の終わりであるかを判定
+	 * @return 値の終わりを示す文字列であれば真を返す
+	 */
+	private function isMapValueEnd() : Bool {
+		var r : EReg = ~/\)/;
+		return r.match(line);
+	}
+	
+	/**
 	 * 整形シリアライズ文字列1行がクラス型のデータであるかを判定
 	 * @return クラス型であった場合には真を返す
 	 */
