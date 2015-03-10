@@ -81,9 +81,7 @@ class SerializationWriter {
 						case "haxe.ds.IntMap","haxe.ds.StringMap",
 							 "haxe.ds.EnumValueMap","haxe.ds.ObjectMap" :
 							//TODO マップの生成処理の実装
-							trace(isMapValueAndKeyNone());
-							trace(getMapKeyType());
-							trace(getMapValueType());
+							originalValue = getObjectMap();
 						case "Array" : 
 							currentLine++;
 							originalValue = getArray();
