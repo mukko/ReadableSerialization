@@ -1,4 +1,8 @@
 package serializationWriter;
+import haxe.ds.IntMap;
+import haxe.ds.ObjectMap;
+import haxe.ds.StringMap;
+import haxe.ds.EnumValueMap;
 import serializationReader.FileTools;
 import Type;
 
@@ -274,6 +278,68 @@ class SerializationWriter {
 			currentLine++;
 		}
 		return originalClass;
+	}
+	
+	/**
+	 * 整形シリアライズデータ文字列からObjectMap型のインスタンスを返す
+	 * @return ObjectMap型のインスタンス
+	 */
+	private function getObjectMap() : ObjectMap <Dynamic,Dynamic> {
+		var objectMap = new ObjectMap();
+		var key : Dynamic = null;
+		var value : Dynamic = null;
+		
+		if (isMapValueAndKeyNone()) return objectMap;
+		
+		//キーの型の習得
+		var keyType = getMapKeyType();
+		
+		switch(keyType) {
+			case TClass(c) : 
+				switch(Type.getClassName(c)) {
+					case "String" : key = getString();
+					case "haxe.ds.IntMap","haxe.ds.StringMap",
+						 "haxe.ds.EnumValueMap","haxe.ds.ObjectMap" :
+						//TODO マップの生成処理の実装
+					case "Array" : 
+						currentLine++;
+						key = getArray();
+					//外部クラスの場合はインポートが必要
+					default : 
+						currentLine++;
+						key = getClass();
+				}
+			default : key = null;
+		}
+		
+		//値の型の取得
+		var valueType = getMapValueType();
+		
+		switch(valueType) {
+			case TObject : 
+				currentLine++;
+				value = getObject();
+			case TClass(c) : 
+				switch(Type.getClassName(c)) {
+					case "String" : key = getString();
+					case "haxe.ds.IntMap","haxe.ds.StringMap",
+						 "haxe.ds.EnumValueMap","haxe.ds.ObjectMap" :
+						//TODO マップの生成処理の実装
+					case "Array" : 
+						currentLine++;
+						value = getArray();
+					//外部クラスの場合はインポートが必要
+					default : 
+						currentLine++;
+						value = getClass();
+				}
+			default : value = null;
+		}
+		
+		//取得した値とキーを登録
+		objectMap.set(key, value);
+		
+		return objectMap;
 	}
 	
 	/**
