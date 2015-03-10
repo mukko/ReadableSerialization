@@ -34,7 +34,7 @@ class SerializationWriter {
 			return getOriginalValue();
 		}catch (msg : String) {
 			var line = StringTools.replace(this.line, '	', '');	//インデント文字の削除
-			trace('\nError in line $currentLine \nLine detail : $line \nError message : $msg');
+			trace('\nError in line '+(currentLine+1)+' \nLine detail : $line \nError message : $msg');
 			return null;
 		}
 	}
