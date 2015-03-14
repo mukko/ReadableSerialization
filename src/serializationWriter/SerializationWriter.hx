@@ -293,6 +293,10 @@ class SerializationWriter {
 		var keyType = getMapKeyType();
 		
 		switch(keyType) {
+			case TNull : key = null;
+			case TInt: key = getInt();
+			case TFloat: key = getFloat();
+			case TBool : key = getBool();
 			case TClass(c) : 
 				switch(Type.getClassName(c)) {
 					case "String" : key = getString();
@@ -307,6 +311,9 @@ class SerializationWriter {
 						currentLine++;
 						key = getClass();
 				}
+			case TObject : 
+				currentLine++;
+				key = getObject();
 			default : key = null;
 		}
 		
@@ -314,23 +321,27 @@ class SerializationWriter {
 		var valueType = getMapValueType();
 		
 		switch(valueType) {
-			case TObject : 
-				currentLine++;
-				value = getObject();
+			case TNull : value = null;
+			case TInt: value = getInt();
+			case TFloat: value = getFloat();
+			case TBool : value = getBool();
 			case TClass(c) : 
 				switch(Type.getClassName(c)) {
-					case "String" : key = getString();
+					case "String" : value = getString();
 					case "haxe.ds.IntMap","haxe.ds.StringMap",
-						 "haxe.ds.EnumValueMap","haxe.ds.ObjectMap" :
+						 "haxe.ds.EnumValueMap", "haxe.ds.ObjectMap" :
+						value = getObjectMap();
 						//TODO マップの生成処理の実装
 					case "Array" : 
 						currentLine++;
 						value = getArray();
-					//外部クラスの場合はインポートが必要
 					default : 
 						currentLine++;
 						value = getClass();
 				}
+			case TObject : 
+				currentLine++;
+				value = getObject();
 			default : value = null;
 		}
 		
