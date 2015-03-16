@@ -253,11 +253,14 @@ class SerializationReader {
 		
 		//パラメータがnullでない場合は再帰
 		if (params != null) {
+			//引数ありのコンストラクタ名を取得
+			var constructorName = enumParam[1];
+			
 			if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE) {
 				strBuf.add('{');
 			}
 			else {
-				strBuf.add('"" : $type = {');
+				strBuf.add('"" : $type = $constructorName{');
 			}
 			for (param in params) {
 				//Enumのパラメータを引数に取り、再帰的に呼び出し
