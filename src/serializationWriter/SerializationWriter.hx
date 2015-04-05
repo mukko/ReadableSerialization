@@ -450,15 +450,21 @@ class SerializationWriter {
 	/**
 	* 元のEnum名を取得
 	* 例:(serializationReader.Color2) → Color2
+	* (hoge.foo.bar.Color2) → Color2
+	* (Color2) → Color2
 	* @return 元のEnum名
 	**/
 	private function getEnumName(str : String) : String {
-		var regexp = ~/\.([^\)]+)\)?/;
+		var regexp = ~/\(([^\)]+)\)?/;
         regexp.match(test);
-        
-        //TODO (Color2)などの.がない場合に対応する
+
         var matched = regexp.matched(1);
-        return matched.substring(matched.lastIndexOf(".") + 1);
+        if(matched.indexOf(".") > 0){
+            return matched.substring(matched.lastIndexOf(".") + 1);
+        }else{
+            return matched;
+        }
+        return null;
 	}
 	
 	/**
