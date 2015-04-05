@@ -448,6 +448,26 @@ class SerializationWriter {
 	}
 	
 	/**
+	* 元のEnum名を取得
+	* 例:(serializationReader.Color2) → Color2
+	* (hoge.foo.bar.Color2) → Color2
+	* (Color2) → Color2
+	* @return 元のEnum名
+	**/
+	private function getEnumName(str : String) : String {
+		var regexp = ~/\(([^\)]+)\)?/;
+        regexp.match(test);
+
+        var matched = regexp.matched(1);
+        if(matched.indexOf(".") > 0){
+            return matched.substring(matched.lastIndexOf(".") + 1);
+        }else{
+            return matched;
+        }
+        return null;
+	}
+	
+	/**
 	 * 読み込んだ行のマップ変数の値はキーと値が登録されているかを判定
 	 * @return 登録されていない場合は真を返す
 	 */
