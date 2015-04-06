@@ -449,8 +449,7 @@ class SerializationWriter {
 	
 	/**
 	* 元のEnum名を取得
-	* 例:(serializationReader.Color2) → Color2
-	* (hoge.foo.bar.Color2) → Color2
+	* 例:(serializationReader.Color2) → serializationReader.Color2
 	* (Color2) → Color2
 	* @return 元のEnum名
 	**/
@@ -459,12 +458,8 @@ class SerializationWriter {
         regexp.match(test);
 
         var matched = regexp.matched(1);
-        if(matched.indexOf(".") > 0){
-            return matched.substring(matched.lastIndexOf(".") + 1);
-        }else{
-            return matched;
-        }
-        return null;
+        
+		return matched;
 	}
 	
 	/**
