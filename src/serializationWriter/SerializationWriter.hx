@@ -453,13 +453,12 @@ class SerializationWriter {
 	* (Color2) → Color2
 	* @return 元のEnum名
 	**/
-	private function getEnumName(str : String) : String {
-		var regexp = ~/\(([^\)]+)\)?/;
-        regexp.match(test);
-
-        var matched = regexp.matched(1);
+	private function getEnumName() : String {
+		var r = ~/\(([^\)]+)\)?/;
+		
+        r.match(line);
         
-		return matched;
+		return r.matched(0).toString();
 	}
 	
 	/**
@@ -508,6 +507,15 @@ class SerializationWriter {
 	}
 	
 	/**
+	* 整形シリアライズ文字列1行がEnum型のデータであるかを判定
+	* @return Enum型であった場合には真を返す
+	**/
+	private function isEnum() : Bool {
+		var r : EReg = ~/ SEnum\(.*\) /;
+		return r.match(line);
+	}
+	
+	/**
 	 * 整形シリアライズ文字列の1行分のデータから型情報を取り出す
 	 * @param str 型を取得したい文字列
 	 * @return データの型
@@ -520,6 +528,10 @@ class SerializationWriter {
 			var className = getClassName();
 			var resolveClass = Type.resolveClass(className);
 			return TClass(resolveClass);
+		}else if(isEnum()) {
+			var enumName = getEnumName();
+			var resolveClass = Type.resolveEnum(enumName);
+			return TEnum(resolveClass);
 		}
 		//型が外部クラスでない場合は型名を取得
 		else {
