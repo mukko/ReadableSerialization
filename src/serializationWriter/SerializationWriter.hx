@@ -458,7 +458,7 @@ class SerializationWriter {
 		
         r.match(line);
         
-		return r.matched(0).toString;
+		return r.matched(0).toString();
 	}
 	
 	/**
@@ -528,6 +528,10 @@ class SerializationWriter {
 			var className = getClassName();
 			var resolveClass = Type.resolveClass(className);
 			return TClass(resolveClass);
+		}else if(isEnum()) {
+			var enumName = getEnumName();
+			var resolveClass = Type.resolveEnum(enumName);
+			return TEnum(resolveClass);
 		}
 		//型が外部クラスでない場合は型名を取得
 		else {
