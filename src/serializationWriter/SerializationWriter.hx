@@ -508,6 +508,15 @@ class SerializationWriter {
 	}
 	
 	/**
+	* 整形シリアライズ文字列1行がEnum型のデータであるかを判定
+	* @return Enum型であった場合には真を返す
+	**/
+	private function isEnum() : Bool {
+		var r : EReg = ~/ SEnum\(.*\) /;
+		return r.match(line);
+	}
+	
+	/**
 	 * 整形シリアライズ文字列の1行分のデータから型情報を取り出す
 	 * @param str 型を取得したい文字列
 	 * @return データの型
