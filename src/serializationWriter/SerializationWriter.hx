@@ -453,13 +453,12 @@ class SerializationWriter {
 	* (Color2) → Color2
 	* @return 元のEnum名
 	**/
-	private function getEnumName(str : String) : String {
-		var regexp = ~/\(([^\)]+)\)?/;
-        regexp.match(test);
-
-        var matched = regexp.matched(1);
+	private function getEnumName() : String {
+		var r = ~/\(([^\)]+)\)?/;
+		
+        r.match(line);
         
-		return matched;
+		return r.matched(0).toString;
 	}
 	
 	/**
