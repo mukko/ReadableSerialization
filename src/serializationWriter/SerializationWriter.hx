@@ -196,7 +196,7 @@ class SerializationWriter {
 			line = FileTools.readLine(fileName, currentLine);
 			
 			//オブジェクトとマップの終わりを示す記号が来たらループを抜ける
-			if (isEndOfInstance() || isMapKeyEnd() || isMapValueEnd()) break;
+			if (isEndOfInstance()) break;
 			
 			//型情報を習得
 			var type = typeof(line);
@@ -245,7 +245,7 @@ class SerializationWriter {
 			//文字列を取得
 			line = FileTools.readLine(fileName, currentLine);
 			//インスタンスとマップの終わりを示す記号が来たらループを抜ける
-			if (isEndOfInstance()  || isMapKeyEnd() || isMapValueEnd()) break;
+			if (isEndOfInstance() ) break;
 			//設定可能コンストラクタ数を超えたらエラーを出力
 			if (numberOfConstructors > MAX_SET_CONSTRUCTORS) throw "Too many arguments";
 			//型情報を習得
