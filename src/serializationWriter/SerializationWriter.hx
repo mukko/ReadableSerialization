@@ -356,7 +356,7 @@ class SerializationWriter {
 	*
 	**/
 	private function getEnumValue () : Dynamic {
-
+		return null;
 	}
 
 	/**
@@ -465,8 +465,9 @@ class SerializationWriter {
 		var r : EReg = ~/\(([^\)]+)\)?/;
 		
         r.match(line);
-        
-		return r.matched(0).toString();
+
+		//(hoge)→hogeの処理
+		return StringTools.replace(StringTools.replace(r.matched(0).toString(), '(', ''), ')', '');
 	}
 	
 	/**
