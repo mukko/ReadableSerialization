@@ -87,6 +87,9 @@ class SerializationReader {
 				default : strBuf.add(currentChar);
 			}
 		}
+		//最後の改行を出力
+		strBuf.add('\n');
+		
 		return strBuf.toString();
 	}
 		
