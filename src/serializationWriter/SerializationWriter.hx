@@ -462,7 +462,7 @@ class SerializationWriter {
 	* @return 元のEnum名
 	**/
 	private function getEnumName() : String {
-		var r = ~/\(([^\)]+)\)?/;
+		var r : EReg = ~/\(([^\)]+)\)?/;
 		
         r.match(line);
         
