@@ -7,3 +7,5 @@ samples/
 out/
 *.n
 *.txt
+*.idea
+*.iml
