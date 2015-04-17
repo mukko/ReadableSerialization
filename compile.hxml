@@ -10,5 +10,6 @@
 -cp src
 -neko sw.n
 -main serializationWriter.Main
+-lib mcli
 
 -cmd neko sw
