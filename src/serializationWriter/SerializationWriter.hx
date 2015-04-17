@@ -350,7 +350,15 @@ class SerializationWriter {
 		
 		return objectMap;
 	}
-	
+
+	/**
+	* 整形シリアライズデータ文字列からEnumのインスタンスを返す
+	*
+	**/
+	private function getEnumValue () : Dynamic {
+
+	}
+
 	/**
 	 * 現在の行がオブジェクト・クラス・配列の終わりを示す文字列であるかを取得
 	 * @return　終わりを示す記号だった場合は真を返す
