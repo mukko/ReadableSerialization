@@ -1,0 +1,12 @@
+"" : SObjectMap = ( __mapKey : SArray = [
+        "" : SInt = 1,
+        "" : SString = abc,
+        "" : SNull = null,
+] -> __mapValue : SObject = {
+        "a" : SInt = 10,
+        "b" : SArray = [
+                "" : SInt = 1,
+                "" : SString = abc,
+                "" : SNull = null,
+		],
+}),

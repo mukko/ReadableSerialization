@@ -3,9 +3,7 @@ build/*
 ReadableSerialization.hxproj
 bin/Main.swf
 *.hxproj
-samples/
 out/
 *.n
-*.txt
 *.idea
 *.iml

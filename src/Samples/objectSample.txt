@@ -1,0 +1,5 @@
+"" : SObject = {
+	"a" : SInt = 10,
+	"b" : SInt = 20,
+	"c" : SString = abc,
+},
