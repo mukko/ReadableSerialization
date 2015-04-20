@@ -387,7 +387,25 @@ class SerializationWriter {
 		value = StringTools.replace(value, '=', '');	//「=」の削除
 		return value.toString();
 	}
-	
+
+	/**
+	* 元のEnum名を取得
+	* SEnumの次に記述される括弧内の文字列を抽出する
+	* 例:(serializationReader.Color2) → serializationReader.Color2
+	* (Color2) → Color2
+	* @return 元のEnum名
+	**/
+	private function getEnumName() : String {
+		var r : EReg = ~/SEnum(.*) =/;	//クラス名を取り出す正規表現
+		r.match(line);
+		var value = r.matched(0);	//正規表現によって抽出された文字列を保持
+		value = StringTools.replace(value, 'SEnum','');//不要な文字の削除
+		value = StringTools.replace(value, '(', '');	//「(」の削除
+		value = StringTools.replace(value, ')', '');	//「)」の削除
+		value = StringTools.replace(value, ' ', '');	//スペースの削除
+		value = StringTools.replace(value, '=', '');	//「=」の削除
+		return value.toString();
+	}
 	/**
 	 * 整形シリアライズ文字列の1行分のデータから変数名を取得する
 	 * ダブルクオーテーションで囲まれた部分を抽出する
@@ -454,22 +472,7 @@ class SerializationWriter {
 		
 		return typeof(valueTypeStr);
 	}
-	
-	/**
-	* 元のEnum名を取得
-	* 例:(serializationReader.Color2) → serializationReader.Color2
-	* (Color2) → Color2
-	* @return 元のEnum名
-	**/
-	private function getEnumName() : String {
-		var r : EReg = ~/\(([^\)]+)\)?/;
-		
-        r.match(line);
 
-		//(hoge)→hogeの処理
-		return StringTools.replace(StringTools.replace(r.matched(0).toString(), '(', ''), ')', '');
-	}
-	
 	/**
 	 * 読み込んだ行のマップ変数の値はキーと値が登録されているかを判定
 	 * @return 登録されていない場合は真を返す
