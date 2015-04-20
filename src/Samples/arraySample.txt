@@ -1,0 +1,11 @@
+__topLevelValue : SArray = [
+	"" : SInt = 0,
+	"" : SArray = [
+		"lineNumber" : SInt = 86,
+		"methodName" : SString = start,
+		"testclass" : SClass(sampleClass.Point) = {
+			"x" : SInt = 10,
+			"y" : SInt = 20,
+		},
+	],
+],

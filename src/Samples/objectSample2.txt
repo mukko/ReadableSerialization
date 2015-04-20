@@ -1,0 +1,11 @@
+"" : SObject = {
+	"a" : SInt = 10,
+	"b" : SInt = 20,
+	"c" : SString = abc,
+	"object" : SObject = {
+		"c" : SFloat = 10.3,
+		"d" : SBool = true,
+		"e" : SString = "",
+	},
+	"f" : SString = asff,
+},

@@ -1,0 +1,12 @@
+"" : SClass(sampleClass.Point) = {
+	"factorPos" : SObject = {
+		"className" : SString = killvege.context.Logic,
+		"fileName" : SString = Logic.hx,
+		"lineNumber" : SInt = 86,
+		"methodName" : SString = start,
+		"testclass" : SClass(sampleClass.Point) = {
+		},
+	},
+	"id" : SInt = 0,
+	"frame" : SInt = 0,
+},
