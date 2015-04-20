@@ -353,10 +353,20 @@ class SerializationWriter {
 
 	/**
 	* 整形シリアライズデータ文字列からEnumのインスタンスを返す
-	*
+	* ex)クラス名.Rgb(255,255,255)
+	* @return Enumインスタンスの文字列
 	**/
-	private function getEnumValue () : Dynamic {
-		return null;
+	private function getEnumValue () : String {
+		var enumValue : String = "$getEnumName.";
+		var r : EReg = ~/.$/;
+		r.match(line);
+
+		var value = r.matched(0); //','か'{'しかこない
+		if(value == ",") enumValue += "$getPrimitiveValue";
+		else{
+
+		}
+		return enumValue;
 	}
 
 	/**
@@ -406,6 +416,7 @@ class SerializationWriter {
 		value = StringTools.replace(value, '=', '');	//「=」の削除
 		return value.toString();
 	}
+
 	/**
 	 * 整形シリアライズ文字列の1行分のデータから変数名を取得する
 	 * ダブルクオーテーションで囲まれた部分を抽出する
