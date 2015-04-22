@@ -387,6 +387,11 @@ class SerializationWriter {
 			if (line == null) break;
 			//マップ以外のインスタンスが宣言されていた場合はループを抜ける
 			if (isNewInstance()) break;
+			//インスタンスの終了を示す文字列だったら現在の行を上に戻してループを抜ける
+			if (isEndOfInstance()) {
+				currentLine--;
+				break;
+			}
 		}
 		
 		return objectMap;
