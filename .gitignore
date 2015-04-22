@@ -7,3 +7,16 @@ out/
 *.n
 *.idea
 *.iml
+*.txt
+!arraySample.txt
+!bigArraySample.txt
+!boolSample.txt
+!classSample.txt
+!enumSample.txt
+!enumSample2.txt
+!floatSample.txt
+!intSample.txt
+!objectSample.txt
+!objectSample2.txt
+!stringMapSample.txt
+!stringSample.txt
