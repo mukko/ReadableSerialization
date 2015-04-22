@@ -1,4 +1,4 @@
-package serializationWriter;
+﻿package serializationWriter;
 import haxe.ds.IntMap;
 import haxe.ds.ObjectMap;
 import haxe.ds.StringMap;
@@ -35,13 +35,13 @@ class SerializationWriter {
 	 */
 	public function run() : Dynamic { 
 		//TODO エラーメッセージを詳細化
-		try {
+//		try {
 			return getOriginalValue();
-		}catch (msg : String) {
-			var line = StringTools.replace(this.line, '	', '');	//インデント文字の削除
-			trace('\nError in line '+(currentLine+1)+' \nLine detail : $line \nError message : $msg');
-			return null;
-		}
+//		}catch (msg : String) {
+//			var line = StringTools.replace(this.line, '	', '');	//インデント文字の削除
+//			trace('\nError in line '+(currentLine+1)+' \nLine detail : $line \nError message : $msg');
+//			return null;
+//		}
 	}
 	
 	/**
@@ -403,12 +403,16 @@ class SerializationWriter {
 		var r : EReg = ~/.$/;
 		r.match(line);
 		//","もしくは"{"しかでてこない
-		if(r.matched(0) == ",") emptyEnum = Type.createEnum(Type.resolveEnum(getEnumName()), getPrimitiveValue(line)); //単純なパターン
+		if(r.matched(0) == ","){
+			emptyEnum = Type.createEnum(Type.resolveEnum(getEnumName()), getPrimitiveValue(line)); //単純なパターン
+		}
 		else{
+			var resolve = Type.resolveEnum(getEnumName());
+			var value : String = getPrimitiveValue2(line);
 			currentLine++;
 			var a : Array<Dynamic> = getArray();
 			trace(a);
-			emptyEnum = Type.createEnum(Type.resolveEnum(getEnumName()), getPrimitiveValue(line), a);
+			emptyEnum = Type.createEnum(resolve, value, a);
 		}
 		return emptyEnum;
 	}
@@ -499,6 +503,23 @@ class SerializationWriter {
 		var value = r.matched(0);	//正規表現によって抽出された文字列を保持
 		value = StringTools.replace(value, '=','');	//「=」の削除
 		value = StringTools.replace(value, ',', '');//「,」の削除
+		value = StringTools.replace(value, ' ', '');//スペースの削除
+		return value.toString();
+	}
+
+	/**
+	 * 引数のシリアライズ文字列から値の部分の文字列を抽出して返す
+	 * 「=」と「,」に囲まれた部分を抽出する。
+	 * プリミティブ型の場合のみ正しく動作する
+	 * @param str 整形シリアライズ文字列の現在処理する1行の文字列
+	 * @return 値の文字列
+	 */
+	private function getPrimitiveValue2(str : String) : String {
+		var r : EReg = ~/=.*\{/;	//型名を取り出す正規表現
+		r.match(str);
+		var value = r.matched(0);	//正規表現によって抽出された文字列を保持
+		value = StringTools.replace(value, '=','');	//「=」の削除
+		value = StringTools.replace(value, '{', '');//「,」の削除
 		value = StringTools.replace(value, ' ', '');//スペースの削除
 		return value.toString();
 	}
