@@ -280,8 +280,6 @@ class SerializationWriter {
 			if (isEndOfInstance() ) break;
 			//設定可能コンストラクタ数を超えたらエラーを出力
 			if (numberOfConstructors > MAX_SET_CONSTRUCTORS) throw "Too many arguments";
-			//型情報を習得
-			var type = typeof(line);
 			
 			//現在の行のデータがマップだった場合は型情報の部分を抽出して型情報を取得
 			var type;
