@@ -499,6 +499,38 @@ class SerializationWriter {
 	}
 	
 	/**
+	 * マップのプリミティブ型のキーの文字列部分を抽出する
+	 * @param	str  マップ変数の整形シリアライズデータ
+	 * @return  キーの文字列
+	 */
+	private function getMapPrimitiveKeyStr(str : String) : String {
+		var r : EReg = ~/ __mapKey .* ->/;
+		r.match(str);
+		var mapKeyStr = r.matched(0);
+		mapKeyStr = StringTools.replace(mapKeyStr, '-', '');
+		mapKeyStr = StringTools.replace(mapKeyStr, '>', '');
+		
+		//getPrimitiveValueメソッドにて処理をするため「,」を付ける
+		return mapKeyStr+",";
+	}
+	
+	/**
+	 * マップのプリミティブ型の値の文字列部分を抽出する
+	 * @param	str  マップ変数の整形シリアライズデータ
+	 * @return  値の文字列
+	 */
+	private function getMapPrimitiveValueStr(str : String) : String {
+		var r : EReg = ~/ __mapValue .*\)/;
+		r.match(str);
+		var mapValueStr = r.matched(0);
+		mapValueStr = StringTools.replace(mapValueStr, ')', '');
+		
+		//getPrimitiveValueメソッドにて処理をするため「,」を付ける
+		return mapValueStr+",";
+	}
+	
+	
+	/**
 	 * 読み込んだ行のマップ変数の値はキーと値が登録されているかを判定
 	 * @return 登録されていない場合は真を返す
 	 */
