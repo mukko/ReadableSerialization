@@ -105,7 +105,7 @@ class SerializationWriter {
 	 * @return Int型の値
 	 */
 	private function getInt() : Int {
-		var value = getPrimitiveValue();
+		var value = getPrimitiveValue(line);
 		return Std.parseInt(value);
 	}
 	
@@ -114,7 +114,7 @@ class SerializationWriter {
 	 * @return Float型の値
 	 */
 	private function getFloat() : Float {
-		var value = getPrimitiveValue();
+		var value = getPrimitiveValue(line);
 		return Std.parseFloat(value);
 	}
 	
@@ -123,7 +123,7 @@ class SerializationWriter {
 	 * @return Bool型の値
 	 */
 	private function getBool() : Bool {
-		var value = getPrimitiveValue();
+		var value = getPrimitiveValue(line);
 		if (value == "true") return true;
 		else return false;
 	}
@@ -133,7 +133,7 @@ class SerializationWriter {
 	 * @return String型の値
 	 */
 	private function getString() : String {
-		var value = getPrimitiveValue();
+		var value = getPrimitiveValue(line);
 		
 		//String型の値が「""」だった場合は空列を代入
 		if (value == '""') value = '';
@@ -442,14 +442,14 @@ class SerializationWriter {
 	}
 	
 	/**
-	 * 整形シリアライズ文字列の1行分のデータから値の部分の文字列を抽出して返す
+	 * 引数のシリアライズ文字列から値の部分の文字列を抽出して返す
 	 * 「=」と「,」に囲まれた部分を抽出する。
 	 * プリミティブ型の場合のみ正しく動作する
 	 * @return 値の文字列
 	 */
-	private function getPrimitiveValue() : String {
+	private function getPrimitiveValue(str : String) : String {
 		var r : EReg = ~/=.*,/;	//型名を取り出す正規表現
-		r.match(line);
+		r.match(str);
 		var value = r.matched(0);	//正規表現によって抽出された文字列を保持
 		value = StringTools.replace(value, '=','');	//「=」の削除
 		value = StringTools.replace(value, ',', '');//「,」の削除
