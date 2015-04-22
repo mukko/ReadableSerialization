@@ -253,6 +253,8 @@ class SerializationWriter {
 				case TObject :
 					currentLine++;
 					Reflect.setField(obj, getValueName(), getObject());
+				case TEnum(c) :
+					Reflect.setField(obj, getValueName(), getEnum());
 				default : obj = null;
 			}
 			currentLine++;
@@ -315,6 +317,8 @@ class SerializationWriter {
 				case TObject :
 					currentLine++;
 					Reflect.setField(originalClass, getValueName(), getObject());
+				case TEnum(c) :
+					Reflect.setField(originalClass, getValueName(), getEnum());
 				default : originalClass = null;
 			}
 			numberOfConstructors++;
@@ -368,6 +372,8 @@ class SerializationWriter {
 				case TObject : 
 					currentLine++;
 					key = getObject();
+				case TEnum(c) :
+					key = getEnum();
 				default : key = null;
 			}
 			
@@ -407,6 +413,8 @@ class SerializationWriter {
 				case TObject : 
 					currentLine++;
 					value = getObject();
+				case TEnum(c) :
+					value = getEnum();
 				default : value = null;
 			}
 			
@@ -435,7 +443,6 @@ class SerializationWriter {
 
 	/**
 	* 整形シリアライズデータ文字列からEnumのインスタンスを返す
-	* ex)Enum名.Rgb(255,255,255)
 	* @return Enumインスタンスの文字列
 	**/
 	private function getEnum () : Enum<Dynamic> {
