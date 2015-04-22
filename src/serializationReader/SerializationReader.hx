@@ -287,7 +287,7 @@ class SerializationReader {
 				strBuf.add(enumParam[1]);
 			}
 			else {
-				strBuf.add('"" : $type = ' + enumParam[1]);
+				strBuf.add('"" : $type = ' + enumParam[1]+',');
 			}
 		}
 		return strBuf.toString();
