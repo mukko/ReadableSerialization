@@ -295,86 +295,96 @@ class SerializationWriter {
 		
 		if (isMapValueAndKeyNone()) return objectMap;
 		
-		//キーの型の習得
-		var keyType = getMapKeyType();
-		
-		switch(keyType) {
-			case TNull : key = null;
-			case TInt :
-				var keyStr = getMapPrimitiveKeyStr(line);
-				key = getInt(keyStr);
-			case TFloat:
-				var keyStr = getMapPrimitiveKeyStr(line);
-				key = getFloat(keyStr);
-			case TBool :
-				var keyStr = getMapPrimitiveKeyStr(line);
-				key = getBool(keyStr);
-			case TClass(c) : 
-				switch(Type.getClassName(c)) {
-					case "String" : 
-						var keyStr = getMapPrimitiveKeyStr(line);
-						key = getString(keyStr);
-					case "haxe.ds.IntMap","haxe.ds.StringMap",
-						 "haxe.ds.EnumValueMap","haxe.ds.ObjectMap" :
-						//TODO マップの生成処理の実装
-					case "Array" : 
-						currentLine++;
-						key = getArray();
-					//外部クラスの場合はインポートが必要
-					default : 
-						currentLine++;
-						key = getClass();
-				}
-			case TObject : 
-				currentLine++;
-				key = getObject();
-			default : key = null;
+		while (true){
+			//キーの型の習得
+			var keyType = getMapKeyType();
+			
+			switch(keyType) {
+				case TNull : key = null;
+				case TInt :
+					var keyStr = getMapPrimitiveKeyStr(line);
+					key = getInt(keyStr);
+				case TFloat:
+					var keyStr = getMapPrimitiveKeyStr(line);
+					key = getFloat(keyStr);
+				case TBool :
+					var keyStr = getMapPrimitiveKeyStr(line);
+					key = getBool(keyStr);
+				case TClass(c) : 
+					switch(Type.getClassName(c)) {
+						case "String" : 
+							var keyStr = getMapPrimitiveKeyStr(line);
+							key = getString(keyStr);
+						case "haxe.ds.IntMap","haxe.ds.StringMap",
+							 "haxe.ds.EnumValueMap","haxe.ds.ObjectMap" :
+							//TODO マップの生成処理の実装
+						case "Array" : 
+							currentLine++;
+							key = getArray();
+						//外部クラスの場合はインポートが必要
+						default : 
+							currentLine++;
+							key = getClass();
+					}
+				case TObject : 
+					currentLine++;
+					key = getObject();
+				default : key = null;
+			}
+			
+			//デバッグ
+			trace("key => "+key);
+			
+			//値の型の取得
+			var valueType = getMapValueType();
+			
+			switch(valueType) {
+				case TNull : value = null;
+				case TInt: 
+					var valueStr = getMapPrimitiveValueStr(line);
+					value = getInt(valueStr);
+				case TFloat:
+					var valueStr = getMapPrimitiveValueStr(line);
+					value = getFloat(valueStr);
+				case TBool :
+					var valueStr = getMapPrimitiveValueStr(line);
+					value = getBool(valueStr);
+				case TClass(c) : 
+					switch(Type.getClassName(c)) {
+						case "String" : 
+							var valueStr = getMapPrimitiveValueStr(line);
+							value = getString(valueStr);
+						case "haxe.ds.IntMap","haxe.ds.StringMap",
+							 "haxe.ds.EnumValueMap", "haxe.ds.ObjectMap" :
+							value = getObjectMap();
+							//TODO マップの生成処理の実装
+						case "Array" : 
+							currentLine++;
+							value = getArray();
+						default : 
+							currentLine++;
+							value = getClass();
+					}
+				case TObject : 
+					currentLine++;
+					value = getObject();
+				default : value = null;
+			}
+			
+			//デバッグ
+			trace("value => "+value);
+			
+			//取得した値とキーを登録
+			objectMap.set(key, value);
+			
+			//文字列を取得
+			currentLine++;
+			line = FileTools.readLine(fileName, currentLine);
+			//現在の行が空行だったらループを抜ける
+			if (line == null) break;
+			//マップ以外のインスタンスが宣言されていた場合はループを抜ける
+			if (isNewInstance()) break;
 		}
-		
-		//デバッグ
-		trace("key => "+key);
-		
-		//値の型の取得
-		var valueType = getMapValueType();
-		
-		switch(valueType) {
-			case TNull : value = null;
-			case TInt: 
-				var valueStr = getMapPrimitiveValueStr(line);
-				value = getInt(valueStr);
-			case TFloat:
-				var valueStr = getMapPrimitiveValueStr(line);
-				value = getFloat(valueStr);
-			case TBool :
-				var valueStr = getMapPrimitiveValueStr(line);
-				value = getBool(valueStr);
-			case TClass(c) : 
-				switch(Type.getClassName(c)) {
-					case "String" : 
-						var valueStr = getMapPrimitiveValueStr(line);
-						value = getString(valueStr);
-					case "haxe.ds.IntMap","haxe.ds.StringMap",
-						 "haxe.ds.EnumValueMap", "haxe.ds.ObjectMap" :
-						value = getObjectMap();
-						//TODO マップの生成処理の実装
-					case "Array" : 
-						currentLine++;
-						value = getArray();
-					default : 
-						currentLine++;
-						value = getClass();
-				}
-			case TObject : 
-				currentLine++;
-				value = getObject();
-			default : value = null;
-		}
-		
-		//デバッグ
-		trace("value => "+value);
-		
-		//取得した値とキーを登録
-		objectMap.set(key, value);
 		
 		return objectMap;
 	}
@@ -393,11 +403,21 @@ class SerializationWriter {
 	 * 現在の行がオブジェクト・クラス・配列の終わりを示す文字列であるかを取得
 	 * @return　終わりを示す記号だった場合は真を返す
 	 */
-	private function isEndOfInstance () : Bool {
+	private function isEndOfInstance() : Bool {
 		//インデント文字列と「,」を除いた文字列が「}」なら真
 		var str = StringTools.replace(line, '	', '');
 		str = StringTools.replace(str, ',', '');
 		if (str == '}' || str == ']') return true;
+		else return false;
+	}
+	
+	/**
+	 * 現在の行が新たなインスタンスの生成部分であるかを取得
+	 * @return  新たなインスタンス生成部分だったら真を返す
+	 */
+	private function isNewInstance() : Bool	{
+		var str = StringTools.replace(line, '	', '');
+		if (str.charAt(0) == '"' || str.charAt(0) == '_') return true;
 		else return false;
 	}
 	
