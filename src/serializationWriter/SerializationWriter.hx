@@ -1,11 +1,12 @@
-package serializationWriter;
+﻿package serializationWriter;
 import haxe.ds.IntMap;
 import haxe.ds.ObjectMap;
 import haxe.ds.StringMap;
 import haxe.ds.EnumValueMap;
 import serializationReader.FileTools;
 import Type;
-
+import serializationReader.Color2;
+import serializationReader.Color3;
 import sampleClass.Point;
 
 /**
@@ -34,13 +35,13 @@ class SerializationWriter {
 	 */
 	public function run() : Dynamic { 
 		//TODO エラーメッセージを詳細化
-		try {
+//		try {
 			return getOriginalValue();
-		}catch (msg : String) {
-			var line = StringTools.replace(this.line, '	', '');	//インデント文字の削除
-			trace('\nError in line '+(currentLine+1)+' \nLine detail : $line \nError message : $msg');
-			return null;
-		}
+//		}catch (msg : String) {
+//			var line = StringTools.replace(this.line, '	', '');	//インデント文字の削除
+//			trace('\nError in line '+(currentLine+1)+' \nLine detail : $line \nError message : $msg');
+//			return null;
+//		}
 	}
 	
 	/**
@@ -94,7 +95,7 @@ class SerializationWriter {
 					currentLine++;
 					originalValue = getObject();
 				case TEnum(c) :
-					originalValue = getEnumValue();
+					originalValue = getEnum();
 				default : originalValue = null;
 			}
 			currentLine++;
@@ -184,6 +185,8 @@ class SerializationWriter {
 				case TObject :
 					currentLine++;
 					array.push(getObject());
+				case TEnum(c) :
+					array.push(getEnum());
 				default : array.push(null);
 			}
 			currentLine++;
@@ -394,25 +397,24 @@ class SerializationWriter {
 	* ex)Enum名.Rgb(255,255,255)
 	* @return Enumインスタンスの文字列
 	**/
-	private function getEnumValue () : Dynamic {
-		var enumValue : Dynamic = "$getEnumName."; //Enum名.
+	private function getEnum () : Enum<Dynamic> {
+		//TODO Enumの値がインスタンスを持つ場合に対応する(ex: out_enumSample3.txt.txt)
+		var emptyEnum : Enum<Dynamic>;
 		var r : EReg = ~/.$/;
 		r.match(line);
-
-		var value = r.matched(0); //','か'{'しかこない
-		if(value == ","){
-			enumValue += "$getPrimitiveValue"; //Enum名.Bar
-			currentLine++;
+		//","もしくは"{"しかでてこない
+		if(r.matched(0) == ","){
+			emptyEnum = Type.createEnum(Type.resolveEnum(getEnumName()), getPrimitiveValue(line)); //単純なパターン
 		}
 		else{
-			enumValue += "$getPrimitiveValue("; //Enum名.Bar(
-			while(!isEndOfInstance()){ //},がでてくるまで繰り返す
-				enumValue += "$getOriginalValue()";
-			}
-			enumValue += ")"; //Enum名.Bar(10,20,30,)
+			var resolve = Type.resolveEnum(getEnumName());
+			var value : String = getEnumValueName(line);
 			currentLine++;
+			var a : Array<Dynamic> = getArray();
+			trace(a);
+			emptyEnum = Type.createEnum(resolve, value, a);
 		}
-		return enumValue;
+		return emptyEnum;
 	}
 
 	/**
@@ -501,6 +503,23 @@ class SerializationWriter {
 		var value = r.matched(0);	//正規表現によって抽出された文字列を保持
 		value = StringTools.replace(value, '=','');	//「=」の削除
 		value = StringTools.replace(value, ',', '');//「,」の削除
+		value = StringTools.replace(value, ' ', '');//スペースの削除
+		return value.toString();
+	}
+
+	/**
+	 * 引数のシリアライズ文字列から値の部分の文字列を抽出して返す
+	 * 「=」と「,」に囲まれた部分を抽出する。
+	 * プリミティブ型の場合のみ正しく動作する
+	 * @param str 整形シリアライズ文字列の現在処理する1行の文字列
+	 * @return 値の文字列
+	 */
+	private function getEnumValueName(str : String) : String {
+		var r : EReg = ~/=.*\{/;	//型名を取り出す正規表現
+		r.match(str);
+		var value = r.matched(0);	//正規表現によって抽出された文字列を保持
+		value = StringTools.replace(value, '=','');	//「=」の削除
+		value = StringTools.replace(value, '{', '');//「,」の削除
 		value = StringTools.replace(value, ' ', '');//スペースの削除
 		return value.toString();
 	}
