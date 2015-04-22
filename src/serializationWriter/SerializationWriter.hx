@@ -296,17 +296,22 @@ class SerializationWriter {
 		//キーの型の習得
 		var keyType = getMapKeyType();
 		
-		//デバッグ
-		trace(keyType.getName());
-		
 		switch(keyType) {
 			case TNull : key = null;
-			case TInt: key = getInt(line);
-			case TFloat: key = getFloat(line);
-			case TBool : key = getBool(line);
+			case TInt :
+				var keyStr = getMapPrimitiveKeyStr(line);
+				key = getInt(keyStr);
+			case TFloat:
+				var keyStr = getMapPrimitiveKeyStr(line);
+				key = getFloat(keyStr);
+			case TBool :
+				var keyStr = getMapPrimitiveKeyStr(line);
+				key = getBool(keyStr);
 			case TClass(c) : 
 				switch(Type.getClassName(c)) {
-					case "String" : key = getString(line);
+					case "String" : 
+						var keyStr = getMapPrimitiveKeyStr(line);
+						key = getString(keyStr);
 					case "haxe.ds.IntMap","haxe.ds.StringMap",
 						 "haxe.ds.EnumValueMap","haxe.ds.ObjectMap" :
 						//TODO マップの生成処理の実装
@@ -332,12 +337,20 @@ class SerializationWriter {
 		
 		switch(valueType) {
 			case TNull : value = null;
-			case TInt: value = getInt(line);
-			case TFloat: value = getFloat(line);
-			case TBool : value = getBool(line);
+			case TInt: 
+				var valueStr = getMapPrimitiveValueStr(line);
+				value = getInt(valueStr);
+			case TFloat:
+				var valueStr = getMapPrimitiveValueStr(line);
+				value = getFloat(valueStr);
+			case TBool :
+				var valueStr = getMapPrimitiveValueStr(line);
+				value = getBool(valueStr);
 			case TClass(c) : 
 				switch(Type.getClassName(c)) {
-					case "String" : value = getString(line);
+					case "String" : 
+						var valueStr = getMapPrimitiveValueStr(line);
+						value = getString(valueStr);
 					case "haxe.ds.IntMap","haxe.ds.StringMap",
 						 "haxe.ds.EnumValueMap", "haxe.ds.ObjectMap" :
 						value = getObjectMap();
