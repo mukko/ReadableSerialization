@@ -93,6 +93,8 @@ class SerializationWriter {
 				case TObject : 
 					currentLine++;
 					originalValue = getObject();
+				case TEnum(c) :
+					originalValue = getEnumValue();
 				default : originalValue = null;
 			}
 			currentLine++;
@@ -379,18 +381,26 @@ class SerializationWriter {
 
 	/**
 	* 整形シリアライズデータ文字列からEnumのインスタンスを返す
-	* ex)クラス名.Rgb(255,255,255)
+	* ex)Enum名.Rgb(255,255,255)
 	* @return Enumインスタンスの文字列
 	**/
-	private function getEnumValue () : String {
-		var enumValue : String = "$getEnumName.";
+	private function getEnumValue () : Dynamic {
+		var enumValue : Dynamic = "$getEnumName."; //Enum名.
 		var r : EReg = ~/.$/;
 		r.match(line);
 
 		var value = r.matched(0); //','か'{'しかこない
-		if(value == ",") enumValue += "$getPrimitiveValue";
+		if(value == ","){
+			enumValue += "$getPrimitiveValue"; //Enum名.Bar
+			currentLine++;
+		}
 		else{
-
+			enumValue += "$getPrimitiveValue("; //Enum名.Bar(
+			while(!isEndOfInstance()){ //},がでてくるまで繰り返す
+				enumValue += "$getOriginalValue()";
+			}
+			enumValue += ")"; //Enum名.Bar(10,20,30,)
+			currentLine++;
 		}
 		return enumValue;
 	}
