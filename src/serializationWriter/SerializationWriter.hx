@@ -409,11 +409,21 @@ class SerializationWriter {
 	 * 現在の行がオブジェクト・クラス・配列の終わりを示す文字列であるかを取得
 	 * @return　終わりを示す記号だった場合は真を返す
 	 */
-	private function isEndOfInstance () : Bool {
+	private function isEndOfInstance() : Bool {
 		//インデント文字列と「,」を除いた文字列が「}」なら真
 		var str = StringTools.replace(line, '	', '');
 		str = StringTools.replace(str, ',', '');
 		if (str == '}' || str == ']') return true;
+		else return false;
+	}
+	
+	/**
+	 * 現在の行が新たなインスタンスの生成部分であるかを取得
+	 * @return  新たなインスタンス生成部分だったら真を返す
+	 */
+	private function isNewInstance() : Bool	{
+		var str = StringTools.replace(line, '	', '');
+		if (str.charAt(0) == '"' || str.charAt(0) == '_') return true;
 		else return false;
 	}
 	
