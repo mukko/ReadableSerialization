@@ -310,7 +310,7 @@ class SerializationReader {
 			strBuf.add(str);
 		}
 		else {
-			strBuf.add('"" = : $type = $str,');
+			strBuf.add('"" : $type = $str,');
 		}
 		return strBuf.toString();
 	}
