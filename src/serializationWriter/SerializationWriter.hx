@@ -93,6 +93,8 @@ class SerializationWriter {
 				case TObject : 
 					currentLine++;
 					originalValue = getObject();
+				case TEnum(c) :
+					originalValue = getEnumValue();
 				default : originalValue = null;
 			}
 			currentLine++;
