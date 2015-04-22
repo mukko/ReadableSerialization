@@ -72,12 +72,12 @@ class SerializationWriter {
 			//元のデータを生成
 			switch (type) {
 				case TNull : originalValue = null;
-				case TInt: originalValue = getInt();
-				case TFloat: originalValue = getFloat();
-				case TBool : originalValue = getBool();
+				case TInt: originalValue = getInt(line);
+				case TFloat: originalValue = getFloat(line);
+				case TBool : originalValue = getBool(line);
 				case TClass(c) : 
 					switch(Type.getClassName(c)) {
-						case "String" : originalValue = getString();
+						case "String" : originalValue = getString(line);
 						case "haxe.ds.IntMap","haxe.ds.StringMap",
 							 "haxe.ds.EnumValueMap","haxe.ds.ObjectMap" :
 							//TODO マップの生成処理の実装
@@ -102,38 +102,42 @@ class SerializationWriter {
 	
 	/**
 	 * 整形シリアライズ文字列の1行分のデータからInt型の数値を返す
+	 * @param  Int型のデータが含まれた整形シリアライズ文字列
 	 * @return Int型の値
 	 */
-	private function getInt() : Int {
-		var value = getPrimitiveValue(line);
+	private function getInt(str : String) : Int {
+		var value = getPrimitiveValue(str);
 		return Std.parseInt(value);
 	}
 	
 	/**
 	 * 整形シリアライズ文字列の1行分のデータからFloat型の数値を返す
+	 * @param  Float型のデータが含まれた整形シリアライズ文字列
 	 * @return Float型の値
 	 */
-	private function getFloat() : Float {
-		var value = getPrimitiveValue(line);
+	private function getFloat(str : String) : Float {
+		var value = getPrimitiveValue(str);
 		return Std.parseFloat(value);
 	}
 	
 	/**
 	 * 整形シリアライズ文字列の1行分のデータからBool型の値を返す
+	 * @param  Bool型のデータが含まれた整形シリアライズ文字列
 	 * @return Bool型の値
 	 */
-	private function getBool() : Bool {
-		var value = getPrimitiveValue(line);
+	private function getBool(str : String) : Bool {
+		var value = getPrimitiveValue(str);
 		if (value == "true") return true;
 		else return false;
 	}
 	
 	/**
 	 * 整形シリアライズ文字列の1行分のデータからString型の値を返す
+	 * @param  String型のデータが含まれた整形シリアライズ文字列
 	 * @return String型の値
 	 */
-	private function getString() : String {
-		var value = getPrimitiveValue(line);
+	private function getString(str : String) : String {
+		var value = getPrimitiveValue(str);
 		
 		//String型の値が「""」だった場合は空列を代入
 		if (value == '""') value = '';
@@ -161,12 +165,12 @@ class SerializationWriter {
 			//元のデータを生成
 			switch (type) {
 				case TNull : array.push(null);
-				case TInt: array.push(getInt());
-				case TFloat: array.push(getFloat());
-				case TBool : array.push(getBool());
+				case TInt: array.push(getInt(line));
+				case TFloat: array.push(getFloat(line));
+				case TBool : array.push(getBool(line));
 				case TClass(c) : 
 					switch(Type.getClassName(c)) {
-						case "String" : array.push(getString());
+						case "String" : array.push(getString(line));
 						case "Array" : 
 							currentLine++;
 							array.push(getArray());
@@ -204,12 +208,12 @@ class SerializationWriter {
 			//元のデータを生成
 			switch (type) {
 				case TNull : Reflect.setField(obj, getValueName(), null);
-				case TInt: Reflect.setField(obj,getValueName(),getInt());
-				case TFloat: Reflect.setField(obj,getValueName(),getFloat());
-				case TBool : Reflect.setField(obj,getValueName(),getBool());
+				case TInt: Reflect.setField(obj,getValueName(),getInt(line));
+				case TFloat: Reflect.setField(obj,getValueName(),getFloat(line));
+				case TBool : Reflect.setField(obj,getValueName(),getBool(line));
 				case TClass(c) : 
 					switch(Type.getClassName(c)) {
-						case "String" : Reflect.setField(obj, getValueName(), getString());
+						case "String" : Reflect.setField(obj, getValueName(), getString(line));
 						case "Array" : 
 							currentLine++;
 							Reflect.setField(obj, getValueName(), getArray());
@@ -254,12 +258,12 @@ class SerializationWriter {
 			//元のデータを生成
 			switch (type) {
 				case TNull : Reflect.setField(originalClass, getValueName(), null);
-				case TInt: Reflect.setField(originalClass,getValueName(),getInt());
-				case TFloat: Reflect.setField(originalClass,getValueName(),getFloat());
-				case TBool : Reflect.setField(originalClass,getValueName(),getBool());
+				case TInt: Reflect.setField(originalClass,getValueName(),getInt(line));
+				case TFloat: Reflect.setField(originalClass,getValueName(),getFloat(line));
+				case TBool : Reflect.setField(originalClass,getValueName(),getBool(line));
 				case TClass(c) : 
 					switch(Type.getClassName(c)) {
-						case "String" : Reflect.setField(originalClass, getValueName(), getString());
+						case "String" : Reflect.setField(originalClass, getValueName(), getString(line));
 						case "Array" : 
 							currentLine++;
 							Reflect.setField(originalClass, getValueName(), getArray());
@@ -297,12 +301,12 @@ class SerializationWriter {
 		
 		switch(keyType) {
 			case TNull : key = null;
-			case TInt: key = getInt();
-			case TFloat: key = getFloat();
-			case TBool : key = getBool();
+			case TInt: key = getInt(line);
+			case TFloat: key = getFloat(line);
+			case TBool : key = getBool(line);
 			case TClass(c) : 
 				switch(Type.getClassName(c)) {
-					case "String" : key = getString();
+					case "String" : key = getString(line);
 					case "haxe.ds.IntMap","haxe.ds.StringMap",
 						 "haxe.ds.EnumValueMap","haxe.ds.ObjectMap" :
 						//TODO マップの生成処理の実装
@@ -328,12 +332,12 @@ class SerializationWriter {
 		
 		switch(valueType) {
 			case TNull : value = null;
-			case TInt: value = getInt();
-			case TFloat: value = getFloat();
-			case TBool : value = getBool();
+			case TInt: value = getInt(line);
+			case TFloat: value = getFloat(line);
+			case TBool : value = getBool(line);
 			case TClass(c) : 
 				switch(Type.getClassName(c)) {
-					case "String" : value = getString();
+					case "String" : value = getString(line);
 					case "haxe.ds.IntMap","haxe.ds.StringMap",
 						 "haxe.ds.EnumValueMap", "haxe.ds.ObjectMap" :
 						value = getObjectMap();
@@ -445,6 +449,7 @@ class SerializationWriter {
 	 * 引数のシリアライズ文字列から値の部分の文字列を抽出して返す
 	 * 「=」と「,」に囲まれた部分を抽出する。
 	 * プリミティブ型の場合のみ正しく動作する
+	 * @param str 整形シリアライズ文字列の現在処理する1行の文字列
 	 * @return 値の文字列
 	 */
 	private function getPrimitiveValue(str : String) : String {
