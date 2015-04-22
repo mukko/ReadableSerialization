@@ -95,7 +95,7 @@ class SerializationWriter {
 					currentLine++;
 					originalValue = getObject();
 				case TEnum(c) :
-					originalValue = getEnumValue();
+					originalValue = getEnum();
 				default : originalValue = null;
 			}
 			currentLine++;
@@ -186,7 +186,7 @@ class SerializationWriter {
 					currentLine++;
 					array.push(getObject());
 				case TEnum(c) :
-					array.push(getEnumValue());
+					array.push(getEnum());
 				default : array.push(null);
 			}
 			currentLine++;
@@ -397,7 +397,7 @@ class SerializationWriter {
 	* ex)Enum名.Rgb(255,255,255)
 	* @return Enumインスタンスの文字列
 	**/
-	private function getEnumValue () : Enum<Dynamic> {
+	private function getEnum () : Enum<Dynamic> {
 		//TODO Enumの値がインスタンスを持つ場合に対応する(ex: out_enumSample3.txt.txt)
 		var emptyEnum : Enum<Dynamic>;
 		var r : EReg = ~/.$/;
@@ -408,7 +408,7 @@ class SerializationWriter {
 		}
 		else{
 			var resolve = Type.resolveEnum(getEnumName());
-			var value : String = getPrimitiveValue2(line);
+			var value : String = getEnumValueName(line);
 			currentLine++;
 			var a : Array<Dynamic> = getArray();
 			trace(a);
@@ -514,7 +514,7 @@ class SerializationWriter {
 	 * @param str 整形シリアライズ文字列の現在処理する1行の文字列
 	 * @return 値の文字列
 	 */
-	private function getPrimitiveValue2(str : String) : String {
+	private function getEnumValueName(str : String) : String {
 		var r : EReg = ~/=.*\{/;	//型名を取り出す正規表現
 		r.match(str);
 		var value = r.matched(0);	//正規表現によって抽出された文字列を保持
