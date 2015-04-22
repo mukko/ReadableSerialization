@@ -1,4 +1,4 @@
-﻿package serializationWriter;
+package serializationWriter;
 import haxe.ds.IntMap;
 import haxe.ds.ObjectMap;
 import haxe.ds.StringMap;
@@ -162,8 +162,17 @@ class SerializationWriter {
 			//オブジェクトの終わりを示す記号が来たらループを抜ける
 			if (isEndOfInstance()) break;
 			
-			//型情報を習得
-			var type = typeof(line);
+			//現在の行のデータがマップだった場合は型情報の部分を抽出して型情報を取得
+			var type;
+			if (isMap()) {
+				var r : EReg = ~/ : S.*Map = \(/;
+				r.match(line);
+				var mapType = r.matched(0);
+				type = typeof(mapType);
+			}
+			else {
+				type = typeof(line);	//型情報を習得
+			}
 			
 			//元のデータを生成
 			switch (type) {
@@ -177,7 +186,9 @@ class SerializationWriter {
 						case "Array" : 
 							currentLine++;
 							array.push(getArray());
-						//外部クラスの場合はインポートが必要
+						case "haxe.ds.IntMap","haxe.ds.StringMap",
+							 "haxe.ds.EnumValueMap","haxe.ds.ObjectMap" :
+							array.push(getObjectMap());
 						default : 
 							currentLine++;
 							array.push(getClass());
@@ -207,8 +218,17 @@ class SerializationWriter {
 			//オブジェクトとマップの終わりを示す記号が来たらループを抜ける
 			if (isEndOfInstance()) break;
 			
-			//型情報を習得
-			var type = typeof(line);
+			//現在の行のデータがマップだった場合は型情報の部分を抽出して型情報を取得
+			var type;
+			if (isMap()) {
+				var r : EReg = ~/ : S.*Map = \(/;
+				r.match(line);
+				var mapType = r.matched(0);
+				type = typeof(mapType);
+			}
+			else {
+				type = typeof(line);	//型情報を習得
+			}
 			
 			//元のデータを生成
 			switch (type) {
@@ -222,6 +242,9 @@ class SerializationWriter {
 						case "Array" : 
 							currentLine++;
 							Reflect.setField(obj, getValueName(), getArray());
+						case "haxe.ds.IntMap","haxe.ds.StringMap",
+							 "haxe.ds.EnumValueMap","haxe.ds.ObjectMap" :
+							Reflect.setField(obj, getValueName(), getObjectMap());
 						//外部クラスの場合はインポートが必要
 						default : 
 							currentLine++;
@@ -260,6 +283,18 @@ class SerializationWriter {
 			//型情報を習得
 			var type = typeof(line);
 			
+			//現在の行のデータがマップだった場合は型情報の部分を抽出して型情報を取得
+			var type;
+			if (isMap()) {
+				var r : EReg = ~/ : S.*Map = \(/;
+				r.match(line);
+				var mapType = r.matched(0);
+				type = typeof(mapType);
+			}
+			else {
+				type = typeof(line);	//型情報を習得
+			}
+			
 			//元のデータを生成
 			switch (type) {
 				case TNull : Reflect.setField(originalClass, getValueName(), null);
@@ -272,6 +307,9 @@ class SerializationWriter {
 						case "Array" : 
 							currentLine++;
 							Reflect.setField(originalClass, getValueName(), getArray());
+						case "haxe.ds.IntMap","haxe.ds.StringMap",
+							 "haxe.ds.EnumValueMap","haxe.ds.ObjectMap" :
+							Reflect.setField(originalClass, getValueName(), getObjectMap());
 						//外部クラスの場合はインポートが必要
 						default : currentLine++;
 								  Reflect.setField(originalClass, getValueName(), getClass());
