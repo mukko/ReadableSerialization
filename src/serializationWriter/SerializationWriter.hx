@@ -371,15 +371,15 @@ class SerializationWriter {
 	* ex)Enum名.Rgb(255,255,255)
 	* @return Enumインスタンスの文字列
 	**/
-	private function getEnumValue () : String {
-		var enumValue : String = "$getEnumName."; //Enum名.
+	private function getEnumValue () : Dynamic {
+		var enumValue : Dynamic = "$getEnumName."; //Enum名.
 		var r : EReg = ~/.$/;
 		r.match(line);
 
 		var value = r.matched(0); //','か'{'しかこない
 		if(value == ","){
 			enumValue += "$getPrimitiveValue"; //Enum名.Bar
-			currentLine++
+			currentLine++;
 		}
 		else{
 			enumValue += "$getPrimitiveValue("; //Enum名.Bar(
