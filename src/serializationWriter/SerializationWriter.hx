@@ -423,7 +423,7 @@ class SerializationWriter {
 		//インデント文字列と「,」を除いた文字列が「}」なら真
 		var str = StringTools.replace(line, '	', '');
 		str = StringTools.replace(str, ',', '');
-		if (str == '}' || str == ']') return true;
+		if (str.charAt(0) == '}' || str.charAt(0) == ']') return true;
 		else return false;
 	}
 	
