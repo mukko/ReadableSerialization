@@ -2,6 +2,8 @@ package serializationWriter;
 
 import haxe.Serializer;
 import haxe.Unserializer;
+import serializationReader.SerializationReader;
+import serializationReader.FileTools;
 
 class Main extends mcli.CommandLine {
 	
@@ -11,12 +13,16 @@ class Main extends mcli.CommandLine {
 			Sys.println("No files selected.");
 		}
 		else {
+			Sys.println(FileTools.readTextFile(name));
 			//ファイル名読み込みシリアライズテキストから元データを生成
 			var sw = new SerializationWriter(name);
 			var originValie = sw.run();
 			
-			Sys.println(originValie);
-			Sys.println("value type =>"+Type.typeof(originValie));
+			Sys.println("Data is \n"+originValie);
+			Sys.println("value type =>" + Type.typeof(originValie));
+			
+			var sr = new SerializationReader(Serializer.run(originValie));
+			Sys.println(sr.run());
 		}
 	}
 	

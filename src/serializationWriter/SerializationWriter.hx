@@ -292,6 +292,9 @@ class SerializationWriter {
 		//キーの型の習得
 		var keyType = getMapKeyType();
 		
+		//デバッグ
+		trace(keyType.getName());
+		
 		switch(keyType) {
 			case TNull : key = null;
 			case TInt: key = getInt();
@@ -316,6 +319,9 @@ class SerializationWriter {
 				key = getObject();
 			default : key = null;
 		}
+		
+		//デバッグ
+		trace("key => "+key);
 		
 		//値の型の取得
 		var valueType = getMapValueType();
@@ -344,6 +350,9 @@ class SerializationWriter {
 				value = getObject();
 			default : value = null;
 		}
+		
+		//デバッグ
+		trace("value => "+value);
 		
 		//取得した値とキーを登録
 		objectMap.set(key, value);
@@ -483,7 +492,7 @@ class SerializationWriter {
 		
 		return typeof(valueTypeStr);
 	}
-
+	
 	/**
 	 * 読み込んだ行のマップ変数の値はキーと値が登録されているかを判定
 	 * @return 登録されていない場合は真を返す
