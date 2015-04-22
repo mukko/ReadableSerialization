@@ -5,7 +5,8 @@ import haxe.ds.StringMap;
 import haxe.ds.EnumValueMap;
 import serializationReader.FileTools;
 import Type;
-
+import serializationReader.Color2;
+import serializationReader.Color3;
 import sampleClass.Point;
 
 /**
@@ -184,6 +185,8 @@ class SerializationWriter {
 				case TObject :
 					currentLine++;
 					array.push(getObject());
+				case TEnum(c) :
+					array.push(getEnumValue());
 				default : array.push(null);
 			}
 			currentLine++;
@@ -394,8 +397,19 @@ class SerializationWriter {
 	* ex)Enum名.Rgb(255,255,255)
 	* @return Enumインスタンスの文字列
 	**/
-	private function getEnumValue () : Dynamic {
-		var emptyEnum = Type.createEnum(Type.resolveEnum(getEnumName()), getPrimitiveValue(line));
+	private function getEnumValue () : Enum<Dynamic> {
+		//TODO Enumの値がインスタンスを持つ場合に対応する(ex: out_enumSample3.txt.txt)
+		var emptyEnum : Enum<Dynamic>;
+		var r : EReg = ~/.$/;
+		r.match(line);
+		//","もしくは"{"しかでてこない
+		if(r.matched(0) == ",") emptyEnum = Type.createEnum(Type.resolveEnum(getEnumName()), getPrimitiveValue(line)); //単純なパターン
+		else{
+			currentLine++;
+			var a : Array<Dynamic> = getArray();
+			trace(a);
+			emptyEnum = Type.createEnum(Type.resolveEnum(getEnumName()), getPrimitiveValue(line), a);
+		}
 		return emptyEnum;
 	}
 
