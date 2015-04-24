@@ -8,6 +8,7 @@ out/
 *.idea
 *.iml
 *.txt
+samples/*
 !testClass/*
 !arraySample.txt
 !bigArraySample.txt
