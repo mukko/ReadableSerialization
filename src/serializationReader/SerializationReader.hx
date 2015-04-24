@@ -62,7 +62,8 @@ class SerializationReader {
 				case '}': 
 					//「}」の次の文字が「,」だったら改行を出力しない
 					nextChar = readableSerializedData.charAt(i + 1);	//現在の次の文字を保持	
-					if (nextChar == ',' || nextChar == ')' || nextChar == ':') {
+					var nextChar2 = readableSerializedData.charAt(i + 2);	//現在の次の次の文字を取得
+					if (nextChar == ',' || nextChar == ')' || nextChar == ':' || nextChar2 == '-') {
 						strBuf.add(currentChar);
 					}
 					else {
