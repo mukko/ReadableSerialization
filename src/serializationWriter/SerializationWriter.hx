@@ -5,8 +5,7 @@ import haxe.ds.StringMap;
 import haxe.ds.EnumValueMap;
 import serializationReader.FileTools;
 import Type;
-import serializationReader.Color2;
-import serializationReader.Color3;
+import serializationReader.Color;
 import sampleClass.Point;
 
 /**
