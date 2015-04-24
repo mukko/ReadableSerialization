@@ -35,13 +35,13 @@ class SerializationWriter {
 	 */
 	public function run() : Dynamic { 
 		//TODO エラーメッセージを詳細化
-//		try {
+		try {
 			return getOriginalValue();
-//		}catch (msg : String) {
-//			var line = StringTools.replace(this.line, '	', '');	//インデント文字の削除
-//			trace('\nError in line '+(currentLine+1)+' \nLine detail : $line \nError message : $msg');
-//			return null;
-//		}
+		}catch (msg : String) {
+			var line = StringTools.replace(this.line, '	', '');	//インデント文字の削除
+			trace('\nError in line '+(currentLine+1)+' \nLine detail : $line \nError message : $msg');
+			return null;
+		}
 	}
 	
 	/**
@@ -446,7 +446,6 @@ class SerializationWriter {
 	* @return Enumインスタンスの文字列
 	**/
 	private function getEnum () : Enum<Dynamic> {
-		//TODO Enumの値がインスタンスを持つ場合に対応する(ex: out_enumSample3.txt.txt)
 		var emptyEnum : Enum<Dynamic>;
 		var r : EReg = ~/.$/;
 		r.match(line);
