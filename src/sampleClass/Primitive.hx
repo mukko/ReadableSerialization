@@ -1,4 +1,5 @@
 package sampleClass;
+
 class Primitive {
 	public var numInt(default, null) : Int;
 	public var numFloat(default, null) : Float;
