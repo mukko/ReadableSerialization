@@ -1,9 +1,14 @@
 package serializationReader;
+import haxe.ds.EnumValueMap;
+import haxe.ds.IntMap;
 import haxe.ds.ObjectMap;
 import haxe.ds.StringMap;
 import haxe.Serializer;
 import haxe.Unserializer;
-
+import sampleClass.Color;
+import sampleClass.Point;
+import sampleClass.Primitive;
+import serializationWriter.SerializationWriter;
 class Main extends mcli.CommandLine {
 	
 	public function runDefault(?name:String) {
@@ -11,14 +16,46 @@ class Main extends mcli.CommandLine {
 			Sys.println("No files selected.");
 		}
 		else if (name == "sample") {
-			//サンプルテキストを出力
-			var array1 : Array<Dynamic> = [10, 20, "abc"];
-			var array2 : Array<Dynamic> = [1.5, "aaa", true];
-			var obj = { a:10, b:20 };
-			var map1:ObjectMap<Dynamic, Dynamic> = [array1 => array2];
-			var int : String = "abcdefg";
-			var sr = new SerializationReader(Serializer.run(map1)).run();
-			Sys.println(FileTools.outputString(sr, "sample.txt") + " is created.");
+			//プリミティブ型のサンプル
+			var int = 10;
+			var float = 3.14;
+			var bool = true;
+			var str = "abcde";
+			//プリミティブ型以外のサンプル
+			var enm : Color = Color.Green;
+			var array : Array<Dynamic> = [int, float, bool];
+			
+			var intMap = new IntMap();
+			var strMap = new StringMap();
+			var objMap = new ObjectMap();
+			var enmMap = new EnumValueMap();
+			intMap.set(int, str);
+			
+			var obj = { i : int, b: float , m : strMap };
+			array.push(obj);
+			var cls = new Point(10, 20, new Primitive(10, 3.14, "abc", true), array, strMap, obj);
+			var cls2 = new Point(100, 200, new Primitive(100, 3.104, "abcf", false), array, intMap, obj);
+			
+			strMap.set(str, int);
+			objMap.set(cls, strMap);
+			enmMap.set(enm, cls);
+			enmMap.set(enm, cls2);
+			
+			var obj2 = { i : int, b: float , m : strMap };
+			
+			//テスト処理
+			var sr_origin = Serializer.run(cls);
+			
+			var sr = new SerializationReader(sr_origin);
+			Sys.println(sr.run());
+			FileTools.outputString(sr.run(), "out.txt");
+			
+			Sys.println(sr_origin+"\n");
+			
+			var sw = new SerializationWriter("sr_out.txt");
+			var sr2 = new SerializationReader(Serializer.run(sw.run()));
+			Sys.println(sr2.run());
+			
 		}
 		else {
 			//指定したファイルからシリアライズ文字列を取得
