@@ -376,9 +376,6 @@ class SerializationWriter {
 				default : key = null;
 			}
 			
-			//デバッグ
-			trace("key => "+key);
-			
 			//値の型の取得
 			var valueType = getMapValueType();
 			
@@ -416,9 +413,6 @@ class SerializationWriter {
 					value = getEnum();
 				default : value = null;
 			}
-			
-			//デバッグ
-			trace("value => "+value);
 			
 			//取得した値とキーを登録
 			objectMap.set(key, value);

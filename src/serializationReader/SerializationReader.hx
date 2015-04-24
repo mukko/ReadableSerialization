@@ -154,7 +154,16 @@ class SerializationReader {
 				strbuf.add('"$field" : $fieldType = $reflectField,');
 			}
 		}
-		strbuf.add('}');
+		
+		//再帰で呼び出された場合はカンマを出力しない
+		/*if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE) {
+			strbuf.add('}');
+		}
+		else {
+			strbuf.add('},');
+		}
+		*/
+		strbuf.add('},');
 		return strbuf.toString();
 	}
 	
@@ -186,6 +195,7 @@ class SerializationReader {
 			}
 		}
 		
+		//再帰で呼び出された場合はカンマを出力しない
 		if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE) {
 			strbuf.add(']');
 		}
@@ -213,7 +223,7 @@ class SerializationReader {
 		
 		//キーの設定が何も無かった場合は型名と値に「__none」という文字列を出力する
 		if (!map.keys().hasNext()) {
-			strBuf.add('( __mapKey : __none = __none -> __mapValue : __none = __none ),');
+			strBuf.add('( __mapKey : __none = __none -> __mapValue : __none = __none ');
 		}
 		
 		for (key in map.keys()) {
@@ -224,21 +234,30 @@ class SerializationReader {
 			if (isRecursive(keyType)) {
 				//値の型が再帰が必要な場合、値を引数に入れて再帰的に呼び出す.
 				if (isRecursive(valueType)) {
-					strBuf.add('( __mapKey : $keyType = '+getReadableSerializedText(key)+' -> __mapValue : $valueType = ' +getReadableSerializedText(map.get(key))+'),');
+					strBuf.add('( __mapKey : $keyType = '+getReadableSerializedText(key)+' -> __mapValue : $valueType = ' +getReadableSerializedText(map.get(key)));
 				}
 				else {
-					strBuf.add('( __mapKey : $keyType = '+getReadableSerializedText(key)+' -> __mapValue : $valueType = '+map.get(key)+'),');
+					strBuf.add('( __mapKey : $keyType = '+getReadableSerializedText(key)+' -> __mapValue : $valueType = '+map.get(key));
 				}
 			}
 			else {
 				if (isRecursive(valueType)) {
-					strBuf.add('( __mapKey : $keyType = $key -> __mapValue : $valueType = ' +getReadableSerializedText(map.get(key))+'),');
+					strBuf.add('( __mapKey : $keyType = $key -> __mapValue : $valueType = ' +getReadableSerializedText(map.get(key)));
 				}
 				else {
-					strBuf.add('( __mapKey : $keyType = $key -> __mapValue : $valueType = '+map.get(key)+'),');
+					strBuf.add('( __mapKey : $keyType = $key -> __mapValue : $valueType = '+map.get(key));
 				}
 			}
 		}
+		
+		//再帰で呼び出された場合はカンマを出力しない
+		if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE) {
+			strBuf.add(')');
+		}
+		else {
+			strBuf.add('),');
+		}
+		
 		return strBuf.toString();
 	}
 	
