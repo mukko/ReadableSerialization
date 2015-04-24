@@ -269,7 +269,7 @@ class SerializationReader {
 				//Enumのパラメータを引数に取り、再帰的に呼び出し
 				paramType = typeof(param);
 				if (isRecursive(paramType)) {
-					strBuf.add('"" : $paramType = '+getReadableSerializedText(param)+',');
+					strBuf.add('"" : $paramType = '+'$constructorName'+getReadableSerializedText(param)+',');
 				}
 				else {
 					strBuf.add('"" : $paramType = $param,');

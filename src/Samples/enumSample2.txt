@@ -1,1 +1,1 @@
-wy26:serializationReader.Color2y3:Rgb:3i10i20i30
+wy25:serializationReader.Colory3:Rgb:3i10i20i30
