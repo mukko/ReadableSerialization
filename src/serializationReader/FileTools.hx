@@ -7,15 +7,26 @@ import sys.io.File;
  */
 
 class FileTools {
+	private static var SR_FILE_OUT_STR : String = "sr_";
+	
 	/**
 	 * String型の文字列をテキストファイルに出力する
 	 * @param	output 出力する文字列
 	 * @param	fileName  出力するテキストファイル名
+	 * @return  出力したファイル名
 	 */
-	public static function outputString(output : String, fileName : String) : Void {
+	public static function outputString(output : String, fileName : String) : String {
+		//ディレクトリ名を含まないファイル名だけの文字列を抽出
+		var pos = fileName.lastIndexOf('/');
+		fileName = fileName.substr(pos + 1);
+		//シリアライズエディタの出力ファイルであることを示す文字列を挿入
+		fileName = SR_FILE_OUT_STR + fileName;
+		
 		var fileOut = File.write(fileName);
 		fileOut.writeString(output);
 		fileOut.close();
+		
+		return fileName;
 	}
 	
 	/**
