@@ -1,9 +1,0 @@
-"" : SClass(sampleClass.Point) = {
-	"x" : SInt = 10,
-	"y" : SInt = 10,
-	"e" : SEnum(serializationReader.Color) = Rgb{
-		"" : SInt = 10,
-		"" : SInt = 20,
-		"" : SInt = 30,
-	},
-}
