@@ -20,7 +20,8 @@ class Main extends mcli.CommandLine {
 			
 			Sys.println("Data is \n"+originValie);
 			Sys.println("value type =>" + Type.typeof(originValie));
-			
+
+			//sw後のデータから再びsrできるかをテスト
 			var sr = new SerializationReader(Serializer.run(originValie));
 			Sys.println(sr.run());
 		}
