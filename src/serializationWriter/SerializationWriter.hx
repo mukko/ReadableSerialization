@@ -457,9 +457,7 @@ class SerializationWriter {
 			var resolve = Type.resolveEnum(getEnumName());
 			var value : String = getEnumValueName(line);
 			currentLine++;
-			var a : Array<Dynamic> = getArray();
-			trace(a);
-			emptyEnum = Type.createEnum(resolve, value, a);
+			emptyEnum = Type.createEnum(resolve, value, getArray());
 		}
 		return emptyEnum;
 	}

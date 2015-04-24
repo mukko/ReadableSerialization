@@ -1,1 +1,1 @@
-wy6:Color2y3:Rgb:3i10i20wR0R1:3i30i40wR0y4:Blue:0
+wy26:serializationReader.Color3y3:Rgb:3i10i20wR0R1:3i30i40wR0y4:Blue:0
