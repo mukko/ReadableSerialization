@@ -251,26 +251,26 @@ class SerializationReader {
 		var dummyEnum : DummyEnum = exUnserializedData;
 		var enumParam = dummyEnum.getParameters();
 		var params : Array<Dynamic> = enumParam[2];	//Enumのパラメータを取得
+		var constructorName = enumParam[1];			//コンストラクタ名を取得
 		var paramType;	//Enumのパラメータの型を保持
 		var strBuf = new StringBuf();	//文字列バッファ
 		
-		//パラメータがnullでない場合は再帰
+		//コンストラクタが引数ありの場合
 		if (params != null) {
-			//引数ありのコンストラクタ名を取得
-			var constructorName = enumParam[1];
-			
+			//再帰で呼び出された場合はコンストラクタ名と括弧を出力
 			if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE) {
-				strBuf.add('{');
+				strBuf.add('$constructorName{');
 			}
 			else {
 				strBuf.add('"" : $type = $constructorName{');
 			}
+			//Enumのパラメータを再帰的に整形シリアライズテキスト化
 			for (param in params) {
-				//Enumのパラメータを引数に取り、再帰的に呼び出し
 				paramType = typeof(param);
 				if (isRecursive(paramType)) {
-					strBuf.add('"" : $paramType = '+'$constructorName'+getReadableSerializedText(param)+',');
+					strBuf.add('"" : $paramType = '+getReadableSerializedText(param)+',');
 				}
+				//プリミティブ型の場合はここでシリアライズテキストを出力
 				else {
 					strBuf.add('"" : $paramType = $param,');
 				}
@@ -282,12 +282,13 @@ class SerializationReader {
 				strBuf.add('},');
 			}
 		}
+		//コンストラクタが引数無しの場合
 		else {
 			if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE) {
-				strBuf.add(enumParam[1]);
+				strBuf.add(constructorName);
 			}
 			else {
-				strBuf.add('"" : $type = ' + enumParam[1]+',');
+				strBuf.add('"" : $type = $constructorName,');
 			}
 		}
 		return strBuf.toString();
