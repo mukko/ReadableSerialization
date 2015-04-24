@@ -154,15 +154,7 @@ class SerializationReader {
 				strbuf.add('"$field" : $fieldType = $reflectField,');
 			}
 		}
-		
-		//再帰で呼び出された場合はカンマを出力しない
-		/*if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE) {
-			strbuf.add('}');
-		}
-		else {
-			strbuf.add('},');
-		}
-		*/
+
 		strbuf.add('},');
 		return strbuf.toString();
 	}

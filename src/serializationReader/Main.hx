@@ -44,18 +44,13 @@ class Main extends mcli.CommandLine {
 			var obj2 = { i : int, b: float , m : strMap };
 			
 			//テスト処理
-			var sr_origin = Serializer.run(cls);
+			var sr_origin = Serializer.run(enm);
 			
 			var sr = new SerializationReader(sr_origin);
 			Sys.println(sr.run());
 			FileTools.outputString(sr.run(), "out.txt");
 			
 			Sys.println(sr_origin+"\n");
-			
-			var sw = new SerializationWriter("sr_out.txt");
-			var sr2 = new SerializationReader(Serializer.run(sw.run()));
-			Sys.println(sr2.run());
-			
 		}
 		else {
 			//指定したファイルからシリアライズ文字列を取得

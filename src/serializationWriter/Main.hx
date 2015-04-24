@@ -12,6 +12,10 @@ class Main extends mcli.CommandLine {
 		if (name == null) { 
 			Sys.println("No files selected.");
 		}
+		else if (name == "test") {
+			var sw = new SerializationWriter("sr_out.txt");
+			trace(sw.run());
+		}
 		else {
 			Sys.println(FileTools.readTextFile(name));
 			//ファイル名読み込みシリアライズテキストから元データを生成
