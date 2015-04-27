@@ -82,6 +82,9 @@ class SerializationReader {
 						strBuf.add(currentChar + '\n');
 						for (i in 0...indent) strBuf.add(INDENT);
 					}
+					else if (nextChar == ',') {
+						//何も出力しない
+					}
 					else {
 						strBuf.add(currentChar);
 					}
@@ -287,12 +290,7 @@ class SerializationReader {
 					strBuf.add('"" : $paramType = $param,');
 				}
 			}
-			if (recursiveDepth >= NOT_OUTPUT_VALUE_TYPE) {
-				strBuf.add('}');
-			}
-			else {
-				strBuf.add('},');
-			}
+			strBuf.add('},');
 		}
 		//コンストラクタが引数無しの場合
 		else {
