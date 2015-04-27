@@ -1,9 +1,10 @@
 package serializationWriter;
 
-import haxe.Serializer;
-import haxe.Unserializer;
-import serializationReader.SerializationReader;
 import serializationReader.FileTools;
+
+//生成したいクラス・EnumのインポートはSerializationWriterインスタンスを生成したクラス内
+import sampleClass.Color;
+import sampleClass.Point;
 
 class Main extends mcli.CommandLine {
 	
@@ -17,17 +18,18 @@ class Main extends mcli.CommandLine {
 			trace(sw.run());
 		}
 		else {
-			Sys.println(FileTools.readTextFile(name));
-			//ファイル名読み込みシリアライズテキストから元データを生成
-			var sw = new SerializationWriter(name);
-			var originValie = sw.run();
-			
-			Sys.println("Data is \n"+originValie);
-			Sys.println("value type =>" + Type.typeof(originValie));
-
-			//sw後のデータから再びsrできるかをテスト
-			var sr = new SerializationReader(Serializer.run(originValie));
-			Sys.println(sr.run());
+			//指定したファイルから文字列を取得
+			var swFile = FileTools.readTextFile(name);
+			if (swFile == null) {
+				Sys.println("No such file "+name);
+			}
+			else {
+				var sw = new SerializationWriter(name);
+				var originValue = sw.run();
+				Sys.println(name+"\n");
+				Sys.println(swFile+"\n");
+				Sys.println("Data is \n"+originValue+"\n\n");
+			}
 		}
 	}
 	

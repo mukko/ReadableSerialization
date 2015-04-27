@@ -23,6 +23,7 @@ class Main extends mcli.CommandLine {
 			var str = "abcde";
 			//プリミティブ型以外のサンプル
 			var enm : Color = Color.Green;
+			var enm2 : Color = Color.Grey(100);
 			var array : Array<Dynamic> = [int, float, bool];
 			
 			var intMap = new IntMap();
@@ -33,8 +34,8 @@ class Main extends mcli.CommandLine {
 			
 			var obj = { i : int, b: float , m : strMap };
 			array.push(obj);
-			var cls = new Point(10, 20, new Primitive(10, 3.14, "abc", true), array, strMap, obj);
-			var cls2 = new Point(100, 200, new Primitive(100, 3.104, "abcf", false), array, intMap, obj);
+			var cls = new Point(10, 20, new Primitive(10, 3.14, "abc", true), array, strMap, obj,enm2);
+			var cls2 = new Point(100, 200, new Primitive(100, 3.104, "abcf", false), array, intMap, obj,enm2);
 			
 			strMap.set(str, int);
 			objMap.set(cls, strMap);
@@ -44,7 +45,7 @@ class Main extends mcli.CommandLine {
 			var obj2 = { i : int, b: float , m : strMap };
 			
 			//テスト処理
-			var sr_origin = Serializer.run(enm);
+			var sr_origin = Serializer.run(cls2);
 			
 			var sr = new SerializationReader(sr_origin);
 			Sys.println(sr.run());

@@ -5,8 +5,6 @@ import haxe.ds.StringMap;
 import haxe.ds.EnumValueMap;
 import serializationReader.FileTools;
 import Type;
-import sampleClass.Color;
-import sampleClass.Point;
 
 /**
  * 整形シリアライズデータを元に元のデータを生成する
